@@ -1,0 +1,15 @@
+# Environment
+.env
+.env.local
+.env.production
+
+# Dependencies
+node_modules/
+.next/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
