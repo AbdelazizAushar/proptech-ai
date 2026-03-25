@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&amp;family=Tajawal:wght@300;400;500;700;900&amp;family=Manrope:wght@400;600;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .syrian-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l5.878 18.09h19.022l-15.389 11.18 5.878 18.09-15.389-11.18-15.389 11.18 5.878-18.09-15.389-11.18h19.022z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-high": "#e6e8ea",
+                        "on-primary-fixed-variant": "#2b486b",
+                        "inverse-on-surface": "#eff1f3",
+                        "primary-fixed": "#d2e4ff",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed": "#ffe08f",
+                        "secondary": "#755b00",
+                        "tertiary-container": "#00431a",
+                        "primary": "#002444",
+                        "on-tertiary-container": "#00bb56",
+                        "on-secondary-fixed-variant": "#584400",
+                        "on-secondary-container": "#785d00",
+                        "background": "#f8f9fb",
+                        "inverse-primary": "#abc9f2",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "surface-bright": "#f8f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "secondary-fixed-dim": "#e6c364",
+                        "primary-container": "#1b3a5c",
+                        "outline": "#73777f",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#001c38",
+                        "secondary-container": "#fed977",
+                        "on-tertiary-fixed-variant": "#005322",
+                        "on-background": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-fixed": "#002109",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#3de273",
+                        "surface-container": "#eceef0",
+                        "outline-variant": "#c3c6cf",
+                        "primary-fixed-dim": "#abc9f2",
+                        "tertiary": "#002b0e",
+                        "tertiary-fixed": "#66ff8e",
+                        "surface-container-low": "#f2f4f6",
+                        "on-primary-container": "#87a4cc",
+                        "surface-tint": "#436084",
+                        "surface": "#f8f9fb",
+                        "on-surface-variant": "#43474e",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#241a00"
+                    },
+                    fontFamily: {
+                        "headline": ["Almarai", "Manrope", "sans-serif"],
+                        "body": ["Tajawal", "Inter", "sans-serif"],
+                        "label": ["Tajawal", "Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface overflow-x-hidden pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-transparent backdrop-blur-md dark:bg-slate-950/80">
+<div class="flex flex-row-reverse justify-between items-center w-full px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden ring-2 ring-secondary-fixed">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="close-up portrait of a professional middle-eastern man in a sharp suit with a confident smile against a neutral studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3uJr0ffFOKEIvOCf-7aV3jW1pBPngOcV4pDuTv_1RvT7EojbOMkjkMU0vNdMphPM3IyRril8dkngD85juIGVxnuTD16Ur12fjfQJ2iKbebYjvRwBG5u__V3iljq8zBJN1pPiafBZSynqD5zbinCTDwSBQatnZ5BjecetKyDUrpYy_HBMaVV7r9JRtyFY6VNrb1J07DZMAxzoEUUfG6F8Q7WTs2XwDgX80jSa7MVGzo7TFE_qi3zBtqRXSIYrURZPwP-u4KhclkV-P"/>
+</div>
+</div>
+<h1 class="font-headline font-bold text-lg tracking-wide text-primary dark:text-slate-100 text-xl font-bold text-[#002444] dark:text-slate-100">القيّم الرقمي</h1>
+<button class="text-slate-900 dark:text-slate-50 hover:opacity-80 transition-opacity scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative pt-24 pb-32 px-6 overflow-hidden bg-gradient-to-br from-primary via-primary-container to-on-primary-fixed-variant">
+<div class="absolute inset-0 syrian-pattern opacity-10"></div>
+<!-- 3D Modern Building Placeholder Visual -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-full max-w-sm aspect-[4/5] relative mb-8">
+<img alt="Modern luxury building" class="w-full h-full object-cover rounded-3xl shadow-2xl brightness-90" data-alt="dramatic low-angle shot of a futuristic glass skyscraper at dusk with warm amber interior lights glowing through architectural ribs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE-ZwO3qLKP-eKSPqw2zhjyJCxxQERAbTwAHXq6FWn0GfkssfD_ygtCh-L45mOSv-l6U_RROiwczEzLUkLS_CTeGYWlkRH9tzrjKscoujbev5gznSEywfojkOiJBApai4Rzxnj7Oq7uExxSOx90QW1vKBMvevV6ArnYehqVKrfoI9VujbbywI7BYUg1COw9CWH7JRt429dpt5O-THv8wPt2qlFS_hXpUDrBjml5MTpyJdksNxMaYg2sJcA3vCkb_tOaQ-nUeXwCiNA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent rounded-3xl"></div>
+</div>
+<div class="text-center">
+<h2 class="font-headline text-4xl font-extrabold text-white leading-tight mb-3">ابحث عن منزل أحلامك في سوريا</h2>
+<p class="text-secondary-fixed text-lg font-medium opacity-90">أكثر من ٢٠٠ عقار مميز</p>
+</div>
+</div>
+<!-- Floating Search Bar (Airbnb Style) -->
+<div class="absolute -bottom-10 left-6 right-6 z-20">
+<div class="bg-surface-container-lowest glass-effect p-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-white/20">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 grid grid-cols-3 divide-x divide-x-reverse divide-outline-variant/30 text-right">
+<div class="px-2">
+<span class="block text-[10px] text-on-surface-variant font-medium">المدينة</span>
+<span class="block text-sm font-bold text-primary truncate">دمشق</span>
+</div>
+<div class="px-2">
+<span class="block text-[10px] text-on-surface-variant font-medium">النوع</span>
+<span class="block text-sm font-bold text-primary truncate">فيلا</span>
+</div>
+<div class="px-2">
+<span class="block text-[10px] text-on-surface-variant font-medium">الميزانية</span>
+<span class="block text-sm font-bold text-primary truncate">مفتوحة</span>
+</div>
+</div>
+<button class="bg-secondary-fixed text-on-secondary-fixed w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="search" style="font-variation-settings: 'FILL' 1;">search</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Categories -->
+<section class="mt-20 px-6">
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-primary text-white font-medium text-sm">الكل</button>
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-sm">شقق مودرن</button>
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-sm">قصور تاريخية</button>
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-sm">مكاتب</button>
+</div>
+</section>
+<!-- Featured Properties (Vertical List) -->
+<section class="px-6 py-8">
+<div class="flex justify-between items-end mb-6">
+<h3 class="font-headline text-2xl font-bold text-primary">عقارات مميزة</h3>
+<button class="text-secondary font-bold text-sm">عرض الكل</button>
+</div>
+<div class="space-y-8">
+<!-- Property Card 1 -->
+<div class="group">
+<div class="relative aspect-[16/10] rounded-2xl overflow-hidden mb-4">
+<img alt="Luxury Villa" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="exterior of a white minimalist luxury villa with floor to ceiling windows and a reflecting pool in front at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWsEcDn_9QfqFUkr6Kv0szhm1T3KHvNKvgkjENxNDjPA2A9s9RX5IFo5DukS9SlO-4yKllKw-POmMJgLnUgFSEYx5pNeqOsyYLX5MPkCTceCYyCVHu3MYzq0k7DgCfeYY0uGSniylhyEoe3KQ1DmagGXSF2FxPhg8eh8f41o57rJmmCGS0ZekqLJfRvS0siNCF0_TirfI8l5S53IhYvDg8onVE87KbyfXFtAyrLX73uKrb4D_Hpp6owlwvn83EtgBqgvdHHso8Giul"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary shadow-sm">
+                        جديد
+                    </div>
+<button class="absolute top-4 right-4 text-white drop-shadow-md">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline text-xl font-bold text-on-surface">فيلا الياسمين المعلقة</h4>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+<span class="text-xs font-medium">يعفور، ريف دمشق</span>
+</div>
+</div>
+<div class="text-left">
+<span class="block text-secondary font-black text-lg">٢,٥٠٠,٠٠٠,٠٠٠</span>
+<span class="block text-[10px] text-on-surface-variant">ليرة سورية</span>
+</div>
+</div>
+<div class="flex gap-4 mt-3">
+<div class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm" data-icon="bed">bed</span>
+<span class="text-xs">٥ غرف</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm" data-icon="bathtub">bathtub</span>
+<span class="text-xs">٤ حمامات</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm" data-icon="square_foot">square_foot</span>
+<span class="text-xs">٤٥٠ م²</span>
+</div>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="group">
+<div class="relative aspect-[16/10] rounded-2xl overflow-hidden mb-4">
+<img alt="Penthouse View" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="view from a high-rise penthouse balcony overlooking a sun-drenched coastal city during sunset with modern furniture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhq97Vg_6IAdIfOzOmNEPML9K3PzkiKVndpa92FFwoi2zpJSSBvRHtMjCy0jD7cGDmDs4xJopeZeHOtL6Za3n69fo6XjwVuDqs9-MxsYv_mm_flPU9c1pw1Y5_Ek1v_ygIhVPwuC-68k0wEWSPBERR2izSUUO1PciOQf530hB_6mgXN4JtfRx57KZ-l9xiIqn9yaGy4NA9wr6TfmnM80f5-8RqQJdeyzZW7gDA1_0j70yPo4jdOMu9Oxhb-RthOGbCgag_ih4KV-Ua"/>
+<div class="absolute top-4 left-4 bg-tertiary-container text-tertiary-fixed px-3 py-1 rounded-full text-[10px] font-bold shadow-sm">
+                        موثق
+                    </div>
+<button class="absolute top-4 right-4 text-white drop-shadow-md">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline text-xl font-bold text-on-surface">بنتهاوس الأفق الذهبي</h4>
+<div class="flex items-center gap-1 text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+<span class="text-xs font-medium">المالكي، دمشق</span>
+</div>
+</div>
+<div class="text-left">
+<span class="block text-secondary font-black text-lg">١,٨٠٠,٠٠٠,٠٠٠</span>
+<span class="block text-[10px] text-on-surface-variant">ليرة سورية</span>
+</div>
+</div>
+<div class="flex gap-4 mt-3">
+<div class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm" data-icon="bed">bed</span>
+<span class="text-xs">٣ غرف</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm" data-icon="apartment">apartment</span>
+<span class="text-xs">طابق ١٢</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm" data-icon="square_foot">square_foot</span>
+<span class="text-xs">٣٠٠ م²</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Map Discovery CTA -->
+<section class="px-6 py-6 mb-12">
+<div class="bg-primary relative overflow-hidden rounded-3xl p-8 flex flex-col items-center text-center">
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<img alt="Map background" class="w-full h-full object-cover" data-location="Damascus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiWBat-wVcQRAgNmOQ9lWEfQ-Xqja19ZKGIzIOZB_0gbs9AESidBCZeoVrBwJCTuW_7sP_Qu7xB7OZCmCRu5nYax_KDW5k3WAxR7eSvYUzKjRFgHZB0U32iBMl9I3mTQlbGL3Zk0NNNLoWv-w80N0gXND2hyQZIewCl8H8mkt0RpsvVwwdRRcILqi0-18XM189ph0wEeuwWtTXrSVDICbhiDdbvkaWiHbvfTO6XkKOVFQ5EriEhoFfYLGGEKLabL8KTDgFepR5H9UY"/>
+</div>
+<div class="relative z-10">
+<span class="inline-block bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold px-3 py-1 rounded-full mb-4">استكشف عبر الخريطة</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-2">اعثر على عقارات قريبة منك</h3>
+<p class="text-on-primary-container text-sm mb-6">استخدم ميزة الموقع لتحديد أفضل الصفقات في منطقتك الحالية</p>
+<button class="bg-white text-primary px-8 py-3 rounded-xl font-bold text-sm shadow-xl flex items-center gap-2 mx-auto">
+<span class="material-symbols-outlined text-lg" data-icon="near_me">near_me</span>
+                    بدء البحث
+                </button>
+</div>
+</div>
+</section>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-3xl border-t border-slate-100 dark:border-slate-800 bg-white/90 dark:bg-[#002444]/90 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.06)]">
+<div class="flex flex-row-reverse justify-around items-center w-full px-4 pb-6 pt-3">
+<a class="flex flex-col items-center justify-center text-[#755b00] dark:text-[#ffe08f] font-bold scale-110 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-['Tajawal'] text-[10px] font-medium leading-loose">الرئيسية</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#755b00] dark:hover:text-[#ffe08f] transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-['Tajawal'] text-[10px] font-medium leading-loose">المفضلة</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#755b00] dark:hover:text-[#ffe08f] transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-['Tajawal'] text-[10px] font-medium leading-loose">الحجوزات</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-[#755b00] dark:hover:text-[#ffe08f] transition-transform duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Tajawal'] text-[10px] font-medium leading-loose">الحساب</span>
+</a>
+</div>
+</nav>
+</body></html>

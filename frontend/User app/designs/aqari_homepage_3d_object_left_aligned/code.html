@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Almarai:wght@400;700;800&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#1b3a5c",
+              "tertiary-container": "#00431a",
+              "surface-container-low": "#f2f4f6",
+              "secondary": "#755b00",
+              "on-surface": "#191c1e",
+              "on-primary-container": "#87a4cc",
+              "primary": "#002444",
+              "on-secondary-fixed-variant": "#584400",
+              "surface": "#f8f9fb",
+              "surface-container-lowest": "#ffffff",
+              "inverse-primary": "#abc9f2",
+              "tertiary-fixed-dim": "#3de273",
+              "on-secondary-container": "#785d00",
+              "surface-container": "#eceef0",
+              "surface-variant": "#e0e3e5",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#d2e4ff",
+              "secondary-fixed": "#ffe08f",
+              "tertiary": "#002b0e",
+              "surface-dim": "#d8dadc",
+              "inverse-on-surface": "#eff1f3",
+              "on-primary-fixed": "#001c38",
+              "on-tertiary-container": "#00bb56",
+              "secondary-fixed-dim": "#e6c364",
+              "on-primary": "#ffffff",
+              "outline": "#73777f",
+              "error-container": "#ffdad6",
+              "surface-tint": "#436084",
+              "surface-bright": "#f8f9fb",
+              "surface-container-highest": "#e0e3e5",
+              "on-tertiary-fixed": "#002109",
+              "on-secondary-fixed": "#241a00",
+              "primary-fixed-dim": "#abc9f2",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "surface-container-high": "#e6e8ea",
+              "tertiary-fixed": "#66ff8e",
+              "on-background": "#191c1e",
+              "on-secondary": "#ffffff",
+              "background": "#f8f9fb",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed-variant": "#005322",
+              "on-error": "#ffffff",
+              "on-surface-variant": "#43474e",
+              "secondary-container": "#fed977",
+              "on-primary-fixed-variant": "#2b486b",
+              "outline-variant": "#c3c6cf"
+            },
+            fontFamily: {
+              "headline": ["Almarai", "Manrope", "sans-serif"],
+              "body": ["Tajawal", "Inter", "sans-serif"],
+              "label": ["Tajawal", "Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 8px 32px rgba(25, 28, 30, 0.06);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #0F1E2E 0%, #1B3A5C 100%);
+        }
+        .glass-nav {
+            background: rgba(242, 244, 246, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        .building-float {
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="glass-nav sticky top-0 z-50 flex items-center justify-between border-b border-outline-variant/15 px-6 lg:px-20 py-4">
+<div class="flex items-center gap-4">
+<div class="text-primary h-8 w-8">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-primary font-headline text-xl font-extrabold tracking-tight">عقارات سوريا</h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-on-surface hover:text-primary font-medium transition-colors" href="#">الرئيسية</a>
+<a class="text-on-surface hover:text-primary font-medium transition-colors" href="#">العقارات</a>
+<a class="text-on-surface hover:text-primary font-medium transition-colors" href="#">كيف يعمل</a>
+<a class="text-on-surface hover:text-primary font-medium transition-colors" href="#">اتصل بنا</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-on-primary hover:bg-primary-container px-6 py-2 rounded-lg font-bold transition-all">تسجيل الدخول</button>
+<div class="h-10 w-10 rounded-full bg-cover border border-outline-variant" data-alt="professional profile avatar of a real estate agent in high-end attire" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDy-qc_dONak_lQfAIqQ1lgAai2oaIgIFnAmol28he4e12E7gWB5YCknxZyeUmb6ICL0WIygYkd82STd3TceOkguB5vs0ephalw96FEtAHsD5yndZtU3gWAwQa-r90uwLBXdz6dEdxGA5FpcjjLnTK3Haujh9monDIhxqVKvq3zoI9UYXK4WYRfZUVdi8ycawkMSdczZ-OiWNCcHTqiHesntZZjdK94g5KRp7OYjl97L3DKgjzNnjm86sGvdkjmQdf2M4oPoCCHH6MT');"></div>
+</div>
+</header>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="hero-gradient relative min-h-[600px] flex items-center overflow-hidden py-16 lg:py-0">
+<!-- Subtle Geometric Pattern Overlay -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2CScNfDAEug7tzlKYBNCeoby0LmCVbpKr-hYrWpSVmR7eStS3gUFOsxMztu9u_0sWTU0QIYmrx_atMFBDRGe1OeybUIcRLViXRdOOa0tpjodsJsKT-R3I9a1-M-IZHYLq-2e3nXseFMRtcqGuPosKQEbV9agpvi9Ozit1ROiRwDZBFndisiJsugJtWe0hC_BOUo35iLXca-mEs5l5DdhytVkPWO81ACOfAq3UkAamUy3zDmCHkuRyPLlFy8mteFRxUpxyWTHS31Fy');"></div>
+<div class="container mx-auto px-6 lg:px-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+<!-- Building Object (Left Side) -->
+<div class="order-2 lg:order-1 flex justify-center lg:justify-start items-center relative">
+<div class="building-float relative w-full max-w-[500px] h-[400px] lg:h-[550px]">
+<img alt="High-end 3D building" class="w-full h-full object-contain" data-alt="highly detailed 3D architectural render of a luxury modern apartment building with glowing warm golden lights in the windows, clean sharp edges, isolated on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFm2XRr9lKArtarb18sm_WLqqcqp8Yxai5kRb9jQ2JJcGRro25OYpBCfKW_92-a5_08a5zDc_VbH2m2AHAJax6cz0KO85M8nH4zJuqnqtud4mGpiWHmpI6hES9saR0Xw7QZT6dZafQumYu3C12ftExt9RznLXwZN-Vh2dCudTTuFfQfFmgdALGNdqvUHeEfizG8C33TsWPFU54fDIUdeLGSivzgFpXOysB1ygEzAfOsllIeHuLp6BFrl6hgM6212vvqEI14cKUlNEp"/>
+<!-- Floor Reflection -->
+<div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-black/40 blur-2xl rounded-full"></div>
+</div>
+</div>
+<!-- Text & Search (Right Side - RTL Focus) -->
+<div class="order-1 lg:order-2 flex flex-col items-start text-right space-y-8">
+<div class="space-y-4">
+<h1 class="text-on-primary font-headline text-4xl lg:text-6xl font-extrabold leading-[1.2]">
+                            ابحث عن منزل <br/>
+<span class="text-secondary-fixed">أحلامك في سوريا</span>
+</h1>
+<p class="text-on-primary-container text-lg lg:text-xl max-w-xl leading-relaxed">
+                            اكتشف أفضل العقارات والمنازل المعروضة للبيع والإيجار في كافة المحافظات السورية بأفضل الأسعار وبخدمة عملاء استثنائية.
+                        </p>
+</div>
+<!-- Airbnb-style Pill Search Bar -->
+<div class="w-full max-w-[600px] bg-white rounded-full p-2 flex items-center editorial-shadow">
+<div class="flex-grow flex items-center px-6 border-l border-outline-variant/30">
+<span class="material-symbols-outlined text-outline ml-3" data-icon="search">search</span>
+<input class="w-full border-none focus:ring-0 text-on-surface font-body text-base placeholder:text-on-surface-variant" placeholder="أين تريد السكن؟" type="text"/>
+</div>
+<div class="hidden md:flex px-6 border-l border-outline-variant/30 items-center">
+<span class="material-symbols-outlined text-outline ml-2" data-icon="home">home</span>
+<span class="text-on-surface text-sm whitespace-nowrap">نوع العقار</span>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold hover:bg-primary-container transition-all flex items-center gap-2">
+<span>بحث</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Properties -->
+<section class="py-20 px-6 lg:px-20 bg-surface">
+<div class="mb-12 flex justify-between items-end">
+<div class="space-y-2">
+<h2 class="text-primary font-headline text-3xl font-bold">العقارات المميزة</h2>
+<div class="w-12 h-1 bg-secondary rounded-full"></div>
+</div>
+<a class="text-primary font-bold flex items-center gap-1 hover:underline" href="#">
+                    مشاهدة الكل
+                    <span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden editorial-shadow transition-transform hover:-translate-y-1">
+<div class="aspect-[16/10] overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="luxury apartment interior in Damascus with panoramic windows and elegant minimalist furniture during late afternoon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxjzbBhBmDrAqgYfSr7MEVk1cWecbK6f0isic1IwioEuhxASade7u77ZNXSIm1rgPwlirrywApakF_bU-12pnj5ikx05HQhwzCT-xzUY1hGBGK42Q3KDge4-Mv6U-jdvogE7Ng_G7vYciDwUez6-quVWJnR-LW69Y8hnDQoxSGN6w5r4HHAbsAbtihTtFSiZxZYRy4AIHyNN0r23cXvRNDCbybvO39bA8eOGVmAS4vjymLvv1xhv2gjhDdo5mBO0h9Lw9VJIeMc9a5"/>
+<div class="absolute top-4 right-4 bg-primary text-on-primary text-xs font-bold px-3 py-1 rounded">مميز</div>
+</div>
+<div class="p-6 space-y-4">
+<div>
+<h3 class="text-on-surface font-headline text-xl font-bold">شقة فاخرة في المزة</h3>
+<p class="text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                                دمشق، سوريا
+                            </p>
+</div>
+<div class="flex items-center gap-4 py-2 border-y border-outline-variant/10 text-on-surface-variant text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="bed">bed</span> 3 غرف</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="bathtub">bathtub</span> 2 حمام</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="square_foot">square_foot</span> 180 م²</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="text-primary text-2xl font-extrabold">$150,000</span>
+<button class="text-secondary font-bold hover:text-on-secondary-container">التفاصيل</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden editorial-shadow transition-transform hover:-translate-y-1">
+<div class="aspect-[16/10] overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="expansive luxury villa with private garden and pool in Yaafour district at sunset with warm ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0IkBOkbn6-6vqTvxXwTN9XDxfwzozNElXB8heH8RGU8XOLli_DLTCOj7Xr-IAVYgYPiuqkMEEGEGVEw93k0rXEULnm5fdjzdD6k4hyHz3iKIrjXwVK_iA84Gdczf3zDQurQ0OYMrPs5jPRMe2DZNLNfjTdwMq06RZ2Aygy7zZAZ1RSJbOJoVpdAI4R15Li9B0COKDLRxMo6kAi0xQmIKhUm-O1gXlHN8uN6DVBbCx0DNG8pHaTLUNm61rhgWKfVwPj5D2eqj508NY"/>
+</div>
+<div class="p-6 space-y-4">
+<div>
+<h3 class="text-on-surface font-headline text-xl font-bold">فيلا بحديقة في يعفور</h3>
+<p class="text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                                ريف دمشق
+                            </p>
+</div>
+<div class="flex items-center gap-4 py-2 border-y border-outline-variant/10 text-on-surface-variant text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="bed">bed</span> 5 غرف</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="bathtub">bathtub</span> 4 حمام</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="square_foot">square_foot</span> 450 م²</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="text-primary text-2xl font-extrabold">$300,000</span>
+<button class="text-secondary font-bold hover:text-on-secondary-container">التفاصيل</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden editorial-shadow transition-transform hover:-translate-y-1">
+<div class="aspect-[16/10] overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="modern apartment building facade in Aleppo city center with sleek architecture and balcony plants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvzNjbh0LKsaD_J7LPBy-SxnWMla7eDLGyMxzVFSEb3RBqNuM2XziBvETMp9DKG_swgjTDqFE_XBfmiLySR9Mr1gYzu5tFwJnSql_6KnmtB5vxUmQWThaBSEtuyLm8-VZnChXlOtt4jIVfz_20rPXKOOeoNpFFV8mA6xvSXk5LLHg70zc-MVVHv9ToipB6UOpBnfT49KVIFgvH7P5HMN7l7crNR5PoSOFTuwqcXMA_y2B-sExaX-YgjPLb6OsV9aJFt0oM4XfAC2mV"/>
+</div>
+<div class="p-6 space-y-4">
+<div>
+<h3 class="text-on-surface font-headline text-xl font-bold">شقة مودرن في حلب</h3>
+<p class="text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                                الشهباء، حلب
+                            </p>
+</div>
+<div class="flex items-center gap-4 py-2 border-y border-outline-variant/10 text-on-surface-variant text-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="bed">bed</span> 2 غرف</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="bathtub">bathtub</span> 2 حمام</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base" data-icon="square_foot">square_foot</span> 120 م²</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="text-primary text-2xl font-extrabold">$120,000</span>
+<button class="text-secondary font-bold hover:text-on-secondary-container">التفاصيل</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-24 bg-surface-container-low px-6 lg:px-20 relative overflow-hidden">
+<div class="max-w-4xl mx-auto text-center mb-16 space-y-4">
+<h2 class="text-primary font-headline text-4xl font-bold">كيف يعمل الموقع</h2>
+<p class="text-on-surface-variant text-lg">ثلاث خطوات بسيطة للحصول على منزل أحلامك</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center space-y-6">
+<div class="w-20 h-20 bg-primary-container text-secondary-fixed rounded-2xl flex items-center justify-center editorial-shadow">
+<span class="material-symbols-outlined text-4xl" data-icon="search">search</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-primary font-headline text-xl font-bold">ابحث عن عقار</h3>
+<p class="text-on-surface-variant leading-relaxed">تصفح آلاف العقارات الموثقة في جميع المحافظات السورية بسهولة.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center space-y-6">
+<div class="w-20 h-20 bg-secondary-container text-on-secondary-container rounded-2xl flex items-center justify-center editorial-shadow">
+<span class="material-symbols-outlined text-4xl" data-icon="calendar_today">calendar_today</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-primary font-headline text-xl font-bold">حدد موعد للمعاينة</h3>
+<p class="text-on-surface-variant leading-relaxed">تواصل مباشرة مع الوكلاء لتحديد أنسب وقت لزيارة العقار على أرض الواقع.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center space-y-6">
+<div class="w-20 h-20 bg-tertiary-container text-on-tertiary-container rounded-2xl flex items-center justify-center editorial-shadow">
+<span class="material-symbols-outlined text-4xl" data-icon="key">key</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-primary font-headline text-xl font-bold">استلم مفتاحك</h3>
+<p class="text-on-surface-variant leading-relaxed">أتمم إجراءات الشراء أو الاستئجار بكل أمان وابدأ حياتك في منزلك الجديد.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary py-16 px-6 lg:px-20 text-on-primary">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 border-b border-outline-variant/10 pb-12">
+<div class="space-y-6">
+<div class="flex items-center gap-3">
+<div class="text-on-primary-container h-8 w-8">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-white font-headline text-xl font-bold">عقارات سوريا</h2>
+</div>
+<p class="text-on-primary-container leading-relaxed">
+                    منصتكم الموثوقة للبحث عن العقارات في جميع أنحاء سوريا. نجمع لك أفضل العروض في مكان واحد.
+                </p>
+</div>
+<div class="space-y-6">
+<h3 class="text-secondary-fixed font-headline text-lg font-bold">روابط سريعة</h3>
+<ul class="space-y-3 text-on-primary-container">
+<li><a class="hover:text-white transition-colors" href="#">عقارات للبيع</a></li>
+<li><a class="hover:text-white transition-colors" href="#">عقارات للإيجار</a></li>
+<li><a class="hover:text-white transition-colors" href="#">عقارات تجارية</a></li>
+<li><a class="hover:text-white transition-colors" href="#">أضف عقارك</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h3 class="text-secondary-fixed font-headline text-lg font-bold">المناطق</h3>
+<ul class="space-y-3 text-on-primary-container">
+<li><a class="hover:text-white transition-colors" href="#">دمشق وريفها</a></li>
+<li><a class="hover:text-white transition-colors" href="#">حلب</a></li>
+<li><a class="hover:text-white transition-colors" href="#">اللاذقية وطرطوس</a></li>
+<li><a class="hover:text-white transition-colors" href="#">حمص وحماة</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h3 class="text-secondary-fixed font-headline text-lg font-bold">تواصل معنا</h3>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="phone">phone</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</a>
+</div>
+</div>
+</div>
+<div class="pt-12 text-center text-on-primary-container text-sm">
+            © 2024 عقارات سوريا. جميع الحقوق محفوظة.
+        </div>
+</footer>
+</div>
+</body></html>

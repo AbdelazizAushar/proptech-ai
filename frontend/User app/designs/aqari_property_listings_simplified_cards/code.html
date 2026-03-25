@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aqari - العقارات المتاحة</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&amp;family=Tajawal:wght@300;400;500;700;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed-dim": "#3de273",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#abc9f2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffe08f",
+                        "surface-dim": "#d8dadc",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-container": "#87a4cc",
+                        "tertiary": "#002b0e",
+                        "on-primary-fixed-variant": "#2b486b",
+                        "on-background": "#191c1e",
+                        "on-surface-variant": "#43474e",
+                        "outline-variant": "#c3c6cf",
+                        "on-tertiary-fixed": "#002109",
+                        "surface-container-high": "#e6e8ea",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-secondary-fixed": "#241a00",
+                        "tertiary-container": "#00431a",
+                        "secondary": "#755b00",
+                        "surface-container": "#eceef0",
+                        "background": "#f8f9fb",
+                        "on-surface": "#191c1e",
+                        "primary": "#002444",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#e6c364",
+                        "primary-fixed-dim": "#abc9f2",
+                        "outline": "#73777f",
+                        "on-secondary-container": "#785d00",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "primary-container": "#1b3a5c",
+                        "on-primary-fixed": "#001c38",
+                        "secondary-container": "#fed977",
+                        "on-tertiary-fixed-variant": "#005322",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-tint": "#436084",
+                        "surface-bright": "#f8f9fb",
+                        "primary-fixed": "#d2e4ff",
+                        "surface": "#f8f9fb",
+                        "tertiary-fixed": "#66ff8e",
+                        "on-secondary-fixed-variant": "#584400",
+                        "on-tertiary-container": "#00bb56",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Almarai", "sans-serif"],
+                        "body": ["Tajawal", "sans-serif"],
+                        "label": ["Tajawal", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+    vertical-align: middle
+    }
+.dir-rtl {
+    direction: rtl
+    }
+.no-line {
+    border: none !important
+    }
+.tonal-layering {
+    background-clip: padding-box
+    }
+.syrian-pattern {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCz7A4Z3z4Zoe5q_OwugY-TOMVchbq3m1uzCRMlcusI6TDynJRVS8CKc36thTn84g83BwHH2d-zQMaUEknwYyShGCrveCVBVzoRoBpAhDeredJ5Jursg2YFrD3zdfoIOk-NoYeNDii5_T_Q9_pMLJsd0BvitJXKTdqUtGmbn6DQRCt50MPMzo3LdgiSHddDG6nGZrfUYKp2f-XeYWbesgIR1Xk7S2gW4efWOBimMWbRrbWrE7zGEP8Nk_EDTB_5RoUe6MHKTdY6XmtT);
+    opacity: 0.04;
+    pointer-events: none
+    }</style>
+</head>
+<body class="bg-surface font-body text-on-surface dir-rtl">
+<!-- Top Navigation Shell -->
+<header class="bg-[#1B3A5C] dark:bg-[#002444] text-white/80 font-['Almarai'] font-bold text-lg leading-relaxed shadow-lg shadow-black/20 backdrop-blur-md docked full-width top-0 z-50 flex flex-row-reverse justify-between items-center w-full px-8 py-4 sticky top-0">
+<div class="flex items-center gap-8">
+<div class="text-2xl font-black text-white tracking-wide">Aqari</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-white/80 hover:text-white transition-colors" href="#">الرئيسية</a>
+<a class="text-[#ffe08f] border-b-2 border-[#755b00] pb-1" href="#">عقارات للبيع</a>
+<a class="text-white/80 hover:text-white transition-colors" href="#">عقارات للاستئجار</a>
+<a class="text-white/80 hover:text-white transition-colors" href="#">اتصل بنا</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-white/10 transition-all duration-300 rounded-full scale-95 active:scale-90">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="p-2 hover:bg-white/10 transition-all duration-300 rounded-full scale-95 active:scale-90 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+<button class="p-2 hover:bg-white/10 transition-all duration-300 rounded-full scale-95 active:scale-90">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+<button class="flex items-center gap-2 pr-4 border-r border-white/10 hover:bg-white/10 transition-all duration-300 rounded-lg p-2">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- Page Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+<div class="space-y-2">
+<div class="flex items-center gap-3">
+<h1 class="text-4xl font-headline font-black text-primary tracking-tight">العقارات المتاحة</h1>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-sm font-bold">٢٤ عقار</span>
+</div>
+<p class="text-on-surface-variant max-w-xl">اكتشف أرقى العقارات والفرص الاستثمارية في أفضل المواقع السورية، مختارة بعناية لتناسب تطلعاتكم.</p>
+</div>
+<div class="flex items-center gap-2 text-sm font-medium text-secondary">
+<span>ترتيب حسب:</span>
+<select class="bg-transparent border-none focus:ring-0 cursor-pointer font-bold">
+<option>الأحدث أولاً</option>
+<option>السعر: من الأقل للأعلى</option>
+<option>المساحة: الأكبر أولاً</option>
+</select>
+</div>
+</div>
+<!-- Horizontal Filter Bar -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm mb-12 flex flex-wrap items-center gap-6">
+<div class="flex-1 min-w-[180px]">
+<label class="block text-xs font-bold text-on-surface-variant mb-2 mr-1">المدينة</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-secondary transition-all">
+<option>دمشق</option>
+<option>حلب</option>
+<option>اللاذقية</option>
+<option>حمص</option>
+</select>
+</div>
+<div class="flex-1 min-w-[180px]">
+<label class="block text-xs font-bold text-on-surface-variant mb-2 mr-1">النوع</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-secondary transition-all">
+<option>شقة سكنية</option>
+<option>فيلا فاخرة</option>
+<option>أرض تجارية</option>
+<option>مكتب</option>
+</select>
+</div>
+<div class="flex-1 min-w-[180px]">
+<label class="block text-xs font-bold text-on-surface-variant mb-2 mr-1">السعر</label>
+<div class="flex items-center gap-2">
+<input class="w-full bg-surface-container-low border-none rounded-lg text-sm focus:ring-2 focus:ring-secondary" placeholder="من" type="text"/>
+<input class="w-full bg-surface-container-low border-none rounded-lg text-sm focus:ring-2 focus:ring-secondary" placeholder="إلى" type="text"/>
+</div>
+</div>
+<div class="flex-1 min-w-[150px]">
+<label class="block text-xs font-bold text-on-surface-variant mb-2 mr-1">عدد الغرف</label>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded bg-secondary text-white text-xs font-bold">1</button>
+<button class="w-8 h-8 rounded bg-surface-container-high text-on-surface-variant text-xs font-bold">2</button>
+<button class="w-8 h-8 rounded bg-surface-container-high text-on-surface-variant text-xs font-bold">3</button>
+<button class="w-8 h-8 rounded bg-surface-container-high text-on-surface-variant text-xs font-bold">4+</button>
+</div>
+</div>
+<div class="flex-1 min-w-[150px]">
+<label class="block text-xs font-bold text-on-surface-variant mb-2 mr-1">الحالة</label>
+<div class="flex gap-2">
+<label class="flex items-center gap-2 cursor-pointer bg-surface-container-low px-3 py-2 rounded-lg">
+<input class="text-secondary focus:ring-secondary" name="status" type="radio"/>
+<span class="text-sm">للبيع</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer bg-surface-container-low px-3 py-2 rounded-lg">
+<input class="text-secondary focus:ring-secondary" name="status" type="radio"/>
+<span class="text-sm">للايجار</span>
+</label>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold flex items-center gap-2 self-end hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+                تطبيق الفلاتر
+            </button>
+</section>
+<!-- Main Content Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Side: Property Grid -->
+<div class="lg:col-span-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Property Card 1 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="luxurious modern apartment exterior with large glass windows and balcony overlooking a Mediterranean landscape at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuED8WUNBWHTGtKeQ24wgCHhAoVhdAqiTg_Bq8wPuG7zlMjDkUWJDegJE_bPYpmEDSeGezSgbVNSTrcDWhqgvi0VBnngIc9LR-MOwf8jm1Jrw7wSB9UAWqvZk8CtxjITAOXXyJMRVx3xTWnpOHYRv7qhNoVy5rr2j4aifvK1bmTdMPPIJgPGPo4O8n95LDbSLtNn2yZURAsxGTHq8SnfBsxCjflTIaGHlh32JPEZCM00_BndhVwky7ph0iuME5ya2fhUmsu6HF70Mk"/>
+<div class="absolute top-4 right-4 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-tertiary-fixed-dim rounded-full"></span>
+                                متاح
+                            </div>
+<button class="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md p-2 rounded-full text-white hover:bg-white/40 transition-all">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-headline font-bold text-primary">شقة رويال المطلة</h3>
+<span class="text-secondary font-black text-lg">750,000,000 ل.س</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                                دمشق، تنظيم كفرسوسة
+                            </div>
+<div class="grid grid-cols-3 gap-4 py-4 border-y border-outline-variant/20 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="bed">bed</span>
+<span class="text-xs font-bold">3 غرف</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="bathtub">bathtub</span>
+<span class="text-xs font-bold">2 حمام</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="square_foot">square_foot</span>
+<span class="text-xs font-bold">185 م²</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="contemporary luxury villa with swimming pool and minimalist architecture during the blue hour with glowing warm interior lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9AcZ3-mmubpXq0lG7hIjwTWEZURgaGYA24eMtHpEtfY6ZG5uCQwqUj3LXV0-Dd-LnNdjgkG2j6NoMWVFotBmZClfikuRJEhBkYVV6PMGxNbqE3ORd9Dd_XX3650iM-7YDlWY-MNSQMSBxfpNXwi4w0ZzVY6jB-MYo0H30n5YiXPhGURDVA89s7Y41x7hOTejTI1VKZnKGk8DLn_KTZbIijr2kZlCdlr6ZTQPj87wwKaQRvP1d9a-caVTyjFzvp9_FoNRy-CGjxtc1"/>
+<div class="absolute top-4 right-4 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-tertiary-fixed-dim rounded-full"></span>
+                                متاح
+                            </div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-headline font-bold text-primary">فيلا الياسمين</h3>
+<span class="text-secondary font-black text-lg">2,400,000,000 ل.س</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                                اللاذقية، الشاطئ الأزرق
+                            </div>
+<div class="grid grid-cols-3 gap-4 py-4 border-y border-outline-variant/20 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="bed">bed</span>
+<span class="text-xs font-bold">5 غرف</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="pool">pool</span>
+<span class="text-xs font-bold">مسبح</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="square_foot">square_foot</span>
+<span class="text-xs font-bold">450 م²</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Card 3 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="stunning luxury mansion with classic architectural details and manicured gardens under a clear bright sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf36pSVRnpLOl33r0xFPhMrfPa9QGagD9VxKTO8_UpPrBsSsjFgHq7pQCKZ9Kti990MKvCBVpjBxmHdsKH_Zi5JR7VZWSIuK3nq0pH6d69QjrUpSNkGk7VU1kO8TnTtf9p8xVSOXfV3wUK5cITxbWZKKK4Fo386_XHsh4NbIPeTfujDug4vkSEYfgoXkM8nQlQD7By9nY5JUPVCFO0ylpf-ttD06cxTgG7CuKnJvMsSTy5DaUFv3kJlJZaFydD-Kftn0rL1Ig4qV-S"/>
+<div class="absolute top-4 right-4 bg-error-container text-on-error-container px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span>
+                                محجوز
+                            </div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-headline font-bold text-primary">قصر الشهباء الجديد</h3>
+<span class="text-secondary font-black text-lg">1,850,000,000 ل.س</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                                حلب، حي الفرقان
+                            </div>
+<div class="grid grid-cols-3 gap-4 py-4 border-y border-outline-variant/20 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="bed">bed</span>
+<span class="text-xs font-bold">4 غرف</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="garage">garage</span>
+<span class="text-xs font-bold">كراج</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="square_foot">square_foot</span>
+<span class="text-xs font-bold">320 م²</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Card 4 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="modern minimalist bedroom interior with neutral tones and large windows letting in soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJbaVqYNRg6DP6DBxRm-zUjM0Tk7POKAAjv5yFYov0Y1HeaWWYluhrTvhopzr4MgbuDHr4icSY1CExY3UBrY6OJJVtZcOMTsyCVeYWaqCNMGpD7vU4BjAHuSuPIxsCP-nkwkeJM1QF6L2UgIoU7Uiib2Kbh17YtdXltjqN7_c1ihv2FkrUVGHohhnAtRk9mvX5Ngo75an7a3vXvFnpV47A-udYxm3I3hYNLK93EGu7PeC5KV7HGvY2ZUSnAkXGtSrag8SqJt6EP2EI"/>
+<div class="absolute top-4 right-4 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-tertiary-fixed-dim rounded-full"></span>
+                                متاح
+                            </div>
+</div>
+<div class="p-6 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-headline font-bold text-primary">استوديو لاكشري</h3>
+<span class="text-secondary font-black text-lg">420,000,000 ل.س</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                                دمشق، مشروع دمر
+                            </div>
+<div class="grid grid-cols-3 gap-4 py-4 border-y border-outline-variant/20 mb-6">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="bed">bed</span>
+<span class="text-xs font-bold">1 غرفة</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="ac_unit">ac_unit</span>
+<span class="text-xs font-bold">تكييف</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary-fixed-dim mb-1" data-icon="square_foot">square_foot</span>
+<span class="text-xs font-bold">95 م²</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-16 flex justify-center gap-4">
+<button class="w-12 h-12 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-lg bg-primary text-white font-bold">١</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-high transition-all">٢</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-high transition-all">٣</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+</div>
+</div>
+<!-- Right Sidebar: Interactive Map -->
+<aside class="lg:col-span-4">
+<div class="sticky top-28">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-xl">
+<div class="p-4 border-b border-outline-variant/10 flex items-center justify-between">
+<h4 class="font-headline font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="map">map</span>
+                                تصفح عبر الخريطة
+                            </h4>
+<button class="text-xs text-secondary font-bold underline">عرض بملء الشاشة</button>
+</div>
+<div class="relative h-[600px] bg-surface-container-low group">
+<!-- Simulated Map UI -->
+<img class="w-full h-full object-cover opacity-60 mix-blend-multiply" data-alt="topographic map style satellite view of a middle eastern urban area with soft muted colors and grid lines" data-location="Syria" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyQqVxYRa7NNzI3tWIk4ooco-yFnN6Hp7yJUPuSHWi1oq4qjLGWf0iNXSmhGu8D95T7Go3U_2GXlGMDgWbqbxG-luDd3_ich3CEka5NhRN1v7kynH28CuxwWY710UJCHgWE0OZdtCq404tOFjZZVYIL-BGR0h96qgRdKL8531MlKi-aWlU-Kuq3uVxw3fmvE_zotVsEY5EkyL71sNi4eM4yMTzdR5djqZlO5u-kNDc6_e4Jo7ZnWKD_excKwI0PDzCf2oxJTr7N70o"/>
+<!-- Custom Pins -->
+<div class="absolute top-1/4 right-1/3 group cursor-pointer">
+<div class="bg-primary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform group-hover:-translate-y-1 transition-transform">دمشق</div>
+<div class="w-3 h-3 bg-secondary rounded-full border-2 border-white mx-auto -mt-1 shadow-md"></div>
+</div>
+<div class="absolute top-1/2 left-1/4 group cursor-pointer">
+<div class="bg-primary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform group-hover:-translate-y-1 transition-transform">حمص</div>
+<div class="w-3 h-3 bg-secondary rounded-full border-2 border-white mx-auto -mt-1 shadow-md"></div>
+</div>
+<div class="absolute top-1/3 left-1/2 group cursor-pointer">
+<div class="bg-primary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform group-hover:-translate-y-1 transition-transform">حلب</div>
+<div class="w-3 h-3 bg-secondary rounded-full border-2 border-white mx-auto -mt-1 shadow-md"></div>
+</div>
+<!-- Map Overlay Pattern -->
+<div class="absolute inset-0 syrian-pattern"></div>
+</div>
+<div class="p-6 bg-primary-container text-white">
+<p class="text-sm opacity-80 mb-4">هل ترغب في عرض عقارات في منطقة محددة؟ استخدم أدوات التحديد على الخريطة.</p>
+<button class="w-full border border-white/20 py-2 rounded-lg text-sm font-bold hover:bg-white/10 transition-colors">تحديد منطقة البحث</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-[#002444] dark:bg-black text-white/60 font-['Tajawal'] text-sm leading-8 full-width mt-12 border-t border-white/5 grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 text-right dir-rtl">
+<div class="space-y-6">
+<div class="text-xl font-bold text-[#ffe08f]">Aqari</div>
+<p class="max-w-xs">المنصة الرائدة في السوق العقاري السوري، نوفر لكم وصولاً مباشراً لأفضل العقارات بأسلوب عصري وموثوق.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined p-2 bg-white/5 rounded hover:bg-white/10 transition-colors" data-icon="facebook">social_leaderboard</span>
+<span class="material-symbols-outlined p-2 bg-white/5 rounded hover:bg-white/10 transition-colors" data-icon="instagram">retweet</span>
+</div>
+</div>
+<div>
+<h5 class="text-[#ffe08f] font-bold mb-6">روابط سريعة</h5>
+<ul class="space-y-4">
+<li><a class="hover:text-white hover:translate-x-[-4px] transition-transform inline-block" href="#">عن الشركة</a></li>
+<li><a class="hover:text-white hover:translate-x-[-4px] transition-transform inline-block" href="#">سياسة الخصوصية</a></li>
+<li><a class="hover:text-white hover:translate-x-[-4px] transition-transform inline-block" href="#">الشروط والأحكام</a></li>
+<li><a class="hover:text-white hover:translate-x-[-4px] transition-transform inline-block" href="#">الأسئلة الشائعة</a></li>
+</ul>
+</div>
+<div class="space-y-6">
+<h5 class="text-[#ffe08f] font-bold">النشرة البريدية</h5>
+<p>اشترك لتصلك أحدث العروض العقارية فور نزولها.</p>
+<div class="flex">
+<input class="bg-white/5 border-none rounded-r-lg px-4 py-2 w-full focus:ring-1 focus:ring-[#ffe08f]" placeholder="بريدك الإلكتروني" type="email"/>
+<button class="bg-[#ffe08f] text-[#002444] px-6 py-2 rounded-l-lg font-bold">اشترك</button>
+</div>
+<p class="text-xs mt-8">© 2024 عقاري. جميع الحقوق محفوظة.</p>
+</div>
+</footer>
+</body></html>
