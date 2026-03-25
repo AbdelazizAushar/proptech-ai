@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>إدارة المشرفين - المنسق العقاري</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&amp;family=Tajawal:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary": "#ffffff",
+              "tertiary-fixed": "#66ff8e",
+              "on-secondary": "#ffffff",
+              "secondary-fixed": "#ffe08f",
+              "on-surface-variant": "#43474e",
+              "tertiary-container": "#00431a",
+              "on-primary": "#ffffff",
+              "tertiary": "#002b0e",
+              "secondary-fixed-dim": "#e6c364",
+              "on-error": "#ffffff",
+              "tertiary-fixed-dim": "#3de273",
+              "secondary-container": "#fed977",
+              "surface-container-high": "#e6e8ea",
+              "on-surface": "#191c1e",
+              "on-secondary-fixed-variant": "#584400",
+              "error-container": "#ffdad6",
+              "surface-bright": "#f8f9fb",
+              "error": "#ba1a1a",
+              "on-tertiary-fixed": "#002109",
+              "surface-container-low": "#f2f4f6",
+              "on-primary-container": "#87a4cc",
+              "primary-fixed": "#d2e4ff",
+              "outline": "#73777f",
+              "on-error-container": "#93000a",
+              "on-secondary-container": "#785d00",
+              "surface-container": "#eceef0",
+              "surface": "#f8f9fb",
+              "on-secondary-fixed": "#241a00",
+              "outline-variant": "#c3c6cf",
+              "on-tertiary-container": "#00bb56",
+              "on-background": "#191c1e",
+              "primary-container": "#1b3a5c",
+              "secondary": "#755b00",
+              "primary": "#002444",
+              "inverse-surface": "#2d3133",
+              "on-primary-fixed": "#001c38",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed-dim": "#abc9f2",
+              "on-tertiary-fixed-variant": "#005322",
+              "inverse-on-surface": "#eff1f3",
+              "background": "#f8f9fb",
+              "surface-tint": "#436084",
+              "inverse-primary": "#abc9f2",
+              "surface-dim": "#d8dadc",
+              "surface-variant": "#e0e3e5",
+              "surface-container-highest": "#e0e3e5",
+              "on-primary-fixed-variant": "#2b486b"
+            },
+            fontFamily: {
+              "headline": ["Almarai", "sans-serif"],
+              "body": ["Tajawal", "sans-serif"],
+              "label": ["Tajawal", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
+        .font-almarai { font-family: 'Almarai', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-on-surface">
+<!-- SideNavBar Component -->
+<aside class="h-full w-64 fixed right-0 top-0 border-l border-white/10 bg-[#1B3A5C] dark:bg-slate-950 shadow-2xl shadow-black/20 flex flex-col p-4 overflow-y-auto z-50">
+<div class="mb-10 flex flex-col items-center gap-2">
+<div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center p-2">
+<img alt="شعار المنصة العقارية" class="rounded-full" data-alt="minimalist architectural logo for a luxury real estate platform featuring geometric lines in gold and navy blue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv8d7bs9MtJ471GqttahHnetsTr0wcMLB2aWVvVkwU8XeydlGXotbeHAfp2AiUy_f__AySRd9eM0JVgwEtRa7VgWWOgHe8fKw_-DYngCmnhzea8yH2ZRC_WCgFuW_qK_ncX7NFwMp46-2xMvyz_5QFHUJ-2dYYZR-jnFkLJaVmltRTlyG1f63Nolc7rUO4AshTTrNOgpJmy5pq8Ylsdpvdx4DxTPyed7OWZS4nNzKzeAjwCXjzOmvZqX06tWxwqPFOaLW7XULMWwc"/>
+</div>
+<div class="text-center">
+<h1 class="text-2xl font-bold text-white tracking-tight font-almarai">لوحة التحكم</h1>
+<p class="text-white/60 text-xs font-almarai">المنسق الرقمي</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex flex-row-reverse items-center justify-start gap-3 text-white/70 hover:text-white px-4 py-3 mb-1 font-almarai font-bold hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>نظرة عامة</span>
+</a>
+<a class="flex flex-row-reverse items-center justify-start gap-3 text-white/70 hover:text-white px-4 py-3 mb-1 font-almarai font-bold hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span>العقارات</span>
+</a>
+<a class="flex flex-row-reverse items-center justify-start gap-3 text-white/70 hover:text-white px-4 py-3 mb-1 font-almarai font-bold hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>الحجوزات</span>
+</a>
+<a class="flex flex-row-reverse items-center justify-start gap-3 bg-white/10 text-[#C9A84C] rounded-lg px-4 py-3 mb-1 border-r-4 border-[#C9A84C] font-almarai font-bold transition-transform active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span>المشرفون</span>
+</a>
+<a class="flex flex-row-reverse items-center justify-start gap-3 text-white/70 hover:text-white px-4 py-3 mb-1 font-almarai font-bold hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>الإعدادات</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5">
+<button class="w-full bg-[#C9A84C] text-primary py-3 rounded-lg font-bold font-almarai mb-4 hover:brightness-110 transition-all active:scale-95">
+                إضافة عقار جديد
+            </button>
+<a class="flex flex-row-reverse items-center justify-start gap-3 text-white/70 hover:text-white px-4 py-3 font-almarai font-bold hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>تسجيل الخروج</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar Component -->
+<header class="fixed top-0 left-0 right-64 h-16 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 flex flex-row-reverse justify-between items-center px-8 w-auto">
+<div class="flex flex-row-reverse items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined text-slate-500 hover:text-[#C9A84C] cursor-pointer transition-colors" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+</div>
+<div class="flex flex-row-reverse items-center gap-3 group cursor-pointer">
+<div class="w-9 h-9 rounded-full bg-slate-200 overflow-hidden border border-slate-300">
+<img alt="صورة المشرف" class="w-full h-full object-cover" data-alt="professional portrait of a middle-eastern corporate administrator in formal attire, high-end photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxnd3ZBND5ahlW80POWaNYAlHj54ouchmwJ7lndmwL9DbVRUWnyrxQbNwno5hgjZkQwcVOnLZy-VmbkbShCAKERz5yhN9uhG9qtapUDoW_2RYBcfx5oSNuEISMWo9TNG5o-MEsBCdVTvyu58aMaXIlPDIEkKrV3B13xsWqVwcaXAJKNFUouPkLb_uCPx_ZknI3PMhOrABsCC4z7gKmUMHrTNMRYw0qJPz4Oh9oEiMNShxnlw-4OijqL6JF0JZtTYNlIfv4IUId57Y"/>
+</div>
+<span class="text-[#1B3A5C] dark:text-white font-['Almarai'] text-sm font-semibold group-hover:text-[#C9A84C] transition-colors">أحمد العلي</span>
+</div>
+</div>
+<div class="flex-1 max-w-md mr-8">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute right-3 text-slate-400" data-icon="search">search</span>
+<input class="w-full bg-slate-100 border-none rounded-full py-2 pr-10 pl-4 focus:ring-2 focus:ring-[#C9A84C]/50 text-sm transition-all" placeholder="البحث عن مشرفين..." type="text"/>
+</div>
+</div>
+<div class="hidden">
+<span class="text-[#1B3A5C] font-['Almarai'] text-lg font-semibold">المنسق العقاري</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="mr-64 pt-16 min-h-screen p-8">
+<!-- Header Section with CTA -->
+<section class="mb-10 flex justify-between items-end">
+<div>
+<h2 class="text-3xl font-extrabold text-[#1B3A5C] font-almarai tracking-tight mb-2">إدارة المشرفين</h2>
+<p class="text-slate-500 max-w-lg">قم بإدارة صلاحيات الوصول والتحكم في فريق العمل الخاص بالمنصة العقارية.</p>
+</div>
+<button class="bg-[#C9A84C] hover:bg-[#b39540] text-primary px-6 py-3 rounded-md flex items-center gap-2 font-bold font-almarai transition-all transform active:scale-95 shadow-lg shadow-[#C9A84C]/20">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+<span>+ إضافة مشرف جديد</span>
+</button>
+</section>
+<!-- Bento Style Stats (Optional for Premium Feel) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-slate-100/50">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-blue-50 text-primary rounded-lg">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+</div>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">+12%</span>
+</div>
+<p class="text-slate-500 text-sm mb-1">إجمالي المشرفين</p>
+<h4 class="text-2xl font-bold text-primary font-almarai">24 مشرفاً</h4>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-slate-100/50">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-amber-50 text-secondary rounded-lg">
+<span class="material-symbols-outlined" data-icon="shield_person">shield_person</span>
+</div>
+</div>
+<p class="text-slate-500 text-sm mb-1">مدراء النظام</p>
+<h4 class="text-2xl font-bold text-primary font-almarai">4 مسؤولين</h4>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-slate-100/50">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-emerald-50 text-emerald-700 rounded-lg">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+</div>
+<p class="text-slate-500 text-sm mb-1">النشطون حالياً</p>
+<h4 class="text-2xl font-bold text-primary font-almarai">18 متصل</h4>
+</div>
+</div>
+<!-- Admins Table Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100">
+<div class="overflow-x-auto">
+<table class="w-full text-right">
+<thead class="bg-slate-50 border-b border-slate-100">
+<tr>
+<th class="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">اسم المشرف</th>
+<th class="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">البريد الإلكتروني</th>
+<th class="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">الدور</th>
+<th class="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">تاريخ الإضافة</th>
+<th class="px-8 py-5 text-sm font-bold text-slate-600 font-almarai text-center">الإجراءات</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<!-- Admin Row 1 -->
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-bold">
+                                        ي.س
+                                    </div>
+<div>
+<p class="font-bold text-primary font-almarai">ياسين سليمان</p>
+<p class="text-xs text-slate-400">آخر ظهور: منذ ساعة</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-5 text-slate-600 text-sm">yassin.s@aqari.sy</td>
+<td class="px-8 py-5">
+<span class="bg-[#1B3A5C]/10 text-primary px-3 py-1 rounded-full text-xs font-bold font-almarai">مدير نظام</span>
+</td>
+<td class="px-8 py-5 text-slate-500 text-sm font-label">12 مايو 2023</td>
+<td class="px-8 py-5">
+<div class="flex justify-center gap-4">
+<button class="p-2 text-slate-400 hover:text-[#C9A84C] transition-colors rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Admin Row 2 -->
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold">
+                                        ر.ك
+                                    </div>
+<div>
+<p class="font-bold text-primary font-almarai">رنا كمال</p>
+<p class="text-xs text-slate-400">آخر ظهور: متصل الآن</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-5 text-slate-600 text-sm">rana.kamal@aqari.sy</td>
+<td class="px-8 py-5">
+<span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold font-almarai">مشرف مبيعات</span>
+</td>
+<td class="px-8 py-5 text-slate-500 text-sm font-label">05 يونيو 2023</td>
+<td class="px-8 py-5">
+<div class="flex justify-center gap-4">
+<button class="p-2 text-slate-400 hover:text-[#C9A84C] transition-colors rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Admin Row 3 -->
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold">
+                                        م.ع
+                                    </div>
+<div>
+<p class="font-bold text-primary font-almarai">ماهر عطار</p>
+<p class="text-xs text-slate-400">آخر ظهور: أمس</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-5 text-slate-600 text-sm">m.attar@aqari.sy</td>
+<td class="px-8 py-5">
+<span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold font-almarai">محرر عقارات</span>
+</td>
+<td class="px-8 py-5 text-slate-500 text-sm font-label">22 أغسطس 2023</td>
+<td class="px-8 py-5">
+<div class="flex justify-center gap-4">
+<button class="p-2 text-slate-400 hover:text-[#C9A84C] transition-colors rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Admin Row 4 -->
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-bold">
+                                        ل.م
+                                    </div>
+<div>
+<p class="font-bold text-primary font-almarai">ليلى منصور</p>
+<p class="text-xs text-slate-400">آخر ظهور: منذ 3 أيام</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-5 text-slate-600 text-sm">laila.m@aqari.sy</td>
+<td class="px-8 py-5">
+<span class="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-xs font-bold font-almarai">مشرف تقني</span>
+</td>
+<td class="px-8 py-5 text-slate-500 text-sm font-label">10 سبتمبر 2023</td>
+<td class="px-8 py-5">
+<div class="flex justify-center gap-4">
+<button class="p-2 text-slate-400 hover:text-[#C9A84C] transition-colors rounded-lg hover:bg-slate-100">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-8 py-6 bg-slate-50/30 border-t border-slate-100 flex justify-between items-center">
+<span class="text-sm text-slate-500 font-label">عرض 1 - 4 من أصل 24 مشرف</span>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-lg flex items-center justify-center border border-slate-200 text-slate-400 hover:bg-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center bg-primary text-white font-bold text-sm">1</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center border border-slate-200 text-slate-600 hover:bg-white font-bold text-sm">2</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center border border-slate-200 text-slate-600 hover:bg-white font-bold text-sm">3</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center border border-slate-200 text-slate-400 hover:bg-white transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Role Permissions Context Card -->
+<div class="mt-12 p-8 bg-primary-container rounded-2xl relative overflow-hidden">
+<!-- Subtle pattern overlay -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+<div class="text-white">
+<h3 class="text-2xl font-bold font-almarai mb-3">دليل صلاحيات الأدوار</h3>
+<p class="text-white/70 max-w-md leading-relaxed">تعرف على الفرق بين صلاحيات "مدير النظام" و "المحرر" لضمان توزيع المهام بكفاءة وأمان داخل فريقك الرقمي.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg border border-white/20 transition-all font-bold font-almarai">تحميل تقرير النشاط</button>
+<button class="bg-[#C9A84C] text-primary px-6 py-3 rounded-lg font-bold font-almarai shadow-lg shadow-black/20 hover:scale-105 transition-all">مراجعة الصلاحيات</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

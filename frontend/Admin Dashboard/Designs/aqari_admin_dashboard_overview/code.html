@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&amp;family=Manrope:wght@400;600;800&amp;family=Inter:wght@400;500;600&amp;family=Tajawal:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary": "#ffffff",
+              "on-background": "#191c1e",
+              "on-error-container": "#93000a",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#ffe08f",
+              "on-primary-fixed": "#001c38",
+              "surface-container-high": "#e6e8ea",
+              "surface-container-lowest": "#ffffff",
+              "primary": "#002444",
+              "tertiary-fixed": "#66ff8e",
+              "on-tertiary-fixed-variant": "#005322",
+              "surface-container-highest": "#e0e3e5",
+              "secondary-container": "#fed977",
+              "on-surface-variant": "#43474e",
+              "on-secondary-container": "#785d00",
+              "on-primary-fixed-variant": "#2b486b",
+              "surface-tint": "#436084",
+              "inverse-on-surface": "#eff1f3",
+              "background": "#f8f9fb",
+              "on-tertiary": "#ffffff",
+              "surface-variant": "#e0e3e5",
+              "tertiary-container": "#00431a",
+              "on-secondary-fixed-variant": "#584400",
+              "inverse-surface": "#2d3133",
+              "on-tertiary-container": "#00bb56",
+              "primary-fixed": "#d2e4ff",
+              "tertiary": "#002b0e",
+              "surface-container": "#eceef0",
+              "surface": "#f8f9fb",
+              "secondary": "#755b00",
+              "primary-container": "#1b3a5c",
+              "error": "#ba1a1a",
+              "tertiary-fixed-dim": "#3de273",
+              "outline": "#73777f",
+              "error-container": "#ffdad6",
+              "surface-bright": "#f8f9fb",
+              "on-tertiary-fixed": "#002109",
+              "on-surface": "#191c1e",
+              "primary-fixed-dim": "#abc9f2",
+              "surface-dim": "#d8dadc",
+              "outline-variant": "#c3c6cf",
+              "on-secondary-fixed": "#241a00",
+              "secondary-fixed-dim": "#e6c364",
+              "on-secondary": "#ffffff",
+              "surface-container-low": "#f2f4f6",
+              "on-primary-container": "#87a4cc",
+              "inverse-primary": "#abc9f2"
+            },
+            fontFamily: {
+              "headline": ["Almarai", "Manrope"],
+              "body": ["Tajawal", "Inter"],
+              "label": ["Tajawal", "Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+    vertical-align: middle
+    }
+body {
+    font-family: "Tajawal", sans-serif
+    }
+.editorial-shadow {
+    box-shadow: 0 8px 32px rgba(25, 28, 30, 0.06)
+    }
+.arabesque-pattern {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAXHs2nhOGrJdw4blkOGIAIPDFpf3uTWSl5MD4Oc6UGCDq8b3IZqwShh_PVJ4dTrzFDvheh9uOsEWs0p5eEFzJ8sgLisbw7-E73qxiwre07cPlo7852aL75OpN0i8odcyYqjrVJgUdBKWQ8a5MD5nJRWaJbzGQLawwJLAsdA71F8K0nwb-OJ2JUfQSFYUGwkTWbxneJA4AU2Ld0F-ZqVE5k7Kkvqh3PiMqEOQRmGepKXTa4UzNXarFBPncudRYn6f8mDgBdBGpbpyG5);
+    opacity: 0.02
+    }</style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-x-hidden">
+<!-- Side Navigation Shell -->
+<aside class="fixed right-0 top-0 h-full w-64 border-l border-white/10 bg-[#1B3A5C] dark:bg-slate-950 shadow-xl z-50 transition-all duration-300 font-['Almarai','Manrope'] text-right leading-[1.2] flex flex-col py-8 justify-between">
+<div>
+<div class="px-6 mb-8">
+<span class="text-xl font-bold text-white block">عقاري</span>
+<span class="text-xs text-on-primary-container/60 tracking-widest">لوحة التحكم</span>
+</div>
+<nav class="space-y-1">
+<!-- Active Item -->
+<a class="flex flex-row-reverse items-center gap-3 px-6 py-3 bg-[#C9A84C]/10 text-[#C9A84C] border-r-4 border-[#C9A84C] transition-all duration-300 scale-95-on-click active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-bold">نظرة عامة</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-3 px-6 py-3 text-slate-300/70 hover:bg-white/5 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span>العقارات</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-3 px-6 py-3 text-slate-300/70 hover:bg-white/5 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>الحجوزات</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-3 px-6 py-3 text-slate-300/70 hover:bg-white/5 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>المشرفون</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-3 px-6 py-3 text-slate-300/70 hover:bg-white/5 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>الإعدادات</span>
+</a>
+</nav>
+</div>
+<div class="px-6">
+<div class="flex flex-row-reverse items-center gap-3 p-3 bg-white/5 rounded-xl mb-4">
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover" data-alt="professional headshot of a middle-aged middle-eastern man in a business suit with a friendly and authoritative expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsAk0IZM8b8NQ4XzJ1YwS_k5XyAvVOYcTmYqLCobGH7Tp6Slao4GiJtrDG4b8SOC8hKZT_NpbgpFBglRatA8wDHbIaU57Bg4OoPMT9-n5olPM0ivFpvkEAMhjuRlzXyTfWzXDJNlPjD6fmUeqiq5qVPiiFfMOf2-BVEbM_LLRt4u7Fe36pjKUsYAvKQ5vAyXjp8mGN2ok_KLoQZIE5XgPBBw60AB7EegKXYkJK4H-iu6XcP7dI4lUEbuFEcHeB5W7BQYSR9zQ8Nuja"/>
+<div class="text-right">
+<p class="text-white text-sm font-bold">أحمد العمر</p>
+<p class="text-xs text-slate-400">مدير النظام</p>
+</div>
+</div>
+<button class="flex flex-row-reverse items-center gap-3 w-full px-4 py-2 text-slate-400 hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-sm">تسجيل الخروج</span>
+</button>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 right-64 h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 z-40 transition-colors duration-200">
+<div class="flex flex-row-reverse justify-between items-center px-8 h-full w-full font-['Almarai','Manrope'] text-right">
+<div>
+<h1 class="text-xl font-extrabold text-[#1B3A5C]">نظرة عامة</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-slate-400 text-sm">
+<span class="material-symbols-outlined text-lg" data-icon="calendar_today">calendar_today</span>
+<span>١٢ أكتوبر ٢٠٢٣</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="hover:bg-slate-50 rounded-full p-2 text-slate-500 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<div class="h-8 w-px bg-slate-200 mx-2"></div>
+<img alt="Admin Avatar" class="w-8 h-8 rounded-full object-cover border border-slate-200" data-alt="professional headshot of a middle-aged middle-eastern man in a business suit with a friendly and authoritative expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO0rLtxDNwP-QQgL6kKd_JpErFzl-USAnMpUyk1jcMD3Y4uPu8v7-tDtYTbcsykxKMFd_qhhXbGgH3rhWWD6CP7n_d_POIaLIBYW6G7BD_WYWtXYyeUlT63D7CTLV7KfK8j-cjZ5D5ry37-wgvGS0RNjidotcc3Lj8yK13s3Fot03_1PhAM2Unq8SAtzneFo1lYNvsZapux0olt6avc134f7W757qBGNQcr_xGP5zNbh2ndZ9GpvZVGEe5gcQVb3A51if7eex2s9Ph"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="mr-64 pt-28 pb-12 px-8 min-h-screen relative">
+<div class="absolute inset-0 arabesque-pattern pointer-events-none"></div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-primary transition-transform hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="apartment">apartment</span>
+</div>
+<span class="text-xs text-on-surface-variant font-bold">إجمالي العقارات</span>
+</div>
+<div class="text-3xl font-extrabold text-primary">٢٤</div>
+<div class="mt-2 text-[10px] text-tertiary font-bold">+١٢٪ من الشهر الماضي</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-tertiary-container transition-transform hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-tertiary-container/10 text-tertiary-container rounded-lg">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</div>
+<span class="text-xs text-on-surface-variant font-bold">المتاحة</span>
+</div>
+<div class="text-3xl font-extrabold text-on-background">١٨</div>
+<div class="mt-2 text-[10px] text-on-surface-variant">محدث منذ ٣ ساعات</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#755b00] transition-transform hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-[#755b00]/10 text-[#755b00] rounded-lg">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="text-xs text-on-surface-variant font-bold">المحجوزة</span>
+</div>
+<div class="text-3xl font-extrabold text-on-background">٦</div>
+<div class="mt-2 text-[10px] text-on-surface-variant">قيد المعالجة النهائية</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#C9A84C] transition-transform hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-[#C9A84C]/10 text-[#C9A84C] rounded-lg">
+<span class="material-symbols-outlined" data-icon="add_alert">add_alert</span>
+</div>
+<span class="text-xs text-on-surface-variant font-bold">طلبات جديدة</span>
+</div>
+<div class="text-3xl font-extrabold text-[#C9A84C]">٣</div>
+<div class="mt-2 text-[10px] text-error font-bold">تتطلب استجابة فورية</div>
+</div>
+</div>
+<!-- Content Columns -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+<!-- Recent Properties Table (2/3) -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl editorial-shadow overflow-hidden">
+<div class="p-6 border-b border-slate-50 flex justify-between items-center">
+<h2 class="text-lg font-bold text-primary">العقارات الأخيرة</h2>
+<button class="text-sm text-secondary font-bold hover:underline">عرض الكل</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-right">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-xs font-bold uppercase tracking-wider">
+<th class="px-6 py-4">رقم العقار</th>
+<th class="px-6 py-4">الاسم</th>
+<th class="px-6 py-4">الموقع</th>
+<th class="px-6 py-4">السعر</th>
+<th class="px-6 py-4">الحالة</th>
+<th class="px-6 py-4">إجراءات</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-bold text-primary">#RE-2041</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3 flex-row-reverse justify-end">
+<div class="w-10 h-10 rounded-lg bg-slate-200 overflow-hidden">
+<img alt="Modern Villa" class="w-full h-full object-cover" data-alt="luxury modern minimalist villa with large glass windows and white facade at twilight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADTu7VCOOtUI_TGaDWh60bao-TdtT8ZefDTk1s_HKceZT-RwQs_LC-zRNviL2eys67pbgWSOBRXGaYyfe85jVEd2W-R1ZpsenbzpG71RcXwkGwqLW2NnF-xLTxMYwmhopuQU8H_AgjrzX6PkwCfoGgu-cOw-CC9i80G2LnLRdGkyQ_zWT-RNyeRPvApxlhgcKWl4kqWdiLCquInleOyqkl8KVxTB9WFD3L8nRfXPGADS8C3ZNhe1wD_NFiA0bsct3FyziDE1Dsxi9h"/>
+</div>
+<span class="text-sm font-medium">فيلا المزة الحديثة</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">دمشق، المزة</td>
+<td class="px-6 py-4 text-sm font-bold">٤٥٠,٠٠٠,٠٠٠ ل.س</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-tertiary-container/10 text-on-tertiary-container text-[10px] font-bold rounded-full">متاح</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-primary/5 text-primary rounded"><span class="material-symbols-outlined text-sm" data-icon="edit">edit</span></button>
+<button class="p-1.5 hover:bg-error/5 text-error rounded"><span class="material-symbols-outlined text-sm" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-bold text-primary">#RE-2045</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3 flex-row-reverse justify-end">
+<div class="w-10 h-10 rounded-lg bg-slate-200 overflow-hidden">
+<img alt="Urban Loft" class="w-full h-full object-cover" data-alt="industrial chic urban apartment interior with high ceilings and exposed brick walls" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1goeOk_S9u__IZ_6_kGosJMjwnBnUq1J7_vlP0IvLQhi1qpO4TQwZjC1SK2vBG5JQRo1vVc68w80p_4BTsy-TOsCIKrNWRRLPaod9Pl3ckwcXOyHCbOPJjphaaTq7d4qYTiiscs-MpvKgVXWPjdBM9WBvrRln7Ip1qkUDGRtq2Nw1R8tQ8IMevFvt6uEbSSqHE4AIVJAflJLDXQNipDK1otc3aK_gmT5l7fm9-pQI5NzVeLC4WLCTBjMQ7ehjOGI_W6QjnaUbQaiP"/>
+</div>
+<span class="text-sm font-medium">شقة مشروع دمر</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">دمشق، مشروع دمر</td>
+<td class="px-6 py-4 text-sm font-bold">٢٧٥,٠٠٠,٠٠٠ ل.س</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-[#755b00]/10 text-[#755b00] text-[10px] font-bold rounded-full">محجوز</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-primary/5 text-primary rounded"><span class="material-symbols-outlined text-sm" data-icon="edit">edit</span></button>
+<button class="p-1.5 hover:bg-error/5 text-error rounded"><span class="material-symbols-outlined text-sm" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-bold text-primary">#RE-2048</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3 flex-row-reverse justify-end">
+<div class="w-10 h-10 rounded-lg bg-slate-200 overflow-hidden">
+<img alt="Sea View Apt" class="w-full h-full object-cover" data-alt="contemporary beachfront apartment balcony overlooking a calm mediterranean sea at sunrise" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0To4Cp7fZ7Nq5_7Z-glEoYW2s06hB9zym55FWnCtNUEYpq8tfMXuwNF45mGo_u-a6htQeraK7OO1hPcBp75ukIDswOLEA6giD9iX9DDaEyrDUP87ovlxwrULtqBqXR47YqblttCvP05IGdX8e41jSXEerPR9_7bo3o1kAi4D7k8s8kbqOjY5DxoD_Rau6VMBfVXwljjIRczgQpWYL5PQPi1ZSMOTKSEUyFaF5fgjI11MdM5g_pd7Zg2no0uhheR1BlOHhtnpaaB0w"/>
+</div>
+<span class="text-sm font-medium">قصر اللاذقية الساحلي</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">اللاذقية، الشاطئ</td>
+<td class="px-6 py-4 text-sm font-bold">٨٩٠,٠٠٠,٠٠٠ ل.س</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-tertiary-container/10 text-on-tertiary-container text-[10px] font-bold rounded-full">متاح</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-primary/5 text-primary rounded"><span class="material-symbols-outlined text-sm" data-icon="edit">edit</span></button>
+<button class="p-1.5 hover:bg-error/5 text-error rounded"><span class="material-symbols-outlined text-sm" data-icon="delete">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Add Property Form (1/3) -->
+<div class="bg-surface-container-lowest rounded-xl editorial-shadow overflow-hidden p-6 border-t-4 border-secondary">
+<h2 class="text-lg font-bold text-primary mb-6">إضافة عقار جديد</h2>
+<form class="space-y-4">
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1">عنوان العقار</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm" placeholder="مثال: فيلا الياسمين" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1">الموقع/المدينة</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm" placeholder="دمشق" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1">السعر</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm text-left" dir="ltr" placeholder="ل.س" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1">عدد الغرف</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm" placeholder="0" type="number"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-on-surface-variant mb-1">نوع العقار</label>
+<select class="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm pr-0">
+<option>سكني</option>
+<option>تجاري</option>
+<option>أرض</option>
+</select>
+</div>
+</div>
+<div class="mt-6">
+<label class="block text-xs font-bold text-on-surface-variant mb-3">صورة العقار</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center text-slate-400 hover:border-secondary hover:text-secondary transition-all cursor-pointer bg-surface-container-low/30">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="cloud_upload">cloud_upload</span>
+<span class="text-xs">اسحب الصورة هنا أو اضغط للرفع</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-3 rounded-md font-bold text-sm hover:bg-primary-container transition-colors shadow-lg shadow-primary/20 mt-6" type="submit">
+                        حفظ العقار
+                    </button>
+</form>
+</div>
+</div>
+<!-- Bottom Section: Recent Bookings -->
+<section class="bg-surface-container-lowest rounded-xl editorial-shadow overflow-hidden">
+<div class="p-6 border-b border-slate-50 flex justify-between items-center">
+<div class="flex items-center gap-3 flex-row-reverse">
+<span class="material-symbols-outlined text-secondary" data-icon="history">history</span>
+<h2 class="text-lg font-bold text-primary">الحجوزات الأخيرة</h2>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-right">
+<thead>
+<tr class="bg-surface-container-low/50 text-on-surface-variant text-xs font-bold">
+<th class="px-6 py-4">العميل</th>
+<th class="px-6 py-4">العقار المحجوز</th>
+<th class="px-6 py-4">تاريخ الحجز</th>
+<th class="px-6 py-4">قيمة العربون</th>
+<th class="px-6 py-4">حالة الدفع</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr>
+<td class="px-6 py-4 text-sm font-medium">ياسر القحطاني</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">فيلا المزة الحديثة</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">١٠ أكتوبر ٢٠٢٣</td>
+<td class="px-6 py-4 text-sm font-bold">٥,٠٠٠,٠٠٠ ل.س</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 flex-row-reverse justify-end">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<span class="text-xs font-bold text-on-tertiary-container">مكتمل</span>
+</div>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-sm font-medium">ليلى العبدالله</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">شقة مشروع دمر</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">١١ أكتوبر ٢٠٢٣</td>
+<td class="px-6 py-4 text-sm font-bold">٢,٥٠٠,٠٠٠ ل.س</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 flex-row-reverse justify-end">
+<span class="w-2 h-2 rounded-full bg-[#755b00]"></span>
+<span class="text-xs font-bold text-[#755b00]">قيد الانتظار</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- Contextual FAB (Only on main dashboard) -->
+<button class="fixed bottom-8 left-8 w-14 h-14 bg-secondary text-white rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform z-50">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</body></html>

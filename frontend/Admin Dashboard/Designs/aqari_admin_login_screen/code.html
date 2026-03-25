@@ -1,0 +1,204 @@
+<html><head><meta charset="utf-8"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&amp;family=Tajawal:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-tertiary": "#ffffff",
+          "tertiary-fixed": "#66ff8e",
+          "on-secondary": "#ffffff",
+          "secondary-fixed": "#ffe08f",
+          "on-surface-variant": "#43474e",
+          "tertiary-container": "#00431a",
+          "on-primary": "#ffffff",
+          "tertiary": "#002b0e",
+          "secondary-fixed-dim": "#e6c364",
+          "on-error": "#ffffff",
+          "tertiary-fixed-dim": "#3de273",
+          "secondary-container": "#fed977",
+          "surface-container-high": "#e6e8ea",
+          "on-surface": "#191c1e",
+          "on-secondary-fixed-variant": "#584400",
+          "error-container": "#ffdad6",
+          "surface-bright": "#f8f9fb",
+          "error": "#ba1a1a",
+          "on-tertiary-fixed": "#002109",
+          "surface-container-low": "#f2f4f6",
+          "on-primary-container": "#87a4cc",
+          "primary-fixed": "#d2e4ff",
+          "outline": "#73777f",
+          "on-error-container": "#93000a",
+          "on-secondary-container": "#785d00",
+          "surface-container": "#eceef0",
+          "surface": "#f8f9fb",
+          "on-secondary-fixed": "#241a00",
+          "outline-variant": "#c3c6cf",
+          "on-tertiary-container": "#00bb56",
+          "on-background": "#191c1e",
+          "primary-container": "#1b3a5c",
+          "secondary": "#755b00",
+          "primary": "#002444",
+          "inverse-surface": "#2d3133",
+          "on-primary-fixed": "#001c38",
+          "surface-container-lowest": "#ffffff",
+          "primary-fixed-dim": "#abc9f2",
+          "on-tertiary-fixed-variant": "#005322",
+          "inverse-on-surface": "#eff1f3",
+          "background": "#f8f9fb",
+          "surface-tint": "#436084",
+          "inverse-primary": "#abc9f2",
+          "surface-dim": "#d8dadc",
+          "surface-variant": "#e0e3e5",
+          "surface-container-highest": "#e0e3e5",
+          "on-primary-fixed-variant": "#2b486b"
+        },
+        fontFamily: {
+          "headline": ["Almarai", "sans-serif"],
+          "body": ["Tajawal", "sans-serif"],
+          "label": ["Tajawal", "sans-serif"]
+        },
+        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      },
+    },
+  }
+</script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }
+.syrian-pattern {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAdyO1zlWAHoLcB-X0D7s-T4mdvOsCKnU9evKtt3F844tYI44LIc6reRXH-aTr013xBAHG0Y6sXIMOQxGgjcPEQLyGvTYlZCLMTGJRp0cmQPfumENYrEVVw2CA6U92bH52n7aFuVLxTvWz1MYdWmVH6u6OZAoO-dj7RoUm2oJk4SbcyERIaH3Kuv_WVfLb4BKFsX91Rr2lwA2tRHpUrXIFxgk_vpfG1TlfXCbycxXDm5KTgLGpk7VyozEcb98LORAkow2vMxKV4gSA);
+    opacity: 0.03
+    }
+input:focus + span, input:not(:placeholder-shown) + span {
+    transform: translatey(-20px) scale(0.85);
+    color: #755b00
+    }
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px)
+    }</style>
+</head><body class="bg-surface font-body antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed" dir="rtl">
+<!-- Main Container -->
+<main class="min-h-screen flex flex-col md:flex-row-reverse overflow-hidden">
+<!-- Left Section: Visual Identity (RTL: Left is the large image) -->
+<section class="relative hidden md:flex w-1/2 lg:w-3/5 bg-primary-container items-center justify-center overflow-hidden">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0">
+<img alt="Luxury modern glass architecture at dusk" class="w-full h-full object-cover" data-alt="3D rendering of a high-end modern glass building at twilight with warm interior lighting reflecting on polished surfaces, architectural photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3HraA9sTFioXxYKCuQsarQfpeFLatleuEYAtNCCL_lAziueeggMHDEP7B5C3v4a9JFcpDXWM9Bj4UEgiiprvzwSj7J5c81FD8oZJ6tahw_wORzYZpy-Wz72QJIUakYveJ8abkfRl77BBwEtiwQ7SV-zmnHPRIRV7iPpCHIqP6Y__xYfGXABcFRFSsHhkrECK0Mb6bNfVR8w2qK2QmkjykHjudXDIbaDRfETXGSxCeUPLnFGlP1uE2aNH_nwKpdmh3CTDJJTCAk7E"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent"></div>
+<!-- Syrian Geometric Pattern Overlay -->
+<div class="absolute inset-0 syrian-pattern"></div>
+</div>
+<!-- Content Overlay -->
+<div class="relative z-10 px-12 max-w-2xl text-white space-y-8">
+<div class="inline-block p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+<span class="material-symbols-outlined text-4xl text-secondary-fixed" data-icon="domain">domain</span>
+</div>
+<div class="space-y-4">
+<h1 class="font-headline text-5xl font-extrabold tracking-tight leading-tight">
+            المنسق العقاري <br/> <span class="text-secondary-fixed">بوابة الإدارة المركزية</span>
+</h1>
+<p class="text-xl text-white/80 leading-relaxed font-light">
+            إدارة الأصول العقارية والعمليات بنظرة شاملة ودقيقة. التجربة الرقمية الأكثر تطوراً في السوق العقاري.
+          </p>
+</div>
+<div class="flex gap-12 pt-12 border-t border-white/10">
+<div>
+<div class="text-3xl font-bold text-secondary-fixed">2.4k+</div>
+<div class="text-sm opacity-60 uppercase tracking-widest">عقار مدار</div>
+</div>
+<div>
+<div class="text-3xl font-bold text-secondary-fixed">98%</div>
+<div class="text-sm opacity-60 uppercase tracking-widest">نسبة الإشغال</div>
+</div>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-secondary-fixed/5 rounded-full blur-[100px]"></div>
+</section>
+<!-- Right Section: Login Form (RTL: Right is the form) -->
+<section class="w-full md:w-1/2 lg:w-2/5 flex flex-col bg-surface-container-lowest relative">
+<!-- Mobile Logo Placeholder -->
+<div class="md:hidden p-8 flex justify-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-5xl text-primary" data-icon="domain">domain</span>
+<span class="font-headline font-bold text-xl text-primary mt-2">المنسق العقاري</span>
+</div>
+</div>
+<div class="flex-grow flex items-center justify-center p-8 lg:p-16">
+<div class="w-full max-w-md space-y-10">
+<!-- Header -->
+<div class="space-y-2 text-right">
+<h2 class="font-headline text-3xl font-extrabold text-primary leading-tight">
+              تسجيل دخول المشرف
+            </h2>
+<p class="text-on-surface-variant font-medium">مرحباً بك مجدداً في نظام الإدارة</p>
+</div>
+<!-- Form -->
+<form class="space-y-6">
+<!-- Email Input -->
+<div class="relative group">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2 pr-1" for="email">
+                البريد الإلكتروني
+              </label>
+<div class="relative">
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/40 py-4 px-1 focus:ring-0 focus:border-secondary transition-all duration-300 placeholder:text-surface-variant text-primary font-medium" id="email" name="email" placeholder="admin@aqari.sy" type="email"/>
+<div class="absolute inset-y-0 left-0 flex items-center pr-3 pointer-events-none opacity-40 group-focus-within:opacity-100 group-focus-within:text-secondary">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+</div>
+</div>
+</div>
+<!-- Password Input -->
+<div class="relative group">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2 pr-1" for="password">
+                كلمة المرور
+              </label>
+<div class="relative">
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/40 py-4 px-1 focus:ring-0 focus:border-secondary transition-all duration-300 placeholder:text-surface-variant text-primary font-medium" id="password" name="password" placeholder="••••••••" type="password"/>
+<div class="absolute inset-y-0 left-0 flex items-center pr-3 pointer-events-none opacity-40 group-focus-within:opacity-100 group-focus-within:text-secondary">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+</div>
+</div>
+</div>
+<!-- Action Links -->
+<div class="flex items-center justify-between text-sm">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-on-surface-variant group-hover:text-primary transition-colors">تذكرني</span>
+</label>
+<a class="text-secondary font-bold hover:underline" href="#">نسيت كلمة المرور؟</a>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-primary text-white py-5 rounded-lg font-headline font-bold text-lg shadow-xl shadow-primary/20 hover:bg-primary-container transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98]" type="submit">
+              تسجيل الدخول
+              <span class="material-symbols-outlined text-secondary-fixed" data-icon="arrow_back">arrow_back</span>
+</button>
+</form>
+<!-- Footer Text -->
+<div class="pt-8 border-t border-surface-container flex flex-col items-center gap-4">
+<div class="flex items-center gap-2 px-4 py-2 bg-error-container/10 rounded-full">
+<span class="material-symbols-outlined text-error text-sm" data-icon="gpp_maybe">gpp_maybe</span>
+<span class="text-sm text-on-surface-variant">هذه البوابة مخصصة لمسؤولي النظام فقط</span>
+</div>
+<p class="text-xs text-outline-variant text-center leading-relaxed">
+               بمجرد تسجيل الدخول، أنت توافق على شروط الاستخدام وسياسة الخصوصية الخاصة بالمنصة.
+             </p>
+</div>
+</div>
+</div>
+<!-- Sidebar Accent (The Gold Detail) -->
+<div class="absolute right-0 top-1/4 bottom-1/4 w-[3px] bg-secondary shadow-[0_0_15px_rgba(117,91,0,0.3)]"></div>
+</section>
+</main>
+<!-- Help FAB -->
+<button class="fixed bottom-8 left-8 p-4 bg-white shadow-2xl rounded-full text-primary border border-surface-container-high hover:bg-surface transition-transform active:scale-90 z-50 group">
+<span class="material-symbols-outlined text-3xl" data-icon="support_agent">support_agent</span>
+<span class="absolute right-full mr-3 whitespace-nowrap bg-primary text-white px-3 py-1 rounded text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">الدعم الفني</span>
+</button>
+
+```</body></html>
