@@ -3,6 +3,7 @@ import AdminLayout from './layouts/AdminLayout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Admins from './pages/Admins';
+import Bookings from './pages/Bookings';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="admins" element={<Admins />} />
+          <Route path="bookings" element={<Bookings />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

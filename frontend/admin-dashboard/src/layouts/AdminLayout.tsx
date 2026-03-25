@@ -106,20 +106,6 @@ export default function AdminLayout() {
           <div>
             <h1 className="text-xl font-extrabold text-[#1B3A5C]">المنسق العقاري</h1>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-slate-400 text-sm">
-              <span className="material-symbols-outlined text-lg" data-icon="calendar_today">calendar_today</span>
-              <span>١٢ أكتوبر ٢٠٢٣</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="hover:bg-slate-50 rounded-full p-2 text-slate-500 relative">
-                <span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-                <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
-              </button>
-              <div className="h-8 w-px bg-slate-200 mx-2"></div>
-              <img alt="Admin Avatar" className="w-8 h-8 rounded-full object-cover border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO0rLtxDNwP-QQgL6kKd_JpErFzl-USAnMpUyk1jcMD3Y4uPu8v7-tDtYTbcsykxKMFd_qhhXbGgH3rhWWD6CP7n_d_POIaLIBYW6G7BD_WYWtXYyeUlT63D7CTLV7KfK8j-cjZ5D5ry37-wgvGS0RNjidotcc3Lj8yK13s3Fot03_1PhAM2Unq8SAtzneFo1lYNvsZapux0olt6avc134f7W757qBGNQcr_xGP5zNbh2ndZ9GpvZVGEe5gcQVb3A51if7eex2s9Ph"/>
-            </div>
-          </div>
         </div>
       </header>
 

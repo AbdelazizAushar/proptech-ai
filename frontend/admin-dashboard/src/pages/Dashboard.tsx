@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 interface Listing {
-  id: string; // or number based on schema
+  id: string; // uuid
   name: string;
   location: string;
   price: number;
@@ -14,51 +14,85 @@ export default function Dashboard() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  
+  const [stats, setStats] = useState({
+    totalThisMonth: 0,
+    available: 0,
+    pendingAppointments: 0,
+    totalUsers: 0
+  });
 
-  // Fetch listings on component mount
-  const fetchListings = async () => {
+  const currentDate = new Intl.DateTimeFormat('ar-EG', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  }).format(new Date());
+
+  const fetchData = async () => {
     setLoading(true);
-    let query = supabase.from('listings').select('*');
     
-    const { data, error } = await query;
-    if (error) {
-      console.error('Error fetching listings:', error);
-    } else {
-      setListings(data || []);
+    // 1. Fetch Listings
+    const { data: listingsData } = await supabase.from('listings').select('*').order('created_at', { ascending: false });
+    if (listingsData) {
+      setListings(listingsData);
     }
+
+    // 2. Fetch Analytics
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0,0,0,0);
+    const isoStart = startOfMonth.toISOString();
+
+    const [res1, res2, res3, res4] = await Promise.all([
+      supabase.from('listings').select('id').gte('created_at', isoStart),
+      supabase.from('listings').select('id').eq('status', 'available'),
+      supabase.from('appointments').select('id').eq('status', 'pending'),
+      supabase.from('users').select('id')
+    ]);
+
+    setStats({
+      totalThisMonth: res1.data?.length || 0,
+      available: res2.data?.length || 0,
+      pendingAppointments: res3.data?.length || 0,
+      totalUsers: res4.data?.length || 0
+    });
+
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchListings();
+    fetchData();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     if (window.confirm('هل أنت متأكد من حذف هذا العقار؟')) {
       const { error } = await supabase.from('listings').delete().eq('id', id);
       if (error) {
         console.error('Error deleting listing:', error);
         alert('حدث خطأ أثناء החذف');
       } else {
-        // Optimistic UI update
         setListings(listings.filter(listing => listing.id !== id));
       }
     }
   };
 
-  // Filter listings by search
   const filteredListings = listings.filter(l => 
-    l.name.toLowerCase().includes(search.toLowerCase()) || 
-    l.location.toLowerCase().includes(search.toLowerCase())
+    (l.name && l.name.toLowerCase().includes(search.toLowerCase())) || 
+    (l.location && l.location.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
     <main className="mr-64 pt-28 pb-12 px-8 min-h-screen relative">
       <div className="absolute inset-0 arabesque-pattern pointer-events-none"></div>
       
-      {/* Search Header Add-on */}
-      <div className="mb-8 flex justify-between items-center relative z-10">
-        <h1 className="text-2xl font-bold font-['Almarai'] text-primary">لوحة التحكم السريعة</h1>
+      {/* Header Section */}
+      <div className="mb-8 flex justify-between items-end relative z-10">
+        <div>
+          <h1 className="text-3xl font-bold font-almarai text-primary mb-2">لوحة التحكم السريعة</h1>
+          <p className="text-slate-500 font-bold text-sm tracking-wide">{currentDate}</p>
+        </div>
         <div className="w-1/3">
            <input 
               type="text" 
@@ -72,211 +106,174 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12 relative z-10">
-        {/* Card 1 */}
-        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-primary transition-transform hover:scale-[1.02]">
+        {/* Card 1 - Listings this month */}
+        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-primary transition-transform hover:-translate-y-1">
           <div className="flex justify-between items-start mb-4">
             <div className="p-2 bg-primary/10 rounded-lg text-primary">
               <span className="material-symbols-outlined" data-icon="apartment">apartment</span>
             </div>
             <span className="text-xs text-on-surface-variant font-bold">إجمالي العقارات</span>
           </div>
-          <div className="text-3xl font-extrabold text-primary">{listings.length || '٢٤'}</div>
-          <div className="mt-2 text-[10px] text-tertiary font-bold">+١٢٪ من الشهر الماضي</div>
+          <div className="text-3xl font-extrabold text-primary">{stats.totalThisMonth}</div>
+          <div className="mt-2 text-[10px] text-tertiary font-bold">تم إضافتها هذا الشهر</div>
         </div>
-        {/* Card 2 */}
-        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-tertiary-container transition-transform hover:scale-[1.02]">
+        {/* Card 2 - Available Listings */}
+        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-tertiary-container transition-transform hover:-translate-y-1">
           <div className="flex justify-between items-start mb-4">
             <div className="p-2 bg-tertiary-container/10 text-tertiary-container rounded-lg">
               <span className="material-symbols-outlined" data-icon="check_circle">check_circle</span>
             </div>
             <span className="text-xs text-on-surface-variant font-bold">المتاحة</span>
           </div>
-          <div className="text-3xl font-extrabold text-on-background">١٨</div>
-          <div className="mt-2 text-[10px] text-on-surface-variant">محدث منذ ٣ ساعات</div>
+          <div className="text-3xl font-extrabold text-on-background">{stats.available}</div>
+          <div className="mt-2 text-[10px] text-on-surface-variant">عقارات جاهزة للبيع/الإيجار</div>
         </div>
-        {/* Card 3 */}
-        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#755b00] transition-transform hover:scale-[1.02]">
+        {/* Card 3 - Pending Appointments */}
+        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#755b00] transition-transform hover:-translate-y-1">
           <div className="flex justify-between items-start mb-4">
             <div className="p-2 bg-[#755b00]/10 text-[#755b00] rounded-lg">
               <span className="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
             </div>
             <span className="text-xs text-on-surface-variant font-bold">المحجوزة</span>
           </div>
-          <div className="text-3xl font-extrabold text-on-background">٦</div>
-          <div className="mt-2 text-[10px] text-on-surface-variant">قيد المعالجة النهائية</div>
+          <div className="text-3xl font-extrabold text-on-background">{stats.pendingAppointments}</div>
+          <div className="mt-2 text-[10px] text-on-surface-variant">طلبات قيد الانتظار</div>
         </div>
-        {/* Card 4 */}
-        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#C9A84C] transition-transform hover:scale-[1.02]">
+        {/* Card 4 - Total Customers */}
+        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#C9A84C] transition-transform hover:-translate-y-1">
           <div className="flex justify-between items-start mb-4">
             <div className="p-2 bg-[#C9A84C]/10 text-[#C9A84C] rounded-lg">
-              <span className="material-symbols-outlined" data-icon="add_alert">add_alert</span>
+              <span className="material-symbols-outlined" data-icon="group">group</span>
             </div>
-            <span className="text-xs text-on-surface-variant font-bold">طلبات جديدة</span>
+            <span className="text-xs text-on-surface-variant font-bold">إجمالي العملاء</span>
           </div>
-          <div className="text-3xl font-extrabold text-[#C9A84C]">٣</div>
-          <div className="mt-2 text-[10px] text-error font-bold">تتطلب استجابة فورية</div>
+          <div className="text-3xl font-extrabold text-[#C9A84C]">{stats.totalUsers}</div>
+          <div className="mt-2 text-[10px] text-slate-500 font-bold">المهتمين والمسجلين بالمنصة</div>
         </div>
       </div>
 
-      {/* Content Columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12 relative z-10">
-        
-        {/* Recent Properties Table (2/3) */}
-        <div className="lg:col-span-2 bg-surface-container-lowest rounded-xl editorial-shadow overflow-hidden">
-          <div className="p-6 border-b border-slate-50 flex justify-between items-center">
-            <h2 className="text-lg font-bold text-primary">العقارات</h2>
-            <button onClick={fetchListings} className="text-sm text-secondary font-bold hover:underline">تحديث</button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-right">
-              <thead>
-                <tr className="bg-surface-container-low text-on-surface-variant text-xs font-bold uppercase tracking-wider">
-                  <th className="px-6 py-4">رقم العقار</th>
-                  <th className="px-6 py-4">الاسم</th>
-                  <th className="px-6 py-4">الموقع</th>
-                  <th className="px-6 py-4">السعر</th>
-                  <th className="px-6 py-4">الحالة</th>
-                  <th className="px-6 py-4">إجراءات</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {loading ? (
-                  <tr><td colSpan={6} className="text-center py-8">جاري التحميل...</td></tr>
-                ) : filteredListings.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="text-center py-8 text-slate-500">لا توجد عقارات حالياً</td>
-                  </tr>
-                ) : (
-                  filteredListings.map((listing) => (
-                    <tr key={listing.id} className="hover:bg-surface-container-low/50 transition-colors">
-                      <td className="px-6 py-4 text-sm font-bold text-primary">#{listing.id.toString().substring(0,6)}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3 flex-row-reverse justify-end">
-                          <div className="w-10 h-10 rounded-lg bg-slate-200 overflow-hidden">
-                            <img alt={listing.name} className="w-full h-full object-cover" src={listing.images && listing.images.length > 0 ? listing.images[0] : "https://lh3.googleusercontent.com/aida-public/AB6AXuADTu7VCOOtUI_TGaDWh60bao-TdtT8ZefDTk1s_HKceZT-RwQs_LC-zRNviL2eys67pbgWSOBRXGaYyfe85jVEd2W-R1ZpsenbzpG71RcXwkGwqLW2NnF-xLTxMYwmhopuQU8H_AgjrzX6PkwCfoGgu-cOw-CC9i80G2LnLRdGkyQ_zWT-RNyeRPvApxlhgcKWl4kqWdiLCquInleOyqkl8KVxTB9WFD3L8nRfXPGADS8C3ZNhe1wD_NFiA0bsct3FyziDE1Dsxi9h"}/>
-                          </div>
-                          <span className="text-sm font-medium">{listing.name}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-on-surface-variant">{listing.location}</td>
-                      <td className="px-6 py-4 text-sm font-bold">{listing.price.toLocaleString('ar-SY')} ل.س</td>
-                      <td className="px-6 py-4">
-                        <span className="px-3 py-1 bg-tertiary-container/10 text-on-tertiary-container text-[10px] font-bold rounded-full">{listing.status}</span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex gap-2 justify-end">
-                          <button className="p-1.5 hover:bg-primary/5 text-primary rounded" title="Edit"><span className="material-symbols-outlined text-sm" data-icon="edit">edit</span></button>
-                          <button onClick={() => handleDelete(listing.id)} className="p-1.5 hover:bg-error/5 text-error rounded" title="Delete"><span className="material-symbols-outlined text-sm" data-icon="delete">delete</span></button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+      {/* Listings Grid Cards */}
+      <div className="relative z-10">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold font-almarai text-primary">العقارات المدرجة</h2>
+          <button onClick={fetchData} className="text-sm text-secondary font-bold hover:underline flex items-center gap-1">
+            <span className="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+            تحديث البيانات
+          </button>
         </div>
 
-        {/* Add Property Form (1/3) */}
-        <div className="bg-surface-container-lowest rounded-xl editorial-shadow overflow-hidden p-6 border-t-4 border-secondary h-fit">
-          <h2 className="text-lg font-bold text-primary mb-6">إضافة عقار جديد</h2>
-          {/* UI Only - no strict action submitted here right now as per requirements */}
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <div>
-              <label className="block text-xs font-bold text-on-surface-variant mb-1">عنوان العقار</label>
-              <input className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm" placeholder="مثال: فيلا الياسمين" type="text"/>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-on-surface-variant mb-1">الموقع/المدينة</label>
-                <input className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm" placeholder="دمشق" type="text"/>
+        {loading ? (
+          <div className="text-center py-12 text-slate-500">جاري التحميل...</div>
+        ) : filteredListings.length === 0 ? (
+          <div className="text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-100">لا توجد عقارات حالياً</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredListings.map((listing) => (
+              <div key={listing.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 flex flex-col group cursor-pointer">
+                <div className="relative h-48 overflow-hidden bg-slate-100">
+                  <img 
+                    alt={listing.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    src={listing.images && listing.images.length > 0 && listing.images[0].startsWith('http') ? listing.images[0] : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                    }}
+                  />
+                  <div className="absolute top-3 right-3">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-primary text-[10px] font-bold rounded-full shadow-sm">
+                      {listing.status === 'available' ? 'متاح' : listing.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-5 flex-1 flex flex-col">
+                  <h3 className="font-bold text-primary font-almarai text-lg mb-1 line-clamp-1">{listing.name}</h3>
+                  <div className="flex items-center gap-1 text-slate-500 text-xs mb-4">
+                    <span className="material-symbols-outlined text-[14px]">location_on</span>
+                    <span className="truncate">{listing.location}</span>
+                  </div>
+                  <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
+                    <span className="font-extrabold text-secondary text-lg">{listing.price?.toLocaleString('ar-SY')} <span className="text-xs font-normal">ل.س</span></span>
+                    <div className="flex gap-1">
+                      <button className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-primary hover:text-white transition-colors">
+                        <span className="material-symbols-outlined text-[16px]">edit</span>
+                      </button>
+                      <button onClick={(e) => handleDelete(listing.id, e)} className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-error hover:text-white transition-colors">
+                        <span className="material-symbols-outlined text-[16px]">delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-bold text-on-surface-variant mb-1">السعر</label>
-                <input className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm text-left" dir="ltr" placeholder="ل.س" type="text"/>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-on-surface-variant mb-1">عدد الغرف</label>
-                <input className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm" placeholder="0" type="number"/>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-on-surface-variant mb-1">نوع العقار</label>
-                <select className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-secondary transition-colors py-2 text-sm pr-0">
-                  <option>سكني</option>
-                  <option>تجاري</option>
-                  <option>أرض</option>
-                </select>
-              </div>
-            </div>
-            <div className="mt-6">
-              <label className="block text-xs font-bold text-on-surface-variant mb-3">صورة العقار</label>
-              <div className="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center text-slate-400 hover:border-secondary hover:text-secondary transition-all cursor-pointer bg-surface-container-low/30">
-                <span className="material-symbols-outlined text-3xl mb-2" data-icon="cloud_upload">cloud_upload</span>
-                <span className="text-xs">اسحب الصورة هنا أو اضغط للرفع</span>
-              </div>
-            </div>
-            <button className="w-full bg-primary text-on-primary py-3 rounded-md font-bold text-sm hover:bg-primary-container transition-colors shadow-lg shadow-primary/20 mt-6" type="submit">
-                حفظ العقار عبر n8n (لاحقاً)
-            </button>
-          </form>
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Bottom Section: Recent Bookings */}
-      <section className="bg-surface-container-lowest rounded-xl editorial-shadow overflow-hidden relative z-10">
-        <div className="p-6 border-b border-slate-50 flex justify-between items-center">
-          <div className="flex items-center gap-3 flex-row-reverse">
-            <span className="material-symbols-outlined text-secondary" data-icon="history">history</span>
-            <h2 className="text-lg font-bold text-primary">الحجوزات الأخيرة</h2>
-          </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-right">
-            <thead>
-              <tr className="bg-surface-container-low/50 text-on-surface-variant text-xs font-bold">
-                <th className="px-6 py-4">العميل</th>
-                <th className="px-6 py-4">العقار المحجوز</th>
-                <th className="px-6 py-4">تاريخ الحجز</th>
-                <th className="px-6 py-4">قيمة العربون</th>
-                <th className="px-6 py-4">حالة الدفع</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50">
-              <tr>
-                <td className="px-6 py-4 text-sm font-medium">ياسر القحطاني</td>
-                <td className="px-6 py-4 text-sm text-on-surface-variant">فيلا المزة الحديثة</td>
-                <td className="px-6 py-4 text-sm text-on-surface-variant">١٠ أكتوبر ٢٠٢٣</td>
-                <td className="px-6 py-4 text-sm font-bold">٥,٠٠٠,٠٠٠ ل.س</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2 flex-row-reverse justify-end">
-                    <span className="w-2 h-2 rounded-full bg-tertiary-container"></span>
-                    <span className="text-xs font-bold text-on-tertiary-container">مكتمل</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 text-sm font-medium">ليلى العبدالله</td>
-                <td className="px-6 py-4 text-sm text-on-surface-variant">شقة مشروع دمر</td>
-                <td className="px-6 py-4 text-sm text-on-surface-variant">١١ أكتوبر ٢٠٢٣</td>
-                <td className="px-6 py-4 text-sm font-bold">٢,٥٠٠,٠٠٠ ل.س</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2 flex-row-reverse justify-end">
-                    <span className="w-2 h-2 rounded-full bg-[#755b00]"></span>
-                    <span className="text-xs font-bold text-[#755b00]">قيد الانتظار</span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Contextual FAB (Only on main dashboard) */}
-      <button className="fixed bottom-8 left-8 w-14 h-14 bg-secondary text-white rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform z-50">
+      {/* Floating Action Button */}
+      <button 
+        onClick={() => setShowAddModal(true)}
+        className="fixed bottom-8 left-8 w-14 h-14 bg-secondary text-primary rounded-full flex items-center justify-center shadow-xl shadow-[#C9A84C]/30 hover:scale-110 hover:bg-[#d8b556] transition-all z-40"
+      >
         <span className="material-symbols-outlined" data-icon="add">add</span>
       </button>
+
+      {/* Add Property Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={() => setShowAddModal(false)}></div>
+            <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <h2 className="text-xl font-bold font-almarai text-primary">إضافة عقار جديد</h2>
+                    <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-error transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-error/10">
+                        <span className="material-symbols-outlined text-xl">close</span>
+                    </button>
+                </div>
+                <div className="p-6 max-h-[75vh] overflow-y-auto">
+                    <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); setShowAddModal(false); }}>
+                        <div>
+                        <label className="block text-xs font-bold text-on-surface-variant mb-2">عنوان العقار</label>
+                        <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="مثال: فيلا الياسمين بالقرب من المركز" type="text"/>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-bold text-on-surface-variant mb-2">الموقع/المدينة</label>
+                            <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="دمشق، المزة" type="text"/>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-on-surface-variant mb-2">السعر (ل.س)</label>
+                            <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm text-left" dir="ltr" placeholder="0" type="number"/>
+                        </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-bold text-on-surface-variant mb-2">عدد الغرف</label>
+                            <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="0" type="number"/>
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-on-surface-variant mb-2">نوع العقار</label>
+                            <select className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm">
+                            <option>سكني</option>
+                            <option>تجاري</option>
+                            <option>أرض</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div className="mt-4">
+                        <label className="block text-xs font-bold text-on-surface-variant mb-2">صورة العقار الرئيسية</label>
+                        <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center text-slate-400 hover:border-secondary hover:text-secondary hover:bg-secondary/5 transition-all cursor-pointer bg-slate-50">
+                            <span className="material-symbols-outlined text-3xl mb-2" data-icon="cloud_upload">cloud_upload</span>
+                            <span className="text-xs font-medium">اسحب الصورة هنا أو اضغط للرفع</span>
+                        </div>
+                        </div>
+                        <button className="w-full bg-primary text-white py-3.5 rounded-xl font-bold font-almarai text-sm hover:bg-[#003666] transition-colors shadow-lg shadow-primary/20 mt-6" type="submit">
+                            حفظ مسودة العقار
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+      )}
 
     </main>
   );
