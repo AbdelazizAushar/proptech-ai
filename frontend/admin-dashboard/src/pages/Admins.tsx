@@ -13,7 +13,6 @@ export default function Admins() {
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newAdmin, setNewAdmin] = useState({ name: '', email: '', password: '' });
-  const [search, setSearch] = useState('');
 
   const fetchAdmins = async () => {
     setLoading(true);
@@ -63,15 +62,13 @@ export default function Admins() {
     }
   };
 
-  const filteredAdmins = admins.filter(a => 
-    a.name?.toLowerCase().includes(search.toLowerCase()) || 
-    a.email?.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
-    <main className="mr-64 pt-16 min-h-screen p-8">
+    <main className="mr-64 pt-28 pb-12 px-8 min-h-screen relative">
+      <div className="absolute inset-0 arabesque-pattern pointer-events-none"></div>
+
       {/* Header Section with CTA */}
-      <section className="mb-10 flex justify-between items-end mt-12">
+      <section className="mb-10 flex justify-between items-end relative z-10 pt-4">
         <div>
           <h2 className="text-3xl font-extrabold text-[#1B3A5C] font-almarai tracking-tight mb-2">إدارة المشرفين</h2>
           <p className="text-slate-500 max-w-lg">قم بإدارة صلاحيات الوصول والتحكم في فريق العمل الخاص بالمنصة العقارية.</p>
@@ -142,10 +139,10 @@ export default function Admins() {
             <tbody className="divide-y divide-slate-50">
               {loading ? (
                 <tr><td colSpan={5} className="text-center py-8">جاري التحميل...</td></tr>
-              ) : filteredAdmins.length === 0 ? (
+              ) : admins.length === 0 ? (
                 <tr><td colSpan={5} className="text-center py-8 text-slate-500">لا يوجد مشرفون</td></tr>
               ) : (
-                filteredAdmins.map((admin) => (
+                admins.map((admin) => (
                   <tr key={admin.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-8 py-5">
                       <div className="flex items-center gap-3">
