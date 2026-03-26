@@ -16,4 +16,4 @@ AI-powered platform connecting a frontend app to a WhatsApp bot via n8n automati
 - AI: Groq
 - Embeddings: Cohere
 - Automation: n8n
-- Messaging: WhatsApp Business API (Evolution)
+- Messaging: WhatsApp Business API (Evolution API)
