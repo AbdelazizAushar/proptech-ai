@@ -75,14 +75,14 @@ export default function Admins() {
 
 
   return (
-    <main className="mr-64 pt-28 pb-12 px-8 min-h-screen relative">
+    <main className="pt-20 pb-12 px-4 md:px-8 min-h-screen relative">
       <div className="absolute inset-0 arabesque-pattern pointer-events-none"></div>
 
       {/* Header Section with CTA */}
-      <section className="mb-10 flex justify-between items-end relative z-10 pt-4">
+      <section className="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4 relative z-10 pt-4">
         <div>
-          <h2 className="text-3xl font-extrabold text-[#1B3A5C] font-almarai tracking-tight mb-2">إدارة المشرفين</h2>
-          <p className="text-slate-500 max-w-lg">قم بإدارة صلاحيات الوصول والتحكم في فريق العمل الخاص بالمنصة العقارية.</p>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[#1B3A5C] font-almarai tracking-tight mb-2">إدارة المشرفين</h2>
+          <p className="text-slate-500 max-w-lg text-sm">قم بإدارة صلاحيات الوصول والتحكم في فريق العمل الخاص بالمنصة العقارية.</p>
         </div>
         <button 
           onClick={() => setShowAddForm(!showAddForm)}
@@ -97,7 +97,7 @@ export default function Admins() {
       {showAddForm && (
         <div className="bg-white p-6 rounded-xl shadow-md mb-8 border border-slate-100">
           <h3 className="font-bold text-lg mb-4">إضافة مشرف جديد</h3>
-          <form className="flex gap-4 items-end" onSubmit={handleAdd}>
+          <form className="flex flex-col md:flex-row gap-4 md:items-end" onSubmit={handleAdd}>
             <div className="flex-1">
                <label className="block text-xs font-bold text-slate-500 mb-2">الاسم</label>
                <input 

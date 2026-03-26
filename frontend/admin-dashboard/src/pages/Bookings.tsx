@@ -63,16 +63,16 @@ export default function Bookings() {
   };
 
   return (
-    <main className="mr-64 pt-28 pb-12 px-8 min-h-screen relative">
+    <main className="pt-20 pb-12 px-4 md:px-8 min-h-screen relative">
       <div className="absolute inset-0 arabesque-pattern pointer-events-none"></div>
       
       {/* Header Section */}
-      <div className="mb-10 flex justify-between items-end relative z-10">
+      <div className="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4 relative z-10 pt-4">
         <div>
-          <h1 className="text-3xl font-extrabold font-almarai text-primary mb-2">إدارة الحجوزات</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold font-almarai text-primary mb-2">إدارة الحجوزات</h1>
           <p className="text-slate-500 max-w-lg text-sm">شاهد وتتبع جميع طلبات الحجز والاستفسارات المقدمة من العملاء.</p>
         </div>
-        <button onClick={fetchAppointments} className="bg-white border border-slate-200 text-slate-500 hover:text-primary hover:border-primary px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-bold transition-all shadow-sm">
+        <button onClick={fetchAppointments} className="self-start md:self-auto bg-white border border-slate-200 text-slate-500 hover:text-primary hover:border-primary px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-bold transition-all shadow-sm">
           <span className="material-symbols-outlined text-[18px]">refresh</span>
           تحديث السجل
         </button>

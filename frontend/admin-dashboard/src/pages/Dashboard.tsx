@@ -84,16 +84,16 @@ export default function Dashboard() {
   );
 
   return (
-    <main className="mr-64 pt-28 pb-12 px-8 min-h-screen relative">
+    <main className="pt-20 pb-12 px-4 md:px-8 min-h-screen relative">
       <div className="absolute inset-0 arabesque-pattern pointer-events-none"></div>
       
       {/* Header Section */}
-      <div className="mb-8 flex justify-between items-end relative z-10">
+      <div className="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4 relative z-10 pt-4">
         <div>
-          <h1 className="text-3xl font-bold font-almarai text-primary mb-2">لوحة التحكم السريعة</h1>
+          <h1 className="text-2xl md:text-3xl font-bold font-almarai text-primary mb-2">لوحة التحكم السريعة</h1>
           <p className="text-slate-500 font-bold text-sm tracking-wide">{currentDate}</p>
         </div>
-        <div className="w-1/3">
+        <div className="w-full md:w-1/3">
            <input 
               type="text" 
               placeholder="ابحث بالاسم أو الموقع..." 
@@ -105,7 +105,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12 relative z-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 relative z-10">
         {/* Card 1 - Listings this month */}
         <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-primary transition-transform hover:-translate-y-1">
           <div className="flex justify-between items-start mb-4">
@@ -167,7 +167,7 @@ export default function Dashboard() {
         ) : filteredListings.length === 0 ? (
           <div className="text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-100">لا توجد عقارات حالياً</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {filteredListings.map((listing) => (
               <div key={listing.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 flex flex-col group cursor-pointer">
                 <div className="relative h-48 overflow-hidden bg-slate-100">
