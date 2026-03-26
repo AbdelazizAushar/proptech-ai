@@ -1,7 +1,25 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 export default function AdminLayout() {
+  const navigate = useNavigate();
+  const [adminData, setAdminData] = useState<{name: string, email: string} | null>(null);
+
+  useEffect(() => {
+    const auth = localStorage.getItem('adminAuth');
+    if (!auth) {
+      navigate('/login');
+    } else {
+      setAdminData(JSON.parse(auth));
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminAuth');
+    navigate('/login');
+  };
+
   return (
     <div className="bg-surface text-on-surface antialiased overflow-x-hidden min-h-screen">
       {/* Side Navigation Shell */}
@@ -87,13 +105,13 @@ export default function AdminLayout() {
         </div>
         <div className="px-6 mt-auto pt-6 border-t border-white/5">
           <div className="flex flex-row-reverse items-center gap-3 p-3 bg-white/5 rounded-xl mb-4">
-            <img alt="Admin Avatar" className="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsAk0IZM8b8NQ4XzJ1YwS_k5XyAvVOYcTmYqLCobGH7Tp6Slao4GiJtrDG4b8SOC8hKZT_NpbgpFBglRatA8wDHbIaU57Bg4OoPMT9-n5olPM0ivFpvkEAMhjuRlzXyTfWzXDJNlPjD6fmUeqiq5qVPiiFfMOf2-BVEbM_LLRt4u7Fe36pjKUsYAvKQ5vAyXjp8mGN2ok_KLoQZIE5XgPBBw60AB7EegKXYkJK4H-iu6XcP7dI4lUEbuFEcHeB5W7BQYSR9zQ8Nuja"/>
+            <img alt="Admin Avatar" className="w-10 h-10 rounded-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"/>
             <div className="text-right">
-              <p className="text-white text-sm font-bold">أحمد العمر</p>
+              <p className="text-white text-sm font-bold">{adminData?.name || 'مدير النظام'}</p>
               <p className="text-xs text-slate-400">مدير النظام</p>
             </div>
           </div>
-          <button className="flex flex-row-reverse items-center gap-3 w-full px-4 py-2 text-slate-400 hover:text-error transition-colors">
+          <button onClick={handleLogout} className="flex flex-row-reverse items-center gap-3 w-full px-4 py-2 text-slate-400 hover:text-error transition-colors">
             <span className="material-symbols-outlined" data-icon="logout">logout</span>
             <span className="text-sm">تسجيل الخروج</span>
           </button>
