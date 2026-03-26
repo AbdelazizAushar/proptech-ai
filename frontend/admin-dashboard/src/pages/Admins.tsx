@@ -12,7 +12,7 @@ export default function Admins() {
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newAdmin, setNewAdmin] = useState({ name: '', email: '' });
+  const [newAdmin, setNewAdmin] = useState({ name: '', email: '', password: '' });
   const [search, setSearch] = useState('');
 
   const fetchAdmins = async () => {
@@ -44,12 +44,11 @@ export default function Admins() {
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newAdmin.name || !newAdmin.email) return;
+    if (!newAdmin.name || !newAdmin.email || !newAdmin.password) return;
 
-    // Direct insert to admins table assuming RLS allows it or we have service key (mocking for now)
-    // Supabase Auth isn't created automatically here just table insert.
+    // Direct insert to admins table
     const { data, error } = await supabase.from('admins').insert([
-      { name: newAdmin.name, email: newAdmin.email }
+      { name: newAdmin.name, email: newAdmin.email, password_hash: newAdmin.password }
     ]).select();
 
     if (error) {
@@ -60,7 +59,7 @@ export default function Admins() {
         setAdmins([...admins, data[0]]);
       }
       setShowAddForm(false);
-      setNewAdmin({ name: '', email: '' });
+      setNewAdmin({ name: '', email: '', password: '' });
     }
   };
 
@@ -111,6 +110,16 @@ export default function Admins() {
                  required
                />
             </div>
+            <div className="flex-1">
+               <label className="block text-xs font-bold text-slate-500 mb-2">كلمة المرور</label>
+               <input 
+                 type="password" 
+                 value={newAdmin.password}
+                 onChange={e => setNewAdmin({...newAdmin, password: e.target.value})}
+                 className="w-full border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-[#C9A84C]"
+                 required
+               />
+            </div>
             <button type="submit" className="bg-primary text-white px-6 py-2.5 rounded-lg text-sm font-bold h-[42px]">
               حفظ
             </button>
@@ -118,49 +127,6 @@ export default function Admins() {
         </div>
       )}
 
-      <div className="mb-6">
-        <div className="relative flex items-center max-w-md">
-            <span className="material-symbols-outlined absolute right-3 text-slate-400" data-icon="search">search</span>
-            <input 
-              className="w-full bg-white border border-slate-200 rounded-full py-2 pr-10 pl-4 focus:ring-2 focus:ring-[#C9A84C]/50 text-sm transition-all" 
-              placeholder="البحث عن مشرفين..." 
-              type="text"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-        </div>
-      </div>
-
-      {/* Bento Style Stats (Optional for Premium Feel) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-slate-100/50">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-blue-50 text-primary rounded-lg">
-              <span className="material-symbols-outlined" data-icon="group">group</span>
-            </div>
-          </div>
-          <p className="text-slate-500 text-sm mb-1">إجمالي المشرفين</p>
-          <h4 className="text-2xl font-bold text-primary font-almarai">{admins.length} مشرفاً</h4>
-        </div>
-        <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-slate-100/50">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-amber-50 text-secondary rounded-lg">
-              <span className="material-symbols-outlined" data-icon="shield_person">shield_person</span>
-            </div>
-          </div>
-          <p className="text-slate-500 text-sm mb-1">مدراء النظام</p>
-          <h4 className="text-2xl font-bold text-primary font-almarai">{admins.length} مسؤولين</h4>
-        </div>
-        <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-slate-100/50">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-emerald-50 text-emerald-700 rounded-lg">
-              <span className="material-symbols-outlined" data-icon="verified_user">verified_user</span>
-            </div>
-          </div>
-          <p className="text-slate-500 text-sm mb-1">النشطون حالياً</p>
-          <h4 className="text-2xl font-bold text-primary font-almarai">{admins.length} متصل</h4>
-        </div>
-      </div>
 
       {/* Admins Table Section */}
       <div className="bg-surface-container-lowest rounded-xl shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100">
@@ -170,7 +136,6 @@ export default function Admins() {
               <tr>
                 <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">اسم المشرف</th>
                 <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">البريد الإلكتروني</th>
-                <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">الدور</th>
                 <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai text-center">الإجراءات</th>
               </tr>
             </thead>
@@ -194,14 +159,8 @@ export default function Admins() {
                     </td>
                     <td className="px-8 py-5 text-slate-600 text-sm">{admin.email}</td>
                     <td className="px-8 py-5">
-                      <span className="bg-[#1B3A5C]/10 text-primary px-3 py-1 rounded-full text-xs font-bold font-almarai">مدير نظام</span>
-                    </td>
-                    <td className="px-8 py-5">
                       <div className="flex justify-center gap-4">
-                        <button className="p-2 text-slate-400 hover:text-[#C9A84C] transition-colors rounded-lg hover:bg-slate-100">
-                          <span className="material-symbols-outlined" data-icon="edit">edit</span>
-                        </button>
-                        <button onClick={() => handleDelete(admin.id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
+                        <button onClick={() => handleDelete(admin.id)} className="p-2 text-slate-400 hover:text-error transition-colors rounded-lg hover:bg-error/10">
                           <span className="material-symbols-outlined" data-icon="delete">delete</span>
                         </button>
                       </div>
@@ -211,22 +170,6 @@ export default function Admins() {
               )}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      {/* Role Permissions Context Card */}
-      <div className="mt-12 p-8 bg-primary-container rounded-2xl relative overflow-hidden">
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="text-white">
-            <h3 className="text-2xl font-bold font-almarai mb-3">دليل صلاحيات الأدوار</h3>
-            <p className="text-white/70 max-w-md leading-relaxed">تعرف على الفرق بين صلاحيات "مدير النظام" و "المحرر" لضمان توزيع المهام بكفاءة وأمان داخل فريقك الرقمي.</p>
-          </div>
-          <div className="flex gap-4">
-            <button className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg border border-white/20 transition-all font-bold font-almarai">تحميل تقرير النشاط</button>
-            <button className="bg-[#C9A84C] text-primary px-6 py-3 rounded-lg font-bold font-almarai shadow-lg shadow-black/20 hover:scale-105 transition-all">مراجعة الصلاحيات</button>
-          </div>
         </div>
       </div>
 

@@ -14,28 +14,22 @@ export default function Login() {
     setLoading(true);
     setError(null);
     
-    // In actual implementation this checks the "admins" table
-    // For now, simple mock query since user mentioned custom "admins" table auth
+    // Real authentication checking both email AND password.
     const { data: admin, error: adminError } = await supabase
       .from('admins')
       .select('*')
       .eq('email', email)
+      .eq('password_hash', password)
       .single();
 
     if (adminError || !admin) {
-        // Fallback for demo when missing real auth data
-        console.warn('Login failed against admins table:', adminError);
-        // Simulate login for now to let user pass if table is empty
-        if (email === 'admin@aqari.sy' && password === 'admin') {
-           navigate('/');
-           return;
-        }
-        setError('بيانات الدخول غير صحيحة');
+        setError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
         setLoading(false);
         return;
     }
     
-    // If successful
+    // If successful, save session
+    localStorage.setItem('adminAuth', JSON.stringify({ name: admin.name, email: admin.email }));
     navigate('/');
     setLoading(false);
   };
