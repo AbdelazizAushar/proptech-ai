@@ -6,14 +6,14 @@ AI-powered platform connecting a frontend app to a WhatsApp bot via n8n automati
 
 ## Structure
 
-- `frontend/` — Next.js browsing app
+- `frontend/` — React.js browsing app
 - `n8n/` — All automation workflow JSONs
 
 ## Stack
 
-- Frontend: Next.js
+- Frontend: React.js + Vite
 - Database: Supabase
 - AI: Groq
-- Embeddings: Hugging Face
+- Embeddings: Cohere
 - Automation: n8n
-- Messaging: WhatsApp Business API
+- Messaging: WhatsApp Business API (Evolution)

@@ -75,15 +75,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.GROQ_API_URL }}/openai/v1/audio/transcriptions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://api.groq.com/openai/v1/audio/transcriptions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer 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"
             }
           ]
         },
@@ -123,15 +121,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.GROQ_API_URL }}/openai/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer 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"
             },
             {
               "name": "Content-Type",
@@ -169,19 +165,17 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/rpc/get_or_create_user",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/rpc/get_or_create_user",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Content-Type",
@@ -209,9 +203,7 @@
     },
     {
       "parameters": {
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/conversations",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/conversations",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -238,11 +230,11 @@
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             }
           ]
         },
@@ -272,9 +264,7 @@
     },
     {
       "parameters": {
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/listings",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/listings",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -293,11 +283,11 @@
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             }
           ]
         },
@@ -346,9 +336,7 @@
     },
     {
       "parameters": {
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/listings",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/listings",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -383,11 +371,11 @@
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             }
           ]
         },
@@ -405,15 +393,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.GROQ_API_URL }}/openai/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer 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"
             },
             {
               "name": "Content-Type",
@@ -438,15 +424,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.COHERE_API_URL }}/v2/embed",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://api.cohere.com/v2/embed",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer qtWv1qYiLblwzirPHFeTbBAItlkJEX7w3v1Lc20A"
             },
             {
               "name": "Content-Type",
@@ -471,19 +455,17 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/rpc/match_knowledge_base",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/rpc/match_knowledge_base",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Content-Type",
@@ -508,15 +490,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.GROQ_API_URL }}/openai/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer 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"
             },
             {
               "name": "Content-Type",
@@ -593,21 +573,19 @@
       "typeVersion": 2,
       "position": [
         4976,
-        648
+        656
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.GROQ_API_URL }}/openai/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer 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"
             },
             {
               "name": "Content-Type",
@@ -626,25 +604,23 @@
       "typeVersion": 4.2,
       "position": [
         5200,
-        648
+        656
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/users",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/users",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Content-Type",
@@ -667,25 +643,23 @@
       "typeVersion": 4.2,
       "position": [
         5424,
-        648
+        656
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/appointments",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/appointments",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Content-Type",
@@ -708,25 +682,23 @@
       "typeVersion": 4.2,
       "position": [
         5648,
-        648
+        656
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/rpc/upsert_conversation",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/rpc/upsert_conversation",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "apikey",
-              "value": "={{ $credentials.apiKey }}"
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer {{ $credentials.apiKey }}"
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
             },
             {
               "name": "Content-Type",
@@ -1097,7 +1069,7 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "f4c37442-5eb0-4d5f-a206-7ac00dce8194",
+  "versionId": "fadf0305-bc3c-4aeb-9adf-116c402e232f",
   "meta": {
     "instanceId": "c8b35fe12417e52878293300b5586b3e619adc76a875a42b784c428128e0fa23"
   },
