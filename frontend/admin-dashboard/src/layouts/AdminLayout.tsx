@@ -105,7 +105,6 @@ export default function AdminLayout() {
         </div>
         <div className="px-6 mt-auto pt-6 border-t border-white/5">
           <div className="flex flex-row-reverse items-center gap-3 p-3 bg-white/5 rounded-xl mb-4">
-            <img alt="Admin Avatar" className="w-10 h-10 rounded-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"/>
             <div className="text-right">
               <p className="text-white text-sm font-bold">{adminData?.name || 'مدير النظام'}</p>
               <p className="text-xs text-slate-400">مدير النظام</p>

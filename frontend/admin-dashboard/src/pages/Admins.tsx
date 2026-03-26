@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 interface Admin {
-  id: string; // uuid
+  id: string;
   email: string;
   name: string;
+  password_hash?: string;
   created_at?: string;
 }
 
@@ -13,6 +14,16 @@ export default function Admins() {
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newAdmin, setNewAdmin] = useState({ name: '', email: '', password: '' });
+  const [visiblePasswords, setVisiblePasswords] = useState<Set<string>>(new Set());
+
+  const togglePasswordVisibility = (id: string) => {
+    setVisiblePasswords(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const fetchAdmins = async () => {
     setLoading(true);
@@ -133,6 +144,7 @@ export default function Admins() {
               <tr>
                 <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">اسم المشرف</th>
                 <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">البريد الإلكتروني</th>
+                <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai">كلمة المرور</th>
                 <th className="px-8 py-5 text-sm font-bold text-slate-600 font-almarai text-center">الإجراءات</th>
               </tr>
             </thead>
@@ -145,16 +157,27 @@ export default function Admins() {
                 admins.map((admin) => (
                   <tr key={admin.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-8 py-5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-bold">
-                          {admin.name ? admin.name.substring(0,2) : 'A'}
-                        </div>
-                        <div>
-                          <p className="font-bold text-primary font-almarai">{admin.name}</p>
-                        </div>
-                      </div>
+                      <p className="font-bold text-primary font-almarai">{admin.name}</p>
                     </td>
                     <td className="px-8 py-5 text-slate-600 text-sm">{admin.email}</td>
+                    <td className="px-8 py-5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-sm text-slate-700 tracking-widest">
+                          {visiblePasswords.has(admin.id)
+                            ? (admin.password_hash || '—')
+                            : '••••••••'}
+                        </span>
+                        <button
+                          onClick={() => togglePasswordVisibility(admin.id)}
+                          className="p-1 text-slate-400 hover:text-primary transition-colors rounded"
+                          title={visiblePasswords.has(admin.id) ? 'إخفاء' : 'إظهار'}
+                        >
+                          <span className="material-symbols-outlined text-[18px]">
+                            {visiblePasswords.has(admin.id) ? 'visibility_off' : 'visibility'}
+                          </span>
+                        </button>
+                      </div>
+                    </td>
                     <td className="px-8 py-5">
                       <div className="flex justify-center gap-4">
                         <button onClick={() => handleDelete(admin.id)} className="p-2 text-slate-400 hover:text-error transition-colors rounded-lg hover:bg-error/10">
