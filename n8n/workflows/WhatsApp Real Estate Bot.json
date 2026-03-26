@@ -1,0 +1,1078 @@
+{
+  "name": "WhatsApp Real Estate Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-realestate",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b0713c82-8971-4686-8891-5234cd62c604",
+      "name": "WhatsApp Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        720
+      ],
+      "webhookId": "36a63a28-aae4-4a91-b840-89dab2d71e36"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\nconst from = body.from || body.sender || body.phone || '';\nconst type = body.type || 'text';\nconst text = body.text?.body || body.text || body.message || '';\nconst audioUrl = body.audio?.url || body.audioUrl || '';\nconst imageUrl = body.image?.url || body.imageUrl || '';\n\nreturn [{\n  json: {\n    from,\n    type,\n    text,\n    audioUrl,\n    imageUrl,\n    originalPayload: body\n  }\n}];"
+      },
+      "id": "330942e4-36b5-4f50-ac0c-dd06ca09436d",
+      "name": "Parse & Normalize Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1840,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond_audio_image",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "audio",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "cond_image",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "image",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "f913f9ed-2bea-4d7c-8e6d-ad5e782a0923",
+      "name": "Input Type Router",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2064,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.groq.com/openai/v1/audio/transcriptions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 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"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "={{ $json.audioUrl }}"
+            },
+            {
+              "name": "model",
+              "value": "whisper-large-v3"
+            },
+            {
+              "name": "language",
+              "value": "ar"
+            },
+            {
+              "name": "response_format",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e175e39a-35c2-4d7a-a644-519f3267309c",
+      "name": "Groq - Transcribe Audio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2288,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.2-90b-vision-preview\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مساعد عقاري. صف الصورة المرسلة بالتفصيل مع التركيز على مواصفات العقار.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"image_url\",\n          \"image_url\": {\n            \"url\": \"{{ $json.imageUrl }}\"\n          }\n        },\n        {\n          \"type\": \"text\",\n          \"text\": \"صف هذه الصورة بالتفصيل من منظور عقاري.\"\n        }\n      ]\n    }\n  ],\n  \"max_tokens\": 500\n}",
+        "options": {}
+      },
+      "id": "33b78e5c-399c-4756-aa5e-a845b8efcc95",
+      "name": "Groq - Describe Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2288,
+        864
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\nconst first = inputItems[0].json;\n\n// Determine if this came from audio transcription or image description\nlet resolvedText = first.text;\n\nif (first.text !== undefined && first.audioUrl !== undefined) {\n  // This is pass-through from text branch — keep as is\n  resolvedText = first.text;\n} else if (first.text !== undefined && first.imageUrl !== undefined) {\n  resolvedText = first.text;\n}\n\n// If transcription result is present\nif (first.hasOwnProperty('transcript')) {\n  resolvedText = first.transcript;\n}\n\n// If vision result is present\nif (first.choices && first.choices[0]?.message?.content) {\n  resolvedText = first.choices[0].message.content;\n}\n\nreturn [{\n  json: {\n    from: first.from,\n    type: first.type,\n    text: resolvedText,\n    audioUrl: first.audioUrl || '',\n    imageUrl: first.imageUrl || '',\n    originalPayload: first.originalPayload || {}\n  }\n}];"
+      },
+      "id": "87c3a8bb-1d51-4ffe-b3f2-56244d0e6ae4",
+      "name": "Merge Media Back",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2512,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/rpc/get_or_create_user",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_whatsapp_number\": \"{{ $json.from }}\"\n}",
+        "options": {}
+      },
+      "id": "87456bff-f3e5-4776-9dab-973b5ced8978",
+      "name": "Supabase - Get or Create User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2736,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_id",
+              "value": "=eq.{{ $('Supabase - Get or Create User').item.json[0].id }}"
+            },
+            {
+              "name": "status",
+              "value": "eq.active"
+            },
+            {
+              "name": "order",
+              "value": "created_at.desc"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "422097c8-e112-478d-b79b-fef12eb2a4d9",
+      "name": "Supabase - Load Conversation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2960,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const messageText = $('Merge Media Back').item.json.text || '';\nconst userRecord = $('Supabase - Get or Create User').item.json[0] || {};\nconst conversationArr = $('Supabase - Load Conversation').item.json || [];\nconst conversation = Array.isArray(conversationArr) ? conversationArr[0] : null;\n\n// Extract #PROPERTY_ID pattern\nconst match = messageText.match(/#([\\w-]+)/);\nconst propertyId = match ? match[1] : null;\n\n// Build context\nconst messages = conversation ? (conversation.messages || []) : [];\nconst conversationId = conversation ? conversation.id : null;\nconst listingId = conversation ? conversation.listing_id : null;\n\nreturn [{\n  json: {\n    from: $('Merge Media Back').item.json.from,\n    messageText,\n    type: $('Merge Media Back').item.json.type,\n    propertyId: propertyId || listingId,\n    isNewPropertyRequest: !!propertyId,\n    userId: userRecord.id,\n    userName: userRecord.name || null,\n    userPhone: userRecord.phone || null,\n    conversationId,\n    conversationMessages: messages,\n    userRecord\n  }\n}];"
+      },
+      "id": "75f5f1f9-3d6a-4783-bca8-4ca9f7e2cec1",
+      "name": "Extract Property ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3184,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/listings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "=eq.{{ $json.propertyId }}"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6112a7f3-5a10-46bf-8b68-712817cd8474",
+      "name": "Supabase - Check Listing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3408,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond_available",
+              "leftValue": "={{ $json[0].status }}",
+              "rightValue": "available",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d7ffd67e-f861-4aac-b5e4-bfdf35a9a95e",
+      "name": "Listing Status Router",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3632,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/listings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "category",
+              "value": "=eq.{{ $('Supabase - Check Listing').item.json[0].category }}"
+            },
+            {
+              "name": "location",
+              "value": "=eq.{{ $('Supabase - Check Listing').item.json[0].location }}"
+            },
+            {
+              "name": "status",
+              "value": "eq.available"
+            },
+            {
+              "name": "price",
+              "value": "=gte.{{ Math.floor($('Supabase - Check Listing').item.json[0].price * 0.8) }}"
+            },
+            {
+              "name": "price",
+              "value": "=lte.{{ Math.ceil($('Supabase - Check Listing').item.json[0].price * 1.2) }}"
+            },
+            {
+              "name": "limit",
+              "value": "3"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "17797109-521a-4a5d-8aea-301ee79a260a",
+      "name": "Supabase - Get Similar Listings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4080,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مستشار عقاري محترف اسمك نور. تتحدث باللغة العربية الفصحى فقط. مهمتك إبلاغ العميل بعدم توفر العقار المطلوب بأسلوب محترف ولطيف، ثم عرض البدائل المتاحة بطريقة مقنعة.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"العقار المطلوب غير متاح حالياً ({{ $('Supabase - Check Listing').item.json[0].name }}).\\n\\nالبدائل المتاحة:\\n{{ JSON.stringify($('Supabase - Get Similar Listings').item.json, null, 2) }}\\n\\nرسالة العميل: {{ $('Extract Property ID').item.json.messageText }}\"\n    }\n  ],\n  \"max_tokens\": 800,\n  \"temperature\": 0.7\n}",
+        "options": {}
+      },
+      "id": "9228064a-9b3e-4b4e-9883-89300b00d959",
+      "name": "Groq - Generate Alternatives Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4304,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.cohere.com/v2/embed",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer qtWv1qYiLblwzirPHFeTbBAItlkJEX7w3v1Lc20A"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"embed-multilingual-v3.0\",\n  \"texts\": [\"{{ $('Extract Property ID').item.json.messageText }}\"],\n  \"input_type\": \"search_query\",\n  \"embedding_types\": [\"float\"]\n}",
+        "options": {}
+      },
+      "id": "79535fd5-5269-4fee-989b-fbeb44dd277b",
+      "name": "Cohere - Embed User Question",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3856,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/rpc/match_knowledge_base",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query_embedding\": {{ JSON.stringify($json.embeddings?.float?.[0] || $json.embeddings?.[0] || []) }},\n  \"listing_id\": \"{{ $('Extract Property ID').item.json.propertyId }}\",\n  \"match_threshold\": 0.7,\n  \"match_count\": 5\n}",
+        "options": {}
+      },
+      "id": "81fa55cc-21e2-421b-9d2f-8c10e3cac282",
+      "name": "Supabase - Query Knowledge Base",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4080,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مستشار عقاري محترف اسمك \\\"نور\\\". تتحدث باللغة العربية الفصحى فقط.\\nمهمتك مساعدة العميل في الحصول على معلومات دقيقة حول العقار واتخاذ قرار الشراء أو الحجز.\\n\\nقواعد المحادثة:\\n- أجب دائماً بالعربية فقط\\n- كن ودوداً ومحترفاً وواثقاً\\n- استخدم المعلومات المتاحة في قاعدة المعرفة للإجابة على الأسئلة\\n- إذا لم تجد المعلومة، قل \\\"سأتحقق من هذا لك\\\"\\n- استخدم تقنيات الإقناع بشكل طبيعي: أبرز المزايا، خلق الإلحاحية بلطف، ربط احتياجات العميل بمميزات العقار\\n- راقب مستوى الاهتمام في المحادثة\\n\\nعند اكتشاف اهتمام جدي بالحجز (عندما يسأل عن موعد المعاينة، أو يقول \\\"أريد الحجز\\\"، أو \\\"كيف أتقدم\\\", أو يُظهر نية واضحة للمضي قدماً):\\n- أضف في نهاية ردك هذا النص بالضبط على سطر منفصل: [INTEREST_DETECTED]\\n\\nمعلومات العقار ستُزوَّد لك في كل رسالة ضمن قسم [معلومات العقار المتاحة].\"\n    },\n    ...{{ JSON.stringify($('Extract Property ID').item.json.conversationMessages.map(m => ({ role: m.role, content: m.content }))) }},\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $('Extract Property ID').item.json.messageText }}\\n\\n[معلومات العقار المتاحة]\\n{{ $('Supabase - Query Knowledge Base').item.json.map(chunk => chunk.content).join('\\n---\\n') }}\"\n    }\n  ],\n  \"max_tokens\": 1000,\n  \"temperature\": 0.7\n}",
+        "options": {}
+      },
+      "id": "60d19cec-3909-499a-a309-bdd5e08d6bf8",
+      "name": "Groq - Generate Consultation Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4304,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Determine which branch we came from\nlet rawReply = '';\nlet source = 'consultation';\n\ntry {\n  const consultReply = $('Groq - Generate Consultation Reply').item?.json;\n  if (consultReply?.choices?.[0]?.message?.content) {\n    rawReply = consultReply.choices[0].message.content;\n    source = 'consultation';\n  }\n} catch(e) {}\n\ntry {\n  const altReply = $('Groq - Generate Alternatives Reply').item?.json;\n  if (altReply?.choices?.[0]?.message?.content) {\n    rawReply = altReply.choices[0].message.content;\n    source = 'alternatives';\n  }\n} catch(e) {}\n\nconst interestDetected = rawReply.includes('[INTEREST_DETECTED]');\nconst cleanReply = rawReply.replace('[INTEREST_DETECTED]', '').trim();\n\nconst ctx = $('Extract Property ID').item.json;\n\nreturn [{\n  json: {\n    from: ctx.from,\n    messageText: ctx.messageText,\n    userId: ctx.userId,\n    userName: ctx.userName,\n    userPhone: ctx.userPhone,\n    conversationId: ctx.conversationId,\n    conversationMessages: ctx.conversationMessages,\n    propertyId: ctx.propertyId,\n    botReply: cleanReply,\n    interestDetected,\n    source,\n    userRecord: ctx.userRecord\n  }\n}];"
+      },
+      "id": "f382fb54-ff46-41f0-ba2a-7e575434541b",
+      "name": "Detect Interest Flag",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4528,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond_interest",
+              "leftValue": "={{ $json.interestDetected }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f44a4edc-e3b3-4469-98c6-f249583f885c",
+      "name": "Interest Router",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        4752,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { userName, userPhone, conversationMessages, messageText, from, userId, conversationId, propertyId, botReply } = $json;\n\n// Determine what data collection stage we're at\nlet collectionStage = 'complete';\n\nif (!userName) {\n  collectionStage = 'awaiting_name';\n} else if (!userPhone) {\n  // Check if last bot message was asking for phone and user just replied\n  const lastBotMsg = [...conversationMessages].reverse().find(m => m.role === 'assistant');\n  if (lastBotMsg && lastBotMsg.content && lastBotMsg.content.includes('رقم هاتفك')) {\n    // User's current message should be the phone number\n    collectionStage = 'save_phone';\n  } else {\n    collectionStage = 'awaiting_phone';\n  }\n} else {\n  // Check if we have appointment\n  const lastBotMsg = [...conversationMessages].reverse().find(m => m.role === 'assistant');\n  if (lastBotMsg && lastBotMsg.content && lastBotMsg.content.includes('موعد المعاينة')) {\n    collectionStage = 'save_appointment';\n  } else if (!conversationMessages.some(m => m.role === 'assistant' && m.content.includes('موعد المعاينة'))) {\n    collectionStage = 'awaiting_appointment';\n  } else {\n    collectionStage = 'complete';\n  }\n}\n\n// Parse appointment from message if saving\nlet appointmentDate = null;\nlet appointmentTime = null;\nif (collectionStage === 'save_appointment') {\n  // Simple regex to extract date patterns from Arabic text\n  const dateMatch = messageText.match(/(\\d{1,2}[\\/-]\\d{1,2}[\\/-]\\d{2,4})/);\n  const timeMatch = messageText.match(/(\\d{1,2}:\\d{2}|\\d{1,2}\\s*[صمpm]+)/);\n  appointmentDate = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];\n  appointmentTime = timeMatch ? timeMatch[1] : '10:00';\n}\n\n// If saving name, extract from message\nlet extractedName = userName;\nif (collectionStage === 'awaiting_name' || (collectionStage !== 'complete' && !userName)) {\n  const lastBotMsg = [...conversationMessages].reverse().find(m => m.role === 'assistant');\n  if (lastBotMsg && lastBotMsg.content && lastBotMsg.content.includes('اسمك')) {\n    extractedName = messageText.trim();\n    collectionStage = 'save_name';\n  }\n}\n\nlet extractedPhone = userPhone;\nif (collectionStage === 'save_phone') {\n  extractedPhone = messageText.replace(/[^\\d+]/g, '');\n}\n\nreturn [{\n  json: {\n    from,\n    userId,\n    conversationId,\n    propertyId,\n    botReply,\n    collectionStage,\n    userName: extractedName,\n    userPhone: extractedPhone,\n    appointmentDate,\n    appointmentTime,\n    conversationMessages,\n    messageText\n  }\n}];"
+      },
+      "id": "4234f555-5b9d-48eb-ae99-125a83ad8cd3",
+      "name": "Check Data Collection Stage",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4976,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مستشار عقاري محترف اسمك نور. أجب بالعربية فقط. مرحلة جمع البيانات: {{ $json.collectionStage }}\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.collectionStage === 'awaiting_name' ? 'سعيد باهتمامك! للمتابعة، ما اسمك الكريم؟' : $json.collectionStage === 'awaiting_phone' ? 'شكراً ' + ($json.userName || '') + '! ما رقم هاتفك للتواصل؟' : $json.collectionStage === 'awaiting_appointment' ? 'ممتاز! ما هو الوقت المناسب لك لمعاينة العقار؟ (اليوم والساعة)' : 'شكراً جزيلاً! تم تسجيل موعدك بنجاح. سيتواصل معك فريقنا قريباً لتأكيد الموعد.' }}\"\n    }\n  ],\n  \"max_tokens\": 300,\n  \"temperature\": 0.6\n}",
+        "options": {}
+      },
+      "id": "f1d6d647-5676-4a16-837d-0cbe3554e76b",
+      "name": "Groq - Generate Data Collection Prompt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5200,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/users",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates,return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{ $('Check Data Collection Stage').item.json.userId }}\",\n  \"whatsapp_number\": \"{{ $('Check Data Collection Stage').item.json.from }}\",\n  \"name\": \"{{ $('Check Data Collection Stage').item.json.userName }}\",\n  \"phone\": \"{{ $('Check Data Collection Stage').item.json.userPhone }}\"\n}",
+        "options": {}
+      },
+      "id": "d02a47c2-aa89-4314-a6ad-13bf4fe6a7a3",
+      "name": "Supabase - Upsert User Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5424,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/appointments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"user_id\": \"{{ $('Check Data Collection Stage').item.json.userId }}\",\n  \"listing_id\": \"{{ $('Check Data Collection Stage').item.json.propertyId }}\",\n  \"conversation_id\": \"{{ $('Check Data Collection Stage').item.json.conversationId }}\",\n  \"appointment_date\": \"{{ $('Check Data Collection Stage').item.json.appointmentDate }}\",\n  \"appointment_time\": \"{{ $('Check Data Collection Stage').item.json.appointmentTime }}\",\n  \"status\": \"pending\",\n  \"notes\": \"حجز عبر واتساب\"\n}",
+        "options": {}
+      },
+      "id": "d38168be-a9bb-4216-8124-c50f3cd8ed40",
+      "name": "Supabase - Save Appointment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5648,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://qvhozbdoktphgyndtthy.supabase.co/rest/v1/rpc/upsert_conversation",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer sb_secret_1r3Tx42eB-cgIjoDL7wOhA_cCZ9rxKL"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_conversation_id\": \"{{ $('Detect Interest Flag').item.json.conversationId }}\",\n  \"p_user_id\": \"{{ $('Detect Interest Flag').item.json.userId }}\",\n  \"p_listing_id\": \"{{ $('Detect Interest Flag').item.json.propertyId }}\",\n  \"p_user_message\": {{ JSON.stringify({ role: 'user', content: $('Detect Interest Flag').item.json.messageText, timestamp: new Date().toISOString() }) }},\n  \"p_bot_message\": {{ JSON.stringify({ role: 'assistant', content: $('Detect Interest Flag').item.json.botReply, timestamp: new Date().toISOString() }) }}\n}",
+        "options": {}
+      },
+      "id": "8fdb69d6-dccf-4b8f-b07d-ca2da9d228e9",
+      "name": "Supabase - Update Conversation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5872,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.WHATSAPP_API_URL }}/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"to\": \"{{ $('Detect Interest Flag').item.json.from }}\",\n  \"message\": \"{{ $('Detect Interest Flag').item.json.botReply }}\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "05c2b76a-3f70-4cc2-ade8-17db9d9eafa4",
+      "name": "Send WhatsApp Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6096,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"ok\" }",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "2518ee4f-6891-44bd-b564-37a79a9a6ad9",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        6320,
+        720
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WhatsApp Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse & Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Normalize Message": {
+      "main": [
+        [
+          {
+            "node": "Input Type Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input Type Router": {
+      "main": [
+        [
+          {
+            "node": "Groq - Transcribe Audio",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Groq - Describe Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Media Back",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq - Transcribe Audio": {
+      "main": [
+        [
+          {
+            "node": "Merge Media Back",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq - Describe Image": {
+      "main": [
+        [
+          {
+            "node": "Merge Media Back",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Media Back": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Get or Create User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Get or Create User": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Load Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Load Conversation": {
+      "main": [
+        [
+          {
+            "node": "Extract Property ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Property ID": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Check Listing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Check Listing": {
+      "main": [
+        [
+          {
+            "node": "Listing Status Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listing Status Router": {
+      "main": [
+        [
+          {
+            "node": "Cohere - Embed User Question",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase - Get Similar Listings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cohere - Embed User Question": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Query Knowledge Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Query Knowledge Base": {
+      "main": [
+        [
+          {
+            "node": "Groq - Generate Consultation Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq - Generate Consultation Reply": {
+      "main": [
+        [
+          {
+            "node": "Detect Interest Flag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Get Similar Listings": {
+      "main": [
+        [
+          {
+            "node": "Groq - Generate Alternatives Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq - Generate Alternatives Reply": {
+      "main": [
+        [
+          {
+            "node": "Detect Interest Flag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect Interest Flag": {
+      "main": [
+        [
+          {
+            "node": "Interest Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interest Router": {
+      "main": [
+        [
+          {
+            "node": "Check Data Collection Stage",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase - Update Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Data Collection Stage": {
+      "main": [
+        [
+          {
+            "node": "Groq - Generate Data Collection Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq - Generate Data Collection Prompt": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Upsert User Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Upsert User Data": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Save Appointment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Save Appointment": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Update Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Update Conversation": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp Reply": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "fadf0305-bc3c-4aeb-9adf-116c402e232f",
+  "meta": {
+    "instanceId": "c8b35fe12417e52878293300b5586b3e619adc76a875a42b784c428128e0fa23"
+  },
+  "id": "ZwoFXPETFAJB6vLL",
+  "tags": []
+}
