@@ -10,6 +10,54 @@ interface Listing {
   images: string[];
 }
 
+function CustomSelect({ label, value, options, onChange }: { label: string, value: string, options: { value: string, label: string }[], onChange: (val: string) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedOption = options.find(o => o.value === value);
+
+  return (
+    <div className="relative">
+      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">{label}</label>
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full bg-slate-50 border rounded-lg py-2.5 px-3 text-sm flex justify-between items-center cursor-pointer transition-all duration-200 ${
+          isOpen ? 'border-secondary ring-2 ring-secondary/20 bg-white shadow-sm' : 'border-slate-200 hover:border-slate-300'
+        }`}
+      >
+        <span className={value ? 'text-primary font-bold' : 'text-slate-400'}>
+          {selectedOption ? selectedOption.label : 'اختر...'}
+        </span>
+        <span className={`material-symbols-outlined text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+          expand_more
+        </span>
+      </div>
+      
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-[60]" onClick={() => setIsOpen(false)} />
+          <div className="absolute top-[calc(100%+4px)] left-0 right-0 bg-white border border-slate-100 rounded-xl shadow-2xl z-[70] py-1.5 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+            {options.map((opt) => (
+              <div
+                key={opt.value}
+                onClick={() => {
+                  onChange(opt.value);
+                  setIsOpen(false);
+                }}
+                className={`px-4 py-2.5 text-sm cursor-pointer transition-colors ${
+                  value === opt.value 
+                    ? 'bg-secondary/10 text-primary font-bold border-r-4 border-secondary' 
+                    : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                {opt.label}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -316,32 +364,26 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="relative group">
-                      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">نوع العقار</label>
-                      <select 
-                        value={propertyType}
-                        onChange={(e) => setPropertyType(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm appearance-none cursor-pointer hover:bg-slate-100/50"
-                      >
-                        <option value="سكني">سكني</option>
-                        <option value="تجاري">تجاري</option>
-                        <option value="أرض">أرض</option>
-                      </select>
-                      <span className="material-symbols-outlined absolute left-3 top-[34px] text-slate-400 pointer-events-none transition-transform group-focus-within:rotate-180">expand_more</span>
-                    </div>
-                    <div className="relative group">
-                      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">الحالة</label>
-                      <select 
-                        value={propertyStatus}
-                        onChange={(e) => setPropertyStatus(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm appearance-none cursor-pointer hover:bg-slate-100/50"
-                      >
-                        <option value="available">متاح</option>
-                        <option value="rented">مؤجّر</option>
-                        <option value="sold">مباع</option>
-                      </select>
-                      <span className="material-symbols-outlined absolute left-3 top-[34px] text-slate-400 pointer-events-none transition-transform group-focus-within:rotate-180">expand_more</span>
-                    </div>
+                    <CustomSelect 
+                      label="نوع العقار"
+                      value={propertyType}
+                      onChange={setPropertyType}
+                      options={[
+                        { value: 'سكني', label: 'سكني' },
+                        { value: 'تجاري', label: 'تجاري' },
+                        { value: 'أرض', label: 'أرض' }
+                      ]}
+                    />
+                    <CustomSelect 
+                      label="الحالة"
+                      value={propertyStatus}
+                      onChange={setPropertyStatus}
+                      options={[
+                        { value: 'available', label: 'متاح' },
+                        { value: 'rented', label: 'مؤجّر' },
+                        { value: 'sold', label: 'مباع' }
+                      ]}
+                    />
                   </div>
                 </div>
 
