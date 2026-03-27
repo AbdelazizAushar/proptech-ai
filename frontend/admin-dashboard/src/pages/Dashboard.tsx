@@ -32,7 +32,10 @@ export default function Dashboard() {
   const [selectedSpecs, setSelectedSpecs] = useState<Record<string, number>>({});
   const [areaValue, setAreaValue] = useState('');
   const [areaUnit, setAreaUnit] = useState<'م²' | 'قدم²'>('م²');
-  const [imageUrls, setImageUrls] = useState<string[]>(['']);
+  const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [propertyType, setPropertyType] = useState('سكني');
+  const [propertyStatus, setPropertyStatus] = useState('available');
 
   const toggleSpec = (key: string) => {
     setSelectedSpecs(prev => {
@@ -48,14 +51,31 @@ export default function Dashboard() {
       return { ...prev, [key]: val };
     });
   };
-  const addImageUrl = () => setImageUrls(prev => [...prev, '']);
-  const removeImageUrl = (i: number) => setImageUrls(prev => prev.filter((_, idx) => idx !== i));
-  const updateImageUrl = (i: number, val: string) => setImageUrls(prev => prev.map((u, idx) => idx === i ? val : u));
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setImages(prev => [...prev, ...newFiles]);
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+      setImagePreviews(prev => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    URL.revokeObjectURL(imagePreviews[index]);
+    setImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
   const resetModal = () => {
     setSelectedSpecs({});
     setAreaValue('');
     setAreaUnit('م²');
-    setImageUrls(['']);
+    imagePreviews.forEach(URL.revokeObjectURL);
+    setImages([]);
+    setImagePreviews([]);
+    setPropertyType('سكني');
+    setPropertyStatus('available');
     setShowAddModal(false);
   };
   
@@ -292,25 +312,35 @@ export default function Dashboard() {
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-on-surface-variant mb-1.5">السعر (ل.س)</label>
-                      <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm text-left" dir="ltr" placeholder="0" type="number" />
+                      <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm text-left no-spinner" dir="ltr" placeholder="0" type="number" />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
+                    <div className="relative group">
                       <label className="block text-xs font-bold text-on-surface-variant mb-1.5">نوع العقار</label>
-                      <select className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm">
-                        <option>سكني</option>
-                        <option>تجاري</option>
-                        <option>أرض</option>
+                      <select 
+                        value={propertyType}
+                        onChange={(e) => setPropertyType(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm appearance-none cursor-pointer hover:bg-slate-100/50"
+                      >
+                        <option value="سكني">سكني</option>
+                        <option value="تجاري">تجاري</option>
+                        <option value="أرض">أرض</option>
                       </select>
+                      <span className="material-symbols-outlined absolute left-3 top-[34px] text-slate-400 pointer-events-none transition-transform group-focus-within:rotate-180">expand_more</span>
                     </div>
-                    <div>
+                    <div className="relative group">
                       <label className="block text-xs font-bold text-on-surface-variant mb-1.5">الحالة</label>
-                      <select className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm">
+                      <select 
+                        value={propertyStatus}
+                        onChange={(e) => setPropertyStatus(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm appearance-none cursor-pointer hover:bg-slate-100/50"
+                      >
                         <option value="available">متاح</option>
                         <option value="rented">مؤجّر</option>
                         <option value="sold">مباع</option>
                       </select>
+                      <span className="material-symbols-outlined absolute left-3 top-[34px] text-slate-400 pointer-events-none transition-transform group-focus-within:rotate-180">expand_more</span>
                     </div>
                   </div>
                 </div>
@@ -325,7 +355,7 @@ export default function Dashboard() {
                       onChange={e => setAreaValue(e.target.value)}
                       placeholder="0"
                       dir="ltr"
-                      className="flex-1 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm"
+                      className="flex-1 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm no-spinner"
                     />
                     <div className="flex rounded-lg overflow-hidden border border-slate-200 text-sm font-bold shrink-0">
                       {(['م²', 'قدم²'] as const).map(unit => (
@@ -392,39 +422,43 @@ export default function Dashboard() {
 
                 {/* ── Images ── */}
                 <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="text-xs font-bold text-on-surface-variant">صور العقار (URL)</label>
-                    <button
-                      type="button"
-                      onClick={addImageUrl}
-                      className="text-xs font-bold text-secondary hover:underline flex items-center gap-1"
-                    >
-                      <span className="material-symbols-outlined text-sm">add_photo_alternate</span>
-                      إضافة صورة
-                    </button>
-                  </div>
-                  <div className="space-y-2">
-                    {imageUrls.map((url, i) => (
-                      <div key={i} className="flex gap-2 items-center">
-                        <input
-                          type="url"
-                          value={url}
-                          onChange={e => updateImageUrl(i, e.target.value)}
-                          placeholder={`https://... (صورة ${i + 1})`}
-                          dir="ltr"
-                          className="flex-1 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2 px-3 text-xs"
-                        />
-                        {imageUrls.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removeImageUrl(i)}
-                            className="text-slate-400 hover:text-error transition-colors p-1 rounded-lg hover:bg-error/10 shrink-0"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">close</span>
-                          </button>
-                        )}
+                  <label className="block text-xs font-bold text-on-surface-variant mb-2">صور العقار</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                    {imagePreviews.map((preview, i) => (
+                      <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-slate-200 group">
+                        <img src={preview} alt="preview" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(i)}
+                          className="absolute top-1 right-1 w-6 h-6 bg-error/90 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <span className="material-symbols-outlined text-sm">close</span>
+                        </button>
                       </div>
                     ))}
+                    <label 
+                      className="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 hover:border-secondary hover:text-secondary hover:bg-secondary/5 transition-all cursor-pointer bg-slate-50 p-2"
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (e.dataTransfer.files) {
+                          const newFiles = Array.from(e.dataTransfer.files);
+                          setImages(prev => [...prev, ...newFiles]);
+                          const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+                          setImagePreviews(prev => [...prev, ...newPreviews]);
+                        }
+                      }}
+                    >
+                      <span className="material-symbols-outlined text-2xl mb-1">add_photo_alternate</span>
+                      <span className="text-[10px] font-bold text-center">أضف صور</span>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                    </label>
                   </div>
                 </div>
 

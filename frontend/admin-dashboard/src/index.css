@@ -100,3 +100,13 @@ input:focus + span, input:not(:placeholder-shown) + span {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
 }
+
+/* Hide number input arrows */
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-spinner {
+  -moz-appearance: textfield;
+}
