@@ -15,6 +15,49 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+
+  // Enhanced Add Property modal state
+  const SPECS_LIST = [
+    { key: 'bathroom',    icon: 'bathtub',       label: 'حمام' },
+    { key: 'bedroom',     icon: 'bed',           label: 'غرفة نوم' },
+    { key: 'kitchen',     icon: 'countertops',   label: 'مطبخ' },
+    { key: 'living_room', icon: 'weekend',       label: 'صالة معيشة' },
+    { key: 'balcony',     icon: 'balcony',       label: 'بلكون' },
+    { key: 'garden',      icon: 'yard',          label: 'حديقة' },
+    { key: 'pool',        icon: 'pool',          label: 'مسبح' },
+    { key: 'parking',     icon: 'garage',        label: 'موقف سيارات' },
+    { key: 'maid_room',   icon: 'room_service',  label: 'غرفة خادمة' },
+    { key: 'storage',     icon: 'inventory_2',   label: 'غرفة مخزن' },
+  ];
+  const [selectedSpecs, setSelectedSpecs] = useState<Record<string, number>>({});
+  const [areaValue, setAreaValue] = useState('');
+  const [areaUnit, setAreaUnit] = useState<'م²' | 'قدم²'>('م²');
+  const [imageUrls, setImageUrls] = useState<string[]>(['']);
+
+  const toggleSpec = (key: string) => {
+    setSelectedSpecs(prev => {
+      const next = { ...prev };
+      if (next[key] !== undefined) { delete next[key]; } 
+      else { next[key] = 1; }
+      return next;
+    });
+  };
+  const changeSpecQty = (key: string, delta: number) => {
+    setSelectedSpecs(prev => {
+      const val = Math.max(1, (prev[key] ?? 1) + delta);
+      return { ...prev, [key]: val };
+    });
+  };
+  const addImageUrl = () => setImageUrls(prev => [...prev, '']);
+  const removeImageUrl = (i: number) => setImageUrls(prev => prev.filter((_, idx) => idx !== i));
+  const updateImageUrl = (i: number, val: string) => setImageUrls(prev => prev.map((u, idx) => idx === i ? val : u));
+  const resetModal = () => {
+    setSelectedSpecs({});
+    setAreaValue('');
+    setAreaUnit('م²');
+    setImageUrls(['']);
+    setShowAddModal(false);
+  };
   
   const [stats, setStats] = useState({
     totalThisMonth: 0,
@@ -221,57 +264,180 @@ export default function Dashboard() {
       {/* Add Property Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={() => setShowAddModal(false)}></div>
-            <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h2 className="text-xl font-bold font-almarai text-primary">إضافة عقار جديد</h2>
-                    <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-error transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-error/10">
-                        <span className="material-symbols-outlined text-xl">close</span>
-                    </button>
-                </div>
-                <div className="p-6 max-h-[75vh] overflow-y-auto">
-                    <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); setShowAddModal(false); }}>
-                        <div>
-                        <label className="block text-xs font-bold text-on-surface-variant mb-2">عنوان العقار</label>
-                        <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="مثال: فيلا الياسمين بالقرب من المركز" type="text"/>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-bold text-on-surface-variant mb-2">الموقع/المدينة</label>
-                            <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="دمشق، المزة" type="text"/>
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-on-surface-variant mb-2">السعر (ل.س)</label>
-                            <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm text-left" dir="ltr" placeholder="0" type="number"/>
-                        </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-bold text-on-surface-variant mb-2">عدد الغرف</label>
-                            <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="0" type="number"/>
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-on-surface-variant mb-2">نوع العقار</label>
-                            <select className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm">
-                            <option>سكني</option>
-                            <option>تجاري</option>
-                            <option>أرض</option>
-                            </select>
-                        </div>
-                        </div>
-                        <div className="mt-4">
-                        <label className="block text-xs font-bold text-on-surface-variant mb-2">صورة العقار الرئيسية</label>
-                        <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center text-slate-400 hover:border-secondary hover:text-secondary hover:bg-secondary/5 transition-all cursor-pointer bg-slate-50">
-                            <span className="material-symbols-outlined text-3xl mb-2" data-icon="cloud_upload">cloud_upload</span>
-                            <span className="text-xs font-medium">اسحب الصورة هنا أو اضغط للرفع</span>
-                        </div>
-                        </div>
-                        <button className="w-full bg-primary text-white py-3.5 rounded-xl font-bold font-almarai text-sm hover:bg-[#003666] transition-colors shadow-lg shadow-primary/20 mt-6" type="submit">
-                            حفظ مسودة العقار
-                        </button>
-                    </form>
-                </div>
+          <div className="absolute inset-0 bg-primary/40 backdrop-blur-sm" onClick={resetModal} />
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
+
+            {/* Modal Header */}
+            <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <h2 className="text-xl font-bold font-almarai text-primary">إضافة عقار جديد</h2>
+              <button onClick={resetModal} className="text-slate-400 hover:text-error transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-error/10">
+                <span className="material-symbols-outlined text-xl">close</span>
+              </button>
             </div>
+
+            {/* Modal Body */}
+            <div className="p-6 max-h-[80vh] overflow-y-auto">
+              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); resetModal(); }}>
+
+                {/* ── Basic Info ── */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-on-surface-variant mb-1.5">عنوان العقار</label>
+                    <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="مثال: فيلا الياسمين بالقرب من المركز" type="text" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">الموقع/المدينة</label>
+                      <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="دمشق، المزة" type="text" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">السعر (ل.س)</label>
+                      <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm text-left" dir="ltr" placeholder="0" type="number" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">نوع العقار</label>
+                      <select className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm">
+                        <option>سكني</option>
+                        <option>تجاري</option>
+                        <option>أرض</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">الحالة</label>
+                      <select className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm">
+                        <option value="available">متاح</option>
+                        <option value="rented">مؤجّر</option>
+                        <option value="sold">مباع</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Area ── */}
+                <div>
+                  <label className="block text-xs font-bold text-on-surface-variant mb-1.5">مساحة العقار</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={areaValue}
+                      onChange={e => setAreaValue(e.target.value)}
+                      placeholder="0"
+                      dir="ltr"
+                      className="flex-1 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm"
+                    />
+                    <div className="flex rounded-lg overflow-hidden border border-slate-200 text-sm font-bold shrink-0">
+                      {(['م²', 'قدم²'] as const).map(unit => (
+                        <button
+                          key={unit}
+                          type="button"
+                          onClick={() => setAreaUnit(unit)}
+                          className={`px-4 py-2 transition-colors ${
+                            areaUnit === unit
+                              ? 'bg-primary text-white'
+                              : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                          }`}
+                        >
+                          {unit}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Specs ── */}
+                <div>
+                  <label className="block text-xs font-bold text-on-surface-variant mb-3">مواصفات العقار <span className="text-slate-400 font-normal">(اختر ما ينطبق)</span></label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {SPECS_LIST.map(({ key, icon, label }) => {
+                      const isSelected = selectedSpecs[key] !== undefined;
+                      return (
+                        <div
+                          key={key}
+                          className={`rounded-xl border-2 p-2.5 transition-all select-none ${
+                            isSelected
+                              ? 'border-secondary bg-secondary/5'
+                              : 'border-slate-200 bg-slate-50 hover:border-slate-300 cursor-pointer'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2" onClick={() => toggleSpec(key)}>
+                            <span className={`material-symbols-outlined text-[18px] ${
+                              isSelected ? 'text-secondary' : 'text-slate-400'
+                            }`}>{icon}</span>
+                            <span className={`text-xs font-bold ${
+                              isSelected ? 'text-primary' : 'text-slate-500'
+                            }`}>{label}</span>
+                          </div>
+                          {isSelected && (
+                            <div className="flex items-center justify-between mt-2 pt-2 border-t border-secondary/20">
+                              <button
+                                type="button"
+                                onClick={() => changeSpecQty(key, -1)}
+                                className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm hover:bg-primary/20"
+                              >−</button>
+                              <span className="text-sm font-extrabold text-primary">{selectedSpecs[key]}</span>
+                              <button
+                                type="button"
+                                onClick={() => changeSpecQty(key, +1)}
+                                className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm hover:bg-primary/20"
+                              >+</button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* ── Images ── */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-bold text-on-surface-variant">صور العقار (URL)</label>
+                    <button
+                      type="button"
+                      onClick={addImageUrl}
+                      className="text-xs font-bold text-secondary hover:underline flex items-center gap-1"
+                    >
+                      <span className="material-symbols-outlined text-sm">add_photo_alternate</span>
+                      إضافة صورة
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {imageUrls.map((url, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <input
+                          type="url"
+                          value={url}
+                          onChange={e => updateImageUrl(i, e.target.value)}
+                          placeholder={`https://... (صورة ${i + 1})`}
+                          dir="ltr"
+                          className="flex-1 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2 px-3 text-xs"
+                        />
+                        {imageUrls.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeImageUrl(i)}
+                            className="text-slate-400 hover:text-error transition-colors p-1 rounded-lg hover:bg-error/10 shrink-0"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">close</span>
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── Submit ── */}
+                <button
+                  className="w-full bg-primary text-white py-3.5 rounded-xl font-bold font-almarai text-sm hover:bg-[#003666] transition-colors shadow-lg shadow-primary/20"
+                  type="submit"
+                >
+                  حفظ مسودة العقار
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       )}
 
