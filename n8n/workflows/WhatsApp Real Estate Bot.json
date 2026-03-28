@@ -12,10 +12,7 @@
       "name": "WhatsApp Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [
-        1616,
-        720
-      ],
+      "position": [1616, 720],
       "webhookId": "36a63a28-aae4-4a91-b840-89dab2d71e36"
     },
     {
@@ -26,10 +23,7 @@
       "name": "Parse & Normalize Message",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1840,
-        720
-      ]
+      "position": [1840, 720]
     },
     {
       "parameters": {
@@ -67,10 +61,7 @@
       "name": "Input Type Router",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        2064,
-        720
-      ]
+      "position": [2064, 720]
     },
     {
       "parameters": {
@@ -113,10 +104,7 @@
       "name": "Groq - Transcribe Audio",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        2288,
-        576
-      ]
+      "position": [2288, 576]
     },
     {
       "parameters": {
@@ -144,10 +132,7 @@
       "name": "Groq - Describe Image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        2288,
-        864
-      ]
+      "position": [2288, 864]
     },
     {
       "parameters": {
@@ -157,10 +142,7 @@
       "name": "Merge Media Back",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        2512,
-        720
-      ]
+      "position": [2512, 720]
     },
     {
       "parameters": {
@@ -196,10 +178,7 @@
       "name": "Supabase - Get or Create User",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        2736,
-        720
-      ]
+      "position": [2736, 720]
     },
     {
       "parameters": {
@@ -244,10 +223,7 @@
       "name": "Supabase - Load Conversation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        2960,
-        720
-      ]
+      "position": [2960, 720]
     },
     {
       "parameters": {
@@ -257,10 +233,7 @@
       "name": "Extract Property ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        3184,
-        720
-      ]
+      "position": [3184, 720]
     },
     {
       "parameters": {
@@ -297,10 +270,7 @@
       "name": "Supabase - Check Listing",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        3408,
-        720
-      ]
+      "position": [3408, 720]
     },
     {
       "parameters": {
@@ -329,10 +299,7 @@
       "name": "Listing Status Router",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        3632,
-        720
-      ]
+      "position": [3632, 720]
     },
     {
       "parameters": {
@@ -385,10 +352,7 @@
       "name": "Supabase - Get Similar Listings",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        4080,
-        816
-      ]
+      "position": [4080, 816]
     },
     {
       "parameters": {
@@ -416,10 +380,7 @@
       "name": "Groq - Generate Alternatives Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        4304,
-        816
-      ]
+      "position": [4304, 816]
     },
     {
       "parameters": {
@@ -447,10 +408,7 @@
       "name": "Cohere - Embed User Question",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        3856,
-        624
-      ]
+      "position": [3856, 624]
     },
     {
       "parameters": {
@@ -482,10 +440,7 @@
       "name": "Supabase - Query Knowledge Base",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        4080,
-        624
-      ]
+      "position": [4080, 624]
     },
     {
       "parameters": {
@@ -513,10 +468,7 @@
       "name": "Groq - Generate Consultation Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        4304,
-        624
-      ]
+      "position": [4304, 624]
     },
     {
       "parameters": {
@@ -526,10 +478,7 @@
       "name": "Detect Interest Flag",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        4528,
-        720
-      ]
+      "position": [4528, 720]
     },
     {
       "parameters": {
@@ -558,10 +507,7 @@
       "name": "Interest Router",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        4752,
-        720
-      ]
+      "position": [4752, 720]
     },
     {
       "parameters": {
@@ -571,10 +517,7 @@
       "name": "Check Data Collection Stage",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        4976,
-        656
-      ]
+      "position": [4976, 656]
     },
     {
       "parameters": {
@@ -602,10 +545,7 @@
       "name": "Groq - Generate Data Collection Prompt",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        5200,
-        656
-      ]
+      "position": [5200, 656]
     },
     {
       "parameters": {
@@ -641,10 +581,7 @@
       "name": "Supabase - Upsert User Data",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        5424,
-        656
-      ]
+      "position": [5424, 656]
     },
     {
       "parameters": {
@@ -680,10 +617,7 @@
       "name": "Supabase - Save Appointment",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        5648,
-        656
-      ]
+      "position": [5648, 656]
     },
     {
       "parameters": {
@@ -715,10 +649,7 @@
       "name": "Supabase - Update Conversation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        5872,
-        720
-      ]
+      "position": [5872, 720]
     },
     {
       "parameters": {
@@ -748,10 +679,7 @@
       "name": "Send WhatsApp Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [
-        6096,
-        720
-      ]
+      "position": [6096, 720]
     },
     {
       "parameters": {
@@ -765,10 +693,7 @@
       "name": "Webhook Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [
-        6320,
-        720
-      ]
+      "position": [6320, 720]
     }
   ],
   "pinData": {},
