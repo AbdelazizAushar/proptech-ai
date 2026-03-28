@@ -4,10 +4,8 @@ import clsx from 'clsx';
 
 const navLinks = [
   { to: '/', icon: 'dashboard', label: 'نظرة عامة', end: true },
-  { to: '/properties', icon: 'domain', label: 'العقارات' },
   { to: '/bookings', icon: 'calendar_month', label: 'الحجوزات' },
   { to: '/admins', icon: 'group', label: 'المشرفون' },
-  { to: '/settings', icon: 'settings', label: 'الإعدادات' },
 ];
 
 export default function AdminLayout() {
