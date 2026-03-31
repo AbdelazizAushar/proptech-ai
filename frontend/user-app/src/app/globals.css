@@ -1,0 +1,216 @@
+:root {
+  /* Brand Colors */
+  --primary:       #0a192f;
+  --primary-light: #112240;
+  --primary-hover: #1a3a5c;
+  --accent:        #d4a017;
+  --accent-hover:  #b8860b;
+
+  /* Backgrounds */
+  --bg-light: #f1f5f9;
+  --bg-white: #ffffff;
+  --bg-card:  #ffffff;
+
+  /* Text */
+  --text-dark:  #1e293b;
+  --text-body:  #475569;
+  --text-light: #94a3b8;
+  --text-white: #f8fafc;
+
+  /* Status Colors */
+  --green:  #22c55e;
+  --red:    #ef4444;
+  --amber:  #f59e0b;
+
+  /* Borders */
+  --border:       #e2e8f0;
+  --border-dark:  #cbd5e1;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.10), 0 2px 4px -2px rgb(0 0 0 / 0.10);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.10), 0 4px 6px -4px rgb(0 0 0 / 0.10);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.12), 0 8px 10px -6px rgb(0 0 0 / 0.12);
+  --shadow-2xl:0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Misc */
+  --radius:      8px;
+  --radius-lg:   16px;
+  --radius-full: 9999px;
+  --transition:  all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --navbar-h:    72px;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Tajawal', 'Cairo', 'Segoe UI', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+/* ─── Layout Utilities ───────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.page-wrapper {
+  padding-top: var(--navbar-h);
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--text-white);
+  border-color: var(--primary);
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.btn-accent:hover {
+  background-color: var(--accent-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--border-dark);
+  color: var(--text-dark);
+}
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: rgba(10,25,47,0.04);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-body);
+}
+.btn-ghost:hover {
+  background-color: var(--bg-light);
+}
+
+/* ─── Section Utilities ──────────────────────────────────────────────────── */
+.section-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.75rem;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 40%;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.section-subtitle {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* ─── Badges ─────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.badge-available { background: var(--green); color: #fff; }
+.badge-sold      { background: var(--red);   color: #fff; }
+.badge-rented    { background: var(--amber);  color: #fff; }
+.badge-featured  { background: var(--primary); color: #fff; }
+
+/* ─── Form Inputs ─────────────────────────────────────────────────────────── */
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background-color: var(--bg-white);
+  outline: none;
+  transition: var(--transition);
+  appearance: none;
+}
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(10, 25, 47, 0.1);
+}
+
+/* ─── Global Shimmer Keyframe (used by SkeletonCard, loading.tsx, etc.) ────── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+

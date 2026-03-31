@@ -1,15 +1,49 @@
-# Environment
+# Node / npm
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment variables — NEVER commit these
 .env
 .env.local
-.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
 
-# Dependencies
-node_modules/
-.next/
+# Cache & temp
+.cache/
+.turbo/
+.parcel-cache/
+*.tsbuildinfo
 
-# System
+# OS / system
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Editor configs
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
 
 # Logs
 *.log
+logs/
+
+# Testing
+coverage/
+*.lcov
+
+# Misc
+.netlify/

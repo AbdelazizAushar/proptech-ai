@@ -1,0 +1,105 @@
+/* ─── Shimmer Base ─────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+.sk-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-light)   0%,
+    #e8edf3           40%,
+    var(--bg-light)   80%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius);
+}
+
+/* ─── Skeleton Card ────────────────────────────────────────────────────────── */
+/*
+  Mirrors the PropertyCard dimensions exactly so there's zero layout shift
+  when real cards replace skeletons.
+*/
+.sk-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  /* Same shadow as PropertyCard */
+  box-shadow: var(--shadow-sm);
+}
+
+.sk-card__image {
+  width: 100%;
+  /* Match PropertyCard image height */
+  height: 220px;
+  border-radius: 0;
+}
+
+.sk-card__body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sk-card__badge {
+  width: 72px;
+  height: 22px;
+  border-radius: var(--radius-full);
+}
+
+.sk-card__title {
+  height: 18px;
+  width: 80%;
+}
+.sk-card__title--short {
+  width: 55%;
+}
+
+.sk-card__location {
+  height: 14px;
+  width: 60%;
+}
+
+.sk-card__specs {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.sk-card__spec {
+  height: 32px;
+  flex: 1;
+  border-radius: var(--radius);
+}
+
+.sk-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.sk-card__price {
+  height: 24px;
+  width: 100px;
+}
+
+.sk-card__btn {
+  height: 38px;
+  width: 90px;
+  border-radius: var(--radius);
+}
+
+/* ─── Skeleton Grid ────────────────────────────────────────────────────────── */
+/* Same grid layout as featured__grid and props-grid */
+.sk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.75rem;
+}
+
+@media (max-width: 768px) {
+  .sk-grid { grid-template-columns: 1fr; }
+}
