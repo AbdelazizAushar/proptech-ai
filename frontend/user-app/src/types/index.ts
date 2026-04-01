@@ -1,0 +1,58 @@
+// ─── Core Data Types ──────────────────────────────────────────────────────────
+
+export interface Listing {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  location: string;
+  specs: ListingSpecs;
+  images: string[];
+  status: 'available' | 'sold' | 'rented';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ListingSpecs {
+  غرف_النوم?: number;
+  الحمامات?: number;
+  المساحة_م2?: number;
+  الطابق?: number | string;
+  مصعد?: boolean;
+  موقف_سيارة?: boolean;
+  مسبح?: boolean;
+  حديقة?: boolean;
+  مفروشة?: boolean;
+  تدفئة?: string;
+  تكييف?: boolean;
+  إطلالة_بحر?: boolean;
+  الطوابق?: number;
+  النوع?: string;
+  [key: string]: unknown;
+}
+
+// ─── Filter Types ─────────────────────────────────────────────────────────────
+
+export interface ListingFilter {
+  location?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  rooms?: number;
+  status?: 'available' | 'sold' | 'rented' | 'all';
+}
+
+// ─── UI Component Props ───────────────────────────────────────────────────────
+
+export interface PropertyCardProps {
+  listing: Listing;
+  variant?: 'default' | 'horizontal';
+}
+
+// ─── API Response Types ───────────────────────────────────────────────────────
+
+export interface ApiResponse<T> {
+  data: T | null;
+  error: string | null;
+}

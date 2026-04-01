@@ -1,0 +1,130 @@
+/* ─── Card Container ────────────────────────────────────────────────────────── */
+.pcard {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+.pcard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+  border-color: transparent;
+}
+
+/* ─── Image ─────────────────────────────────────────────────────────────────── */
+.pcard__image-wrap {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+.pcard__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.pcard:hover .pcard__img {
+  transform: scale(1.06);
+}
+.pcard__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,25,47,0.5) 0%, transparent 50%);
+  opacity: 0;
+  transition: var(--transition);
+}
+.pcard:hover .pcard__overlay { opacity: 1; }
+
+.pcard__badges {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* ─── Body ──────────────────────────────────────────────────────────────────── */
+.pcard__body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.6rem;
+}
+
+.pcard__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pcard__location {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+.pcard__location-icon { color: var(--accent); flex-shrink: 0; }
+
+/* ─── Specs ──────────────────────────────────────────────────────────────────── */
+.pcard__specs {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.pcard__spec {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.875rem;
+  color: var(--text-body);
+  font-weight: 500;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────────── */
+.pcard__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+.pcard__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  flex-direction: row-reverse;
+}
+.pcard__price-amount {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+.pcard__price-currency {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.pcard__price-period {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+.pcard__link {
+  font-size: 0.875rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius);
+}
