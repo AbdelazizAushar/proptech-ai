@@ -6,7 +6,7 @@ AI-powered platform connecting a frontend app to a WhatsApp bot via n8n automati
 
 ## Structure
 
-- `frontend/` — React.js browsing app
+- `frontend/` — React.js browsing app 
 - `n8n/` — All automation workflow JSONs
 
 ## Stack
