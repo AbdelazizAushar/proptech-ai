@@ -80,7 +80,7 @@ export default function Dashboard() {
   const [selectedSpecs, setSelectedSpecs] = useState<Record<string, number>>({});
   const [areaValue, setAreaValue] = useState('');
   const [areaUnit, setAreaUnit] = useState<'م²' | 'قدم²'>('م²');
-  const [images, setImages] = useState<File[]>([]);
+  const [_images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [propertyType, setPropertyType] = useState('سكني');
   const [propertyStatus, setPropertyStatus] = useState('available');
