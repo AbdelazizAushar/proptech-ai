@@ -1,5 +1,5 @@
 {
-  "name": "WhatsApp Real Estate Bot",
+  "name": "WhatsApp Real Estate Bot Final",
   "nodes": [
     {
       "parameters": {
@@ -8,22 +8,28 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "b0713c82-8971-4686-8891-5234cd62c604",
+      "id": "11893985-4878-4c1c-9e13-4dfa15a4bafd",
       "name": "WhatsApp Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [1616, 720],
+      "position": [
+        -672,
+        144
+      ],
       "webhookId": "36a63a28-aae4-4a91-b840-89dab2d71e36"
     },
     {
       "parameters": {
         "jsCode": "const body = $input.first().json.body || $input.first().json;\n\nconst from = body.from || body.sender || body.phone || '';\nconst type = body.type || 'text';\nconst text = body.text?.body || body.text || body.message || '';\nconst audioUrl = body.audio?.url || body.audioUrl || '';\nconst imageUrl = body.image?.url || body.imageUrl || '';\n\nreturn [{\n  json: {\n    from,\n    type,\n    text,\n    audioUrl,\n    imageUrl,\n    originalPayload: body\n  }\n}];"
       },
-      "id": "330942e4-36b5-4f50-ac0c-dd06ca09436d",
+      "id": "33dab934-d8c6-49e0-9009-a2a7e412a25d",
       "name": "Parse & Normalize Message",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1840, 720]
+      "position": [
+        -432,
+        144
+      ]
     },
     {
       "parameters": {
@@ -31,7 +37,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -57,11 +64,14 @@
         },
         "options": {}
       },
-      "id": "f913f9ed-2bea-4d7c-8e6d-ad5e782a0923",
+      "id": "e07d8c01-989a-4f51-b140-8ff63528fa4d",
       "name": "Input Type Router",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [2064, 720]
+      "position": [
+        -224,
+        144
+      ]
     },
     {
       "parameters": {
@@ -100,11 +110,14 @@
         },
         "options": {}
       },
-      "id": "e175e39a-35c2-4d7a-a644-519f3267309c",
+      "id": "03d5626d-0362-4a22-b3df-61dbe6e2e89b",
       "name": "Groq - Transcribe Audio",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2288, 576]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -125,24 +138,30 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"model\": \"llama-3.2-90b-vision-preview\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مساعد عقاري. صف الصورة المرسلة بالتفصيل مع التركيز على مواصفات العقار.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"image_url\",\n          \"image_url\": {\n            \"url\": \"{{ $json.imageUrl }}\"\n          }\n        },\n        {\n          \"type\": \"text\",\n          \"text\": \"صف هذه الصورة بالتفصيل من منظور عقاري.\"\n        }\n      ]\n    }\n  ],\n  \"max_tokens\": 500\n}",
+        "jsonBody": "={\n  \"model\": \"llama-3.2-90b-vision-preview\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت خبير هندسة معمارية ووسيط عقاري محترف. مهمتك هي تحليل صورة العقار المرفقة بدقة شديدة وتوليد وصف نصي غني بالكلمات المفتاحية ليتم استخدامه في محرك بحث عقاري ذكي.\n\nصف المظهر الخارجي أو الداخلي للعقار في سطرين إلى ثلاثة أسطر كحد أقصى باللغة العربية، مع التركيز حصراً على العناصر التالية:\n\nالنمط المعماري: (مثال: بناء حديث، تصميم كلاسيكي، طراز ريفي، فيلا مودرن).\n\nنوع الواجهة والمواد: (مثال: واجهة حجرية، إكساء زجاجي بالكامل، تطعيم بالخشب، رخام).\n\nالألوان الطاغية: (مثال: ألوان ترابية دافئة، أبيض ناصع، رمادي مع أسود).\n\nالميزات المعمارية البارزة: (مثال: نوافذ بانورامية واسعة، شرفة ممتدة، سقف قرميد، تصميم هندسي غير تقليدي).\n\nتعليمات صارمة: أعطني الوصف مباشرة بدون أي مقدمات مثل \"تُظهر الصورة..\" أو ختامات. اكتب النص كفقرة واحدة متصلة وجاهزة للبحث.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"image_url\",\n          \"image_url\": {\n            \"url\": \"{{ $json.imageUrl }}\"\n          }\n        },\n        {\n          \"type\": \"text\",\n          \"text\": \"صف هذه الصورة بالتفصيل من منظور عقاري.\"\n        }\n      ]\n    }\n  ],\n  \"max_tokens\": 500\n}",
         "options": {}
       },
-      "id": "33b78e5c-399c-4756-aa5e-a845b8efcc95",
+      "id": "8846f3f9-88c7-497e-a243-8b9a1de8da31",
       "name": "Groq - Describe Image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2288, 864]
+      "position": [
+        0,
+        288
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const inputItems = $input.all();\nconst first = inputItems[0].json;\n\n// Determine if this came from audio transcription or image description\nlet resolvedText = first.text;\n\nif (first.text !== undefined && first.audioUrl !== undefined) {\n  // This is pass-through from text branch — keep as is\n  resolvedText = first.text;\n} else if (first.text !== undefined && first.imageUrl !== undefined) {\n  resolvedText = first.text;\n}\n\n// If transcription result is present\nif (first.hasOwnProperty('transcript')) {\n  resolvedText = first.transcript;\n}\n\n// If vision result is present\nif (first.choices && first.choices[0]?.message?.content) {\n  resolvedText = first.choices[0].message.content;\n}\n\nreturn [{\n  json: {\n    from: first.from,\n    type: first.type,\n    text: resolvedText,\n    audioUrl: first.audioUrl || '',\n    imageUrl: first.imageUrl || '',\n    originalPayload: first.originalPayload || {}\n  }\n}];"
+        "jsCode": "const inputItems = $input.all();\nconst first = inputItems[0].json;\n\nlet originalText = first.text || \"\"; \nlet resolvedText = originalText;\n\nif (first.hasOwnProperty('transcript') && first.transcript) {\n  resolvedText = first.transcript;\n}\n\nif (first.choices && first.choices[0]?.message?.content) {\n  let imageDescription = first.choices[0].message.content.trim();\n  \n  if (originalText && originalText.trim() !== \"\") {\n    resolvedText = `${originalText}\\n🌟 (ملاحظة للنظام: العميل يبحث عن عقار يطابق هذا الوصف البصري: ${imageDescription})`;\n  } else {\n    resolvedText = imageDescription;\n  }\n}\n\nreturn [{\n  json:\n  { from: first.from,\n    type: first.type,\n    text: resolvedText,\n    audioUrl: first.audioUrl || '',\n    imageUrl: first.imageUrl || '',\n    originalPayload: first.originalPayload || {} \n  } \n}];"
       },
-      "id": "87c3a8bb-1d51-4ffe-b3f2-56244d0e6ae4",
+      "id": "62862220-4a72-4a9d-b1d5-3a65959ef966",
       "name": "Merge Media Back",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2512, 720]
+      "position": [
+        224,
+        144
+      ]
     },
     {
       "parameters": {
@@ -174,11 +193,14 @@
         "jsonBody": "={\n  \"p_whatsapp_number\": \"{{ $json.from }}\"\n}",
         "options": {}
       },
-      "id": "87456bff-f3e5-4776-9dab-973b5ced8978",
+      "id": "f3c18c7c-b59a-4642-8745-8f56be3841df",
       "name": "Supabase - Get or Create User",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2736, 720]
+      "position": [
+        448,
+        144
+      ]
     },
     {
       "parameters": {
@@ -188,7 +210,7 @@
           "parameters": [
             {
               "name": "user_id",
-              "value": "=eq.{{ $('Supabase - Get or Create User').item.json[0].id }}"
+              "value": "=eq.{{ $json.id }}"
             },
             {
               "name": "status",
@@ -219,21 +241,28 @@
         },
         "options": {}
       },
-      "id": "422097c8-e112-478d-b79b-fef12eb2a4d9",
+      "id": "46b776a7-960c-4422-aa33-61f45fb31399",
       "name": "Supabase - Load Conversation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2960, 720]
+      "position": [
+        672,
+        144
+      ],
+      "alwaysOutputData": true
     },
     {
       "parameters": {
-        "jsCode": "const messageText = $('Merge Media Back').item.json.text || '';\nconst userRecord = $('Supabase - Get or Create User').item.json[0] || {};\nconst conversationArr = $('Supabase - Load Conversation').item.json || [];\nconst conversation = Array.isArray(conversationArr) ? conversationArr[0] : null;\n\n// Extract #PROPERTY_ID pattern\nconst match = messageText.match(/#([\\w-]+)/);\nconst propertyId = match ? match[1] : null;\n\n// Build context\nconst messages = conversation ? (conversation.messages || []) : [];\nconst conversationId = conversation ? conversation.id : null;\nconst listingId = conversation ? conversation.listing_id : null;\n\nreturn [{\n  json: {\n    from: $('Merge Media Back').item.json.from,\n    messageText,\n    type: $('Merge Media Back').item.json.type,\n    propertyId: propertyId || listingId,\n    isNewPropertyRequest: !!propertyId,\n    userId: userRecord.id,\n    userName: userRecord.name || null,\n    userPhone: userRecord.phone || null,\n    conversationId,\n    conversationMessages: messages,\n    userRecord\n  }\n}];"
+        "jsCode": "const messageText = $('Merge Media Back').first().json.text || '';\nconst userRecord = $('Supabase - Get or Create User').first().json[0] || {};\nconst conversationArr = $('Supabase - Load Conversation').first().json || [];\nconst conversation = Array.isArray(conversationArr) ? conversationArr[0] : null;\n\n// Extract #PROPERTY_ID pattern\nconst match = messageText.match(/#([\\w-]+)/);\nconst propertyId = match ? match[1] : null;\n\n// Build context\nconst messages = conversation ? (conversation.messages || []) : [];\nconst conversationId = conversation ? conversation.id : null;\nconst listingId = conversation ? conversation.listing_id : null;\n\nreturn [{\n  json: {\n    from: $('Merge Media Back').first().json.from,\n    messageText,\n    type: $('Merge Media Back').first().json.type,\n    propertyId: propertyId || listingId,\n    isNewPropertyRequest: !!propertyId,\n    userId: userRecord.id,\n    userName: userRecord.name || null,\n    userPhone: userRecord.phone || null,\n    conversationId,\n    conversationMessages: messages,\n    userRecord\n  }\n}];"
       },
-      "id": "75f5f1f9-3d6a-4783-bca8-4ca9f7e2cec1",
+      "id": "23e5244c-9dba-46d1-a4f7-87cad1b14503",
       "name": "Extract Property ID",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3184, 720]
+      "position": [
+        896,
+        144
+      ]
     },
     {
       "parameters": {
@@ -266,11 +295,14 @@
         },
         "options": {}
       },
-      "id": "6112a7f3-5a10-46bf-8b68-712817cd8474",
+      "id": "1e904287-1b2b-444e-8e7b-dcb54f8491e3",
       "name": "Supabase - Check Listing",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3408, 720]
+      "position": [
+        1120,
+        144
+      ]
     },
     {
       "parameters": {
@@ -278,12 +310,13 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
               "id": "cond_available",
-              "leftValue": "={{ $json[0].status }}",
+              "leftValue": "={{ $json[0]?.status || 'available' }}",
               "rightValue": "available",
               "operator": {
                 "type": "string",
@@ -295,11 +328,14 @@
         },
         "options": {}
       },
-      "id": "d7ffd67e-f861-4aac-b5e4-bfdf35a9a95e",
+      "id": "5e91b2ec-b008-4233-9648-b19fb8cf94e8",
       "name": "Listing Status Router",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [3632, 720]
+      "position": [
+        1344,
+        144
+      ]
     },
     {
       "parameters": {
@@ -348,11 +384,14 @@
         },
         "options": {}
       },
-      "id": "17797109-521a-4a5d-8aea-301ee79a260a",
+      "id": "723823ac-eec1-4762-a39e-75de41b67c68",
       "name": "Supabase - Get Similar Listings",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [4080, 816]
+      "position": [
+        1792,
+        240
+      ]
     },
     {
       "parameters": {
@@ -376,11 +415,14 @@
         "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مستشار عقاري محترف اسمك نور. تتحدث باللغة العربية الفصحى فقط. مهمتك إبلاغ العميل بعدم توفر العقار المطلوب بأسلوب محترف ولطيف، ثم عرض البدائل المتاحة بطريقة مقنعة.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"العقار المطلوب غير متاح حالياً ({{ $('Supabase - Check Listing').item.json[0].name }}).\\n\\nالبدائل المتاحة:\\n{{ JSON.stringify($('Supabase - Get Similar Listings').item.json, null, 2) }}\\n\\nرسالة العميل: {{ $('Extract Property ID').item.json.messageText }}\"\n    }\n  ],\n  \"max_tokens\": 800,\n  \"temperature\": 0.7\n}",
         "options": {}
       },
-      "id": "9228064a-9b3e-4b4e-9883-89300b00d959",
+      "id": "3819909a-84cb-4d40-8a43-7be5ed55a9d7",
       "name": "Groq - Generate Alternatives Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [4304, 816]
+      "position": [
+        2016,
+        240
+      ]
     },
     {
       "parameters": {
@@ -404,11 +446,14 @@
         "jsonBody": "={\n  \"model\": \"embed-multilingual-v3.0\",\n  \"texts\": [\"{{ $('Extract Property ID').item.json.messageText }}\"],\n  \"input_type\": \"search_query\",\n  \"embedding_types\": [\"float\"]\n}",
         "options": {}
       },
-      "id": "79535fd5-5269-4fee-989b-fbeb44dd277b",
+      "id": "f41acc25-3d17-48d5-b49a-d693a44f27b1",
       "name": "Cohere - Embed User Question",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3856, 624]
+      "position": [
+        1568,
+        48
+      ]
     },
     {
       "parameters": {
@@ -433,14 +478,17 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"query_embedding\": {{ JSON.stringify($json.embeddings?.float?.[0] || $json.embeddings?.[0] || []) }},\n  \"listing_id\": \"{{ $('Extract Property ID').item.json.propertyId }}\",\n  \"match_threshold\": 0.7,\n  \"match_count\": 5\n}",
+        "jsonBody": "={\n  \"query_embedding\": {{ JSON.stringify($json.embeddings?.float?.[0] || $json.embeddings?.[0] || []) }},\n  \"listing_id\": \"{{ $('Extract Property ID').item.json.propertyId }}\",\n  \"match_threshold\": 0.1,\n  \"match_count\": 5\n}",
         "options": {}
       },
-      "id": "81fa55cc-21e2-421b-9d2f-8c10e3cac282",
+      "id": "45855403-d32d-4e4b-8e23-efadd8bdde55",
       "name": "Supabase - Query Knowledge Base",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [4080, 624]
+      "position": [
+        1792,
+        48
+      ]
     },
     {
       "parameters": {
@@ -464,21 +512,27 @@
         "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مستشار عقاري محترف اسمك \\\"نور\\\". تتحدث باللغة العربية الفصحى فقط.\\nمهمتك مساعدة العميل في الحصول على معلومات دقيقة حول العقار واتخاذ قرار الشراء أو الحجز.\\n\\nقواعد المحادثة:\\n- أجب دائماً بالعربية فقط\\n- كن ودوداً ومحترفاً وواثقاً\\n- استخدم المعلومات المتاحة في قاعدة المعرفة للإجابة على الأسئلة\\n- إذا لم تجد المعلومة، قل \\\"سأتحقق من هذا لك\\\"\\n- استخدم تقنيات الإقناع بشكل طبيعي: أبرز المزايا، خلق الإلحاحية بلطف، ربط احتياجات العميل بمميزات العقار\\n- راقب مستوى الاهتمام في المحادثة\\n\\nعند اكتشاف اهتمام جدي بالحجز (عندما يسأل عن موعد المعاينة، أو يقول \\\"أريد الحجز\\\"، أو \\\"كيف أتقدم\\\", أو يُظهر نية واضحة للمضي قدماً):\\n- أضف في نهاية ردك هذا النص بالضبط على سطر منفصل: [INTEREST_DETECTED]\\n\\nمعلومات العقار ستُزوَّد لك في كل رسالة ضمن قسم [معلومات العقار المتاحة].\"\n    },\n    ...{{ JSON.stringify($('Extract Property ID').item.json.conversationMessages.map(m => ({ role: m.role, content: m.content }))) }},\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $('Extract Property ID').item.json.messageText }}\\n\\n[معلومات العقار المتاحة]\\n{{ $('Supabase - Query Knowledge Base').item.json.map(chunk => chunk.content).join('\\n---\\n') }}\"\n    }\n  ],\n  \"max_tokens\": 1000,\n  \"temperature\": 0.7\n}",
         "options": {}
       },
-      "id": "60d19cec-3909-499a-a309-bdd5e08d6bf8",
+      "id": "1acf37f8-c18b-406f-89a3-741eae14ddf6",
       "name": "Groq - Generate Consultation Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [4304, 624]
+      "position": [
+        2016,
+        48
+      ]
     },
     {
       "parameters": {
         "jsCode": "// Determine which branch we came from\nlet rawReply = '';\nlet source = 'consultation';\n\ntry {\n  const consultReply = $('Groq - Generate Consultation Reply').item?.json;\n  if (consultReply?.choices?.[0]?.message?.content) {\n    rawReply = consultReply.choices[0].message.content;\n    source = 'consultation';\n  }\n} catch(e) {}\n\ntry {\n  const altReply = $('Groq - Generate Alternatives Reply').item?.json;\n  if (altReply?.choices?.[0]?.message?.content) {\n    rawReply = altReply.choices[0].message.content;\n    source = 'alternatives';\n  }\n} catch(e) {}\n\nconst interestDetected = rawReply.includes('[INTEREST_DETECTED]');\nconst cleanReply = rawReply.replace('[INTEREST_DETECTED]', '').trim();\n\nconst ctx = $('Extract Property ID').item.json;\n\nreturn [{\n  json: {\n    from: ctx.from,\n    messageText: ctx.messageText,\n    userId: ctx.userId,\n    userName: ctx.userName,\n    userPhone: ctx.userPhone,\n    conversationId: ctx.conversationId,\n    conversationMessages: ctx.conversationMessages,\n    propertyId: ctx.propertyId,\n    botReply: cleanReply,\n    interestDetected,\n    source,\n    userRecord: ctx.userRecord\n  }\n}];"
       },
-      "id": "f382fb54-ff46-41f0-ba2a-7e575434541b",
+      "id": "44f364f5-3e1a-431e-bad0-400f8e13b879",
       "name": "Detect Interest Flag",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [4528, 720]
+      "position": [
+        2240,
+        144
+      ]
     },
     {
       "parameters": {
@@ -503,21 +557,27 @@
         },
         "options": {}
       },
-      "id": "f44a4edc-e3b3-4469-98c6-f249583f885c",
+      "id": "0075c7ef-3c44-48dc-8c71-a34929d82d6c",
       "name": "Interest Router",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [4752, 720]
+      "position": [
+        2464,
+        144
+      ]
     },
     {
       "parameters": {
         "jsCode": "const { userName, userPhone, conversationMessages, messageText, from, userId, conversationId, propertyId, botReply } = $json;\n\n// Determine what data collection stage we're at\nlet collectionStage = 'complete';\n\nif (!userName) {\n  collectionStage = 'awaiting_name';\n} else if (!userPhone) {\n  // Check if last bot message was asking for phone and user just replied\n  const lastBotMsg = [...conversationMessages].reverse().find(m => m.role === 'assistant');\n  if (lastBotMsg && lastBotMsg.content && lastBotMsg.content.includes('رقم هاتفك')) {\n    // User's current message should be the phone number\n    collectionStage = 'save_phone';\n  } else {\n    collectionStage = 'awaiting_phone';\n  }\n} else {\n  // Check if we have appointment\n  const lastBotMsg = [...conversationMessages].reverse().find(m => m.role === 'assistant');\n  if (lastBotMsg && lastBotMsg.content && lastBotMsg.content.includes('موعد المعاينة')) {\n    collectionStage = 'save_appointment';\n  } else if (!conversationMessages.some(m => m.role === 'assistant' && m.content.includes('موعد المعاينة'))) {\n    collectionStage = 'awaiting_appointment';\n  } else {\n    collectionStage = 'complete';\n  }\n}\n\n// Parse appointment from message if saving\nlet appointmentDate = null;\nlet appointmentTime = null;\nif (collectionStage === 'save_appointment') {\n  // Simple regex to extract date patterns from Arabic text\n  const dateMatch = messageText.match(/(\\d{1,2}[\\/-]\\d{1,2}[\\/-]\\d{2,4})/);\n  const timeMatch = messageText.match(/(\\d{1,2}:\\d{2}|\\d{1,2}\\s*[صمpm]+)/);\n  appointmentDate = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];\n  appointmentTime = timeMatch ? timeMatch[1] : '10:00';\n}\n\n// If saving name, extract from message\nlet extractedName = userName;\nif (collectionStage === 'awaiting_name' || (collectionStage !== 'complete' && !userName)) {\n  const lastBotMsg = [...conversationMessages].reverse().find(m => m.role === 'assistant');\n  if (lastBotMsg && lastBotMsg.content && lastBotMsg.content.includes('اسمك')) {\n    extractedName = messageText.trim();\n    collectionStage = 'save_name';\n  }\n}\n\nlet extractedPhone = userPhone;\nif (collectionStage === 'save_phone') {\n  extractedPhone = messageText.replace(/[^\\d+]/g, '');\n}\n\nreturn [{\n  json: {\n    from,\n    userId,\n    conversationId,\n    propertyId,\n    botReply,\n    collectionStage,\n    userName: extractedName,\n    userPhone: extractedPhone,\n    appointmentDate,\n    appointmentTime,\n    conversationMessages,\n    messageText\n  }\n}];"
       },
-      "id": "4234f555-5b9d-48eb-ae99-125a83ad8cd3",
+      "id": "e02e46d0-372a-42e2-865d-de9869325a55",
       "name": "Check Data Collection Stage",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [4976, 656]
+      "position": [
+        2688,
+        80
+      ]
     },
     {
       "parameters": {
@@ -541,11 +601,14 @@
         "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"أنت مستشار عقاري محترف اسمك نور. أجب بالعربية فقط. مرحلة جمع البيانات: {{ $json.collectionStage }}\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.collectionStage === 'awaiting_name' ? 'سعيد باهتمامك! للمتابعة، ما اسمك الكريم؟' : $json.collectionStage === 'awaiting_phone' ? 'شكراً ' + ($json.userName || '') + '! ما رقم هاتفك للتواصل؟' : $json.collectionStage === 'awaiting_appointment' ? 'ممتاز! ما هو الوقت المناسب لك لمعاينة العقار؟ (اليوم والساعة)' : 'شكراً جزيلاً! تم تسجيل موعدك بنجاح. سيتواصل معك فريقنا قريباً لتأكيد الموعد.' }}\"\n    }\n  ],\n  \"max_tokens\": 300,\n  \"temperature\": 0.6\n}",
         "options": {}
       },
-      "id": "f1d6d647-5676-4a16-837d-0cbe3554e76b",
+      "id": "ade0cfb6-c17b-482c-9f1d-61fd70ba1f2f",
       "name": "Groq - Generate Data Collection Prompt",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [5200, 656]
+      "position": [
+        2928,
+        80
+      ]
     },
     {
       "parameters": {
@@ -577,11 +640,14 @@
         "jsonBody": "={\n  \"id\": \"{{ $('Check Data Collection Stage').item.json.userId }}\",\n  \"whatsapp_number\": \"{{ $('Check Data Collection Stage').item.json.from }}\",\n  \"name\": \"{{ $('Check Data Collection Stage').item.json.userName }}\",\n  \"phone\": \"{{ $('Check Data Collection Stage').item.json.userPhone }}\"\n}",
         "options": {}
       },
-      "id": "d02a47c2-aa89-4314-a6ad-13bf4fe6a7a3",
+      "id": "445f77c4-fc28-4ad8-a4f3-1272355087aa",
       "name": "Supabase - Upsert User Data",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [5424, 656]
+      "position": [
+        3152,
+        80
+      ]
     },
     {
       "parameters": {
@@ -613,11 +679,14 @@
         "jsonBody": "={\n  \"user_id\": \"{{ $('Check Data Collection Stage').item.json.userId }}\",\n  \"listing_id\": \"{{ $('Check Data Collection Stage').item.json.propertyId }}\",\n  \"conversation_id\": \"{{ $('Check Data Collection Stage').item.json.conversationId }}\",\n  \"appointment_date\": \"{{ $('Check Data Collection Stage').item.json.appointmentDate }}\",\n  \"appointment_time\": \"{{ $('Check Data Collection Stage').item.json.appointmentTime }}\",\n  \"status\": \"pending\",\n  \"notes\": \"حجز عبر واتساب\"\n}",
         "options": {}
       },
-      "id": "d38168be-a9bb-4216-8124-c50f3cd8ed40",
+      "id": "1ab05f16-039e-40f0-a41a-5fa6f321ea11",
       "name": "Supabase - Save Appointment",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [5648, 656]
+      "position": [
+        3376,
+        80
+      ]
     },
     {
       "parameters": {
@@ -645,11 +714,14 @@
         "jsonBody": "={\n  \"p_conversation_id\": \"{{ $('Detect Interest Flag').item.json.conversationId }}\",\n  \"p_user_id\": \"{{ $('Detect Interest Flag').item.json.userId }}\",\n  \"p_listing_id\": \"{{ $('Detect Interest Flag').item.json.propertyId }}\",\n  \"p_user_message\": {{ JSON.stringify({ role: 'user', content: $('Detect Interest Flag').item.json.messageText, timestamp: new Date().toISOString() }) }},\n  \"p_bot_message\": {{ JSON.stringify({ role: 'assistant', content: $('Detect Interest Flag').item.json.botReply, timestamp: new Date().toISOString() }) }}\n}",
         "options": {}
       },
-      "id": "8fdb69d6-dccf-4b8f-b07d-ca2da9d228e9",
+      "id": "6bcb24d0-49c7-469a-8e68-739fd5506e4c",
       "name": "Supabase - Update Conversation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [5872, 720]
+      "position": [
+        3600,
+        144
+      ]
     },
     {
       "parameters": {
@@ -675,11 +747,14 @@
           }
         }
       },
-      "id": "05c2b76a-3f70-4cc2-ade8-17db9d9eafa4",
+      "id": "279c46f1-7869-4ec0-8156-7475d7bbabd7",
       "name": "Send WhatsApp Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [6096, 720]
+      "position": [
+        3824,
+        144
+      ]
     },
     {
       "parameters": {
@@ -689,14 +764,29 @@
           "responseCode": 200
         }
       },
-      "id": "2518ee4f-6891-44bd-b564-37a79a9a6ad9",
+      "id": "b44160fc-ad55-4c95-a889-96d7ca0a8ae3",
       "name": "Webhook Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [6320, 720]
+      "position": [
+        4048,
+        144
+      ]
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "WhatsApp Webhook": [
+      {
+        "json": {
+          "from": "963991234567",
+          "type": "text",
+          "text": {
+            "body": "السلام عليكم، أريد الاستفسار عن العقار #00000000-0000-0000-0002-000000000001"
+          }
+        }
+      }
+    ]
+  },
   "connections": {
     "WhatsApp Webhook": {
       "main": [
@@ -994,10 +1084,10 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "fadf0305-bc3c-4aeb-9adf-116c402e232f",
+  "versionId": "47a5d53d-3f79-43ad-9a4b-c93f1d5e3978",
   "meta": {
     "instanceId": "c8b35fe12417e52878293300b5586b3e619adc76a875a42b784c428128e0fa23"
   },
-  "id": "ZwoFXPETFAJB6vLL",
+  "id": "ufEfgEoUWaGZnRw5",
   "tags": []
 }
