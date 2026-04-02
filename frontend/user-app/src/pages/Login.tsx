@@ -29,7 +29,7 @@ export default function Login() {
     }
 
     // Real authentication check
-    const { data: admin, error: adminError } = await supabase
+    const { data: admin, error: adminError } = await supabase!
       .from('admins')
       .select('*')
       .eq('email', email)

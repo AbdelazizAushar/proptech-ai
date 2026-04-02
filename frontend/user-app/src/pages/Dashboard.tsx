@@ -144,7 +144,7 @@ export default function Dashboard() {
     setLoading(true);
     
     // 1. Fetch Listings
-    const { data: listingsData } = await supabase.from('listings').select('*').order('created_at', { ascending: false });
+    const { data: listingsData } = await supabase!.from('listings').select('*').order('created_at', { ascending: false });
     if (listingsData) {
       setListings(listingsData);
     }
@@ -156,10 +156,10 @@ export default function Dashboard() {
     const isoStart = startOfMonth.toISOString();
 
     const [res1, res2, res3, res4] = await Promise.all([
-      supabase.from('listings').select('id').gte('created_at', isoStart),
-      supabase.from('listings').select('id').eq('status', 'available'),
-      supabase.from('appointments').select('id').eq('status', 'pending'),
-      supabase.from('users').select('id')
+      supabase!.from('listings').select('id').gte('created_at', isoStart),
+      supabase!.from('listings').select('id').eq('status', 'available'),
+      supabase!.from('appointments').select('id').eq('status', 'pending'),
+      supabase!.from('users').select('id')
     ]);
 
     setStats({
@@ -179,7 +179,7 @@ export default function Dashboard() {
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm('هل أنت متأكد من حذف هذا العقار؟')) {
-      const { error } = await supabase.from('listings').delete().eq('id', id);
+      const { error } = await supabase!.from('listings').delete().eq('id', id);
       if (error) {
         console.error('Error deleting listing:', error);
         alert('حدث خطأ أثناء החذف');

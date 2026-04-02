@@ -27,7 +27,7 @@ export default function Admins() {
 
   const fetchAdmins = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('admins').select('*');
+    const { data, error } = await supabase!.from('admins').select('*');
     if (error) {
       console.error('Error fetching admins:', error);
     } else {
@@ -42,7 +42,7 @@ export default function Admins() {
 
   const handleDelete = async (id: string) => {
     if (window.confirm('هل أنت متأكد من حذف هذا المشرف؟')) {
-      const { error } = await supabase.from('admins').delete().eq('id', id);
+      const { error } = await supabase!.from('admins').delete().eq('id', id);
       if (error) {
         console.error('Error deleting admin:', error);
         alert('حدث خطأ أثناء الحذف');
@@ -57,7 +57,7 @@ export default function Admins() {
     if (!newAdmin.name || !newAdmin.email || !newAdmin.password) return;
 
     // Direct insert to admins table
-    const { data, error } = await supabase.from('admins').insert([
+    const { data, error } = await supabase!.from('admins').insert([
       { name: newAdmin.name, email: newAdmin.email, password_hash: newAdmin.password }
     ]).select();
 
