@@ -1,38 +1,46 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+﻿'use client';
+
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
 const navLinks = [
-  { to: '/', icon: 'dashboard', label: 'نظرة عامة', end: true },
-  { to: '/bookings', icon: 'calendar_month', label: 'الحجوزات' },
-  { to: '/admins', icon: 'group', label: 'المشرفون' },
+  { href: '/', icon: 'dashboard', label: 'نظرة عامة', end: true },
+  { href: '/bookings', icon: 'calendar_month', label: 'الحجوزات' },
+  { href: '/admins', icon: 'group', label: 'المشرفون' },
 ];
 
-export default function AdminLayout() {
-  const navigate = useNavigate();
-  const [adminData, setAdminData] = useState<{name: string, email: string} | null>(null);
+export default function AdminLayout({ children }: { children?: React.ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [adminData, setAdminData] = useState<{ name: string; email: string } | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const auth = localStorage.getItem('adminAuth');
     if (!auth) {
-      navigate('/login');
-    } else {
-      setAdminData(JSON.parse(auth));
+      router.replace('/login');
+      return;
     }
-  }, [navigate]);
+
+    try {
+      setAdminData(JSON.parse(auth));
+    } catch {
+      localStorage.removeItem('adminAuth');
+      router.replace('/login');
+    }
+  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminAuth');
-    navigate('/login');
+    router.push('/login');
   };
 
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
     <div className="bg-surface text-on-surface antialiased overflow-x-hidden min-h-screen" dir="rtl">
-
-      {/* ── Mobile Overlay ── */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -40,10 +48,9 @@ export default function AdminLayout() {
         />
       )}
 
-      {/* ── Sidebar ── */}
       <aside
         className={clsx(
-          'fixed right-0 top-0 h-full w-64 border-l border-white/10 bg-[#1B3A5C] shadow-xl z-50 transition-transform duration-300 font-[\'Almarai\',\'Manrope\'] text-right leading-[1.2] flex flex-col py-8 justify-between',
+          "fixed right-0 top-0 h-full w-64 border-l border-white/10 bg-[#1B3A5C] shadow-xl z-50 transition-transform duration-300 font-['Almarai','Manrope'] text-right leading-[1.2] flex flex-col py-8 justify-between",
           sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
         )}
       >
@@ -58,25 +65,26 @@ export default function AdminLayout() {
             </div>
           </div>
           <nav className="space-y-1">
-            {navLinks.map(({ to, icon, label, end }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={end}
-                onClick={closeSidebar}
-                className={({ isActive }) =>
-                  clsx(
+            {navLinks.map(({ href, icon, label, end }) => {
+              const isActive = end ? pathname === href : pathname?.startsWith(href);
+
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={closeSidebar}
+                  className={clsx(
                     'flex flex-row-reverse items-center gap-3 px-6 py-3 transition-all duration-300 active:opacity-80',
                     isActive
                       ? 'bg-[#C9A84C]/10 text-[#C9A84C] border-r-4 border-[#C9A84C] font-bold'
                       : 'text-slate-300/70 hover:bg-white/5 hover:text-white'
-                  )
-                }
-              >
-                <span className="material-symbols-outlined">{icon}</span>
-                <span>{label}</span>
-              </NavLink>
-            ))}
+                  )}
+                >
+                  <span className="material-symbols-outlined">{icon}</span>
+                  <span>{label}</span>
+                </Link>
+              );
+            })}
           </nav>
         </div>
         <div className="px-6 mt-auto pt-6 border-t border-white/5">
@@ -93,11 +101,9 @@ export default function AdminLayout() {
         </div>
       </aside>
 
-      {/* ── Top App Bar ── */}
       <header className="fixed top-0 left-0 right-0 lg:right-64 h-16 bg-white/90 backdrop-blur-md border-b border-slate-100 z-30">
         <div className="flex flex-row-reverse justify-between items-center px-4 md:px-8 h-full w-full font-['Almarai','Manrope'] text-right">
           <h1 className="text-lg md:text-xl font-extrabold text-[#1B3A5C]">المنسق العقاري</h1>
-          {/* Hamburger – mobile only */}
           <button
             className="lg:hidden p-2 text-[#1B3A5C] hover:bg-slate-100 rounded-lg"
             onClick={() => setSidebarOpen(true)}
@@ -107,10 +113,7 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      {/* ── Main Content Area ── */}
-      <div className="lg:mr-64">
-        <Outlet />
-      </div>
+      <div className="lg:mr-64">{children}</div>
     </div>
   );
 }

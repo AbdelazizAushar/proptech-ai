@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+﻿'use client';
+
+import { usePathname } from 'next/navigation';
 import AdminLayout from './layouts/AdminLayout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -7,28 +9,23 @@ import Bookings from './pages/Bookings';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* صفحة تسجيل الدخول — عامة */}
-        <Route path="/login" element={<Login />} />
+  const pathname = usePathname();
 
-        {/* ── المسارات المحمية (تتطلب تسجيل دخول) ── */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="admins"   element={<Admins />} />
-          <Route path="bookings" element={<Bookings />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+  if (pathname === '/login') {
+    return <Login />;
+  }
+
+  const page =
+    pathname === '/admins'
+      ? <Admins />
+      : pathname === '/bookings'
+        ? <Bookings />
+        : <Dashboard />;
+
+  return (
+    <ProtectedRoute>
+      <AdminLayout>{page}</AdminLayout>
+    </ProtectedRoute>
   );
 }
 
