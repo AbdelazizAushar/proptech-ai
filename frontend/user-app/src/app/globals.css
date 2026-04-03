@@ -89,7 +89,7 @@ button {
 }
 
 .page-wrapper {
-  padding-top: var(--navbar-h);
+  padding-top: calc(var(--navbar-h) + 3rem);
 }
 
 /* ─── Buttons ─────────────────────────────────────────────────────────────── */
