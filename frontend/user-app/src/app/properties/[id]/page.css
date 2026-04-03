@@ -28,12 +28,7 @@
 
 /* ── Header ── */
 .detail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
 }
 .detail-title {
   font-size: clamp(1.5rem, 3vw, 2.2rem);
@@ -50,22 +45,6 @@
   color: var(--text-light);
 }
 .detail-location__icon { color: var(--accent); flex-shrink: 0; }
-.detail-header__price  { flex-shrink: 0; text-align: left; }
-.detail-price__label {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--text-light);
-  margin-bottom: 0.25rem;
-}
-.detail-price__value {
-  display: flex;
-  align-items: baseline;
-  gap: 0.3rem;
-  flex-direction: row-reverse;
-}
-.detail-price__amount   { font-size: 2rem;  font-weight: 900; color: var(--primary); }
-.detail-price__currency { font-size: 1.1rem; font-weight: 700; color: var(--accent);  }
-.detail-price__period   { font-size: 0.9rem; color: var(--text-light); }
 
 /* ── Gallery ── */
 .detail-gallery {
@@ -234,6 +213,47 @@
   text-align: center;
   margin-bottom: 1.5rem;
   line-height: 1.6;
+}
+
+/* ── Price inside Contact Card ── */
+.contact-card__price {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+.contact-card__price-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+.contact-card__price-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-direction: row-reverse;
+}
+.contact-card__price-amount {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1;
+}
+.contact-card__price-currency {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.contact-card__price-period {
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.contact-card__divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+  opacity: 0.7;
 }
 
 /* ── WhatsApp CTA ── */
@@ -511,8 +531,25 @@
 
 /* ── Responsive ── */
 @media (max-width: 1100px) {
-  .detail-layout { grid-template-columns: 1fr; }
-  .detail-sidebar { position: static; }
+  .detail-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .detail-content-wrapper { display: contents; }
+  
+  .detail-badges { order: 1; }
+  .detail-header { order: 2; }
+  .detail-gallery { order: 3; }
+  
+  .detail-sidebar { 
+    order: 4; 
+    position: static; 
+    width: 100%;
+    margin: 1rem 0;
+  }
+  
+  .detail-main { order: 5; }
 }
 @media (max-width: 768px) {
   .detail-gallery { grid-template-columns: 1fr; height: auto; }

@@ -40,7 +40,7 @@ export interface ListingFilter {
   minPrice?: number;
   maxPrice?: number;
   rooms?: number;
-  status?: 'available' | 'sold' | 'rented' | 'all';
+  status?: 'sale' | 'rent' | 'all';
 }
 
 // ─── UI Component Props ───────────────────────────────────────────────────────

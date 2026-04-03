@@ -56,12 +56,33 @@ const PropertiesClient: React.FC<Props> = ({ initialListings, initialFilter }) =
       : [...initialListings];
 
     // 2. Hard filters on top of fuzzy results
-    if (filters.category && filters.category !== 'الكل')
-      list = list.filter((l) => l.category === filters.category);
-    if (filters.status && filters.status !== 'all')
-      list = list.filter((l) => l.status === filters.status);
-    if (filters.rooms)
-      list = list.filter((l) => (Number(l.specs.غرف_النوم ?? l.specs.bedroom ?? 0)) >= filters.rooms!);
+    if (filters.location && filters.location !== 'الكل') {
+      list = list.filter((l) => l.location?.includes(filters.location!));
+    }
+    
+    if (filters.category && filters.category !== 'الكل') {
+      list = list.filter((l) => l.category?.includes(filters.category!));
+    }
+    
+    // Status here means "Sale" vs "Rent" based on the UI options
+    if (filters.status && filters.status !== 'all') {
+      if (filters.status === 'sale') {
+        list = list.filter((l) => !l.category?.includes('إيجار'));
+      } else if (filters.status === 'rent') {
+        list = list.filter((l) => l.category?.includes('إيجار'));
+      }
+    }
+    
+    // Rooms
+    if (filters.rooms) {
+      list = list.filter((l) => {
+        const specs = l.specs ?? {};
+        const roomsCount = Number(specs['غرف_النوم'] ?? specs['bedroom'] ?? 0);
+        return roomsCount >= filters.rooms!;
+      });
+    }
+    
+    // Price
     if (filters.minPrice != null)
       list = list.filter((l) => l.price >= filters.minPrice!);
     if (filters.maxPrice != null)
@@ -231,7 +252,7 @@ const PropertiesClient: React.FC<Props> = ({ initialListings, initialFilter }) =
             <div className="filter-group">
               <label className="filter-label">الحالة</label>
               <div className="status-toggle">
-                {[{ v: 'all', l: 'الكل' }, { v: 'available', l: 'للبيع' }, { v: 'rented', l: 'للإيجار' }].map(({ v, l }) => (
+                {[{ v: 'all', l: 'الكل' }, { v: 'sale', l: 'للبيع' }, { v: 'rent', l: 'للإيجار' }].map(({ v, l }) => (
                   <label key={v} className="status-radio">
                     <input
                       type="radio"

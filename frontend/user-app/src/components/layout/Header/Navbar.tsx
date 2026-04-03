@@ -45,9 +45,6 @@ const Navbar = () => {
 
         {/* CTA */}
         <div className="navbar__actions">
-          <Link href={process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:5173'} className="btn btn-ghost hide-mobile">
-            تسجيل الدخول
-          </Link>
           <Link href="/properties" className="btn btn-primary btn--glass">
             <IconSearch size={18} />
             البحث الآن
@@ -74,10 +71,6 @@ const Navbar = () => {
           <Link href="/properties" onClick={() => setMenuOpen(false)}>العقارات</Link>
           <Link href="/#featured" onClick={() => setMenuOpen(false)}>المميزة</Link>
           <Link href="/#how-it-works" onClick={() => setMenuOpen(false)}>آلية العمل</Link>
-          <div className="mobile-nav__divider" />
-          <Link href={process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:5173'} className="btn btn-outline">
-            تسجيل الدخول
-          </Link>
         </nav>
       </div>
     </header>

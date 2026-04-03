@@ -206,164 +206,159 @@ export default async function PropertyDetailPage({ params }: Props) {
           <span aria-current="page">{name}</span>
         </nav>
 
-        {/* ── Status Badges ── */}
-        <div className="detail-badges">
-          <span className={`badge ${statusInfo.cls}`}>{statusInfo.label}</span>
-          {isRent && <span className="badge badge-rented">للإيجار</span>}
-        </div>
-
-        {/* ── Header: Title + Price ── */}
-        <div className="detail-header">
-          <div className="detail-header__meta">
-            <h1 className="detail-title">{name}</h1>
-            <p className="detail-location">
-              <IconMapPin size={16} strokeWidth={1.75} className="detail-location__icon" />
-              {location}
-            </p>
-          </div>
-          <div className="detail-header__price">
-            <span className="detail-price__label">السعر المطلوب</span>
-            <div className="detail-price__value">
-              <span className="detail-price__amount">{formatPrice(price)}</span>
-              <span className="detail-price__currency">$</span>
-              {isRent && <span className="detail-price__period">/شهر</span>}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Gallery ── */}
-        <div className="detail-gallery">
-          <div className="gallery-main">
-            <img
-              src={mainImg}
-              alt={`صورة رئيسية لـ ${name}`}
-              className="gallery-main__img"
-              loading="eager"
-              onError={undefined}
-            />
-            {/* Client-side gallery trigger */}
-            <GalleryTrigger images={allImages} propertyName={name} />
-          </div>
-          {sideImgs.length > 0 && (
-            <div className="gallery-side">
-              {sideImgs.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt={`صورة ${(i + 2).toLocaleString('en-US')} لـ ${name}`}
-                  className="gallery-side__img"
-                  loading="lazy"
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
         {/* ── Layout: Main + Sidebar ── */}
         <div className="detail-layout">
 
-          {/* ── Main Content ── */}
-          <div className="detail-main">
+          {/* ── Left/Main Content Column ── */}
+          <div className="detail-content-wrapper">
+            
+            {/* ── Status Badges ── */}
+            <div className="detail-badges">
+              <span className={`badge ${statusInfo.cls}`}>{statusInfo.label}</span>
+              {isRent && <span className="badge badge-rented">للإيجار</span>}
+            </div>
 
-            {/* ── Specs Grid ── */}
-            <div className="specs-grid">
+            {/* ── Header: Title Only ── */}
+            <div className="detail-header">
+              <div className="detail-header__meta">
+                <h1 className="detail-title">{name}</h1>
+                <p className="detail-location">
+                  <IconMapPin size={16} strokeWidth={1.75} className="detail-location__icon" />
+                  {location}
+                </p>
+              </div>
+            </div>
 
-              {/* Numeric specs */}
-              {bedrooms != null && (
-                <Spec icon={<IconBed size={22} strokeWidth={1.5} />} label="غرف النوم"
-                  value={`${Number(bedrooms).toLocaleString('en-US')}`} />
-              )}
-              {bathrooms != null && (
-                <Spec icon={<IconBath size={22} strokeWidth={1.5} />} label="الحمامات"
-                  value={`${Number(bathrooms).toLocaleString('en-US')}`} />
-              )}
-              {area != null && (
-                <Spec icon={<IconSquare size={22} strokeWidth={1.5} />} label="المساحة"
-                  value={`${Number(area).toLocaleString('en-US')} م²`} />
-              )}
-              {(floor != null || floors != null) && (
-                <Spec icon={<IconFloor size={22} strokeWidth={1.5} />} label="الطابق"
-                  value={`${Number(floor ?? floors).toLocaleString('en-US')}`} />
-              )}
-              <Spec icon={<IconTag size={22} strokeWidth={1.5} />} label="النوع" value={category} />
-
-              {kitchen != null && (
-                <Spec icon={<Kitchen />} label="مطبخ"
-                  value={Number(kitchen) > 1 ? `${Number(kitchen).toLocaleString('en-US')} مطابخ` : 'يوجد'} />
-              )}
-              {livingRoom != null && (
-                <Spec icon={<LivingRoom />} label="صالة المعيشة"
-                  value={Number(livingRoom) > 1 ? `${Number(livingRoom).toLocaleString('en-US')} صالات` : 'يوجد'} />
-              )}
-
-              {/* Boolean specs */}
-              {elevator != null && (
-                <Spec icon={<IconElevator size={22} strokeWidth={1.5} />} label="مصعد"
-                  isBoolean yes={!!elevator} />
-              )}
-              {parking != null && (
-                <Spec icon={<Parking />} label="موقف سيارات"
-                  isBoolean yes={!!parking} />
-              )}
-              {pool != null && (
-                <Spec icon={<Pool />} label="مسبح"
-                  isBoolean yes={!!pool} />
-              )}
-              {garden != null && (
-                <Spec icon={<Garden />} label="حديقة"
-                  isBoolean yes={!!garden} />
-              )}
-              {balcony != null && (
-                <Spec icon={<Balcony />} label="بلكون"
-                  isBoolean yes={Number(balcony) > 0} />
-              )}
-              {maidRoom != null && (
-                <Spec icon={<MaidRoom />} label="غرفة خادمة"
-                  isBoolean yes={Number(maidRoom) > 0} />
-              )}
-              {storage != null && (
-                <Spec icon={<Storage />} label="غرفة مخزن"
-                  isBoolean yes={Number(storage) > 0} />
-              )}
-              {furnished != null && (
-                <Spec icon={<IconCheckBadge size={22} />} label="مفروشة"
-                  isBoolean yes={!!furnished} />
-              )}
-              {seaView != null && (
-                <Spec icon={<SeaView />} label="إطلالة بحرية"
-                  isBoolean yes={!!seaView} />
-              )}
-              {ac != null && (
-                <Spec icon={<AC />} label="تكييف"
-                  isBoolean yes={!!ac} />
-              )}
-              {heating && (
-                <Spec icon={<Heating />} label="التدفئة" value={String(heating)} />
+            {/* ── Gallery ── */}
+            <div className="detail-gallery">
+              <div className="gallery-main">
+                <img
+                  src={mainImg}
+                  alt={`صورة رئيسية لـ ${name}`}
+                  className="gallery-main__img"
+                  loading="eager"
+                  onError={undefined}
+                />
+                <GalleryTrigger images={allImages} propertyName={name} />
+              </div>
+              {sideImgs.length > 0 && (
+                <div className="gallery-side">
+                  {sideImgs.map((img, i) => (
+                    <img
+                      key={i}
+                      src={img}
+                      alt={`صورة ${(i + 2).toLocaleString('en-US')} لـ ${name}`}
+                      className="gallery-side__img"
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
               )}
             </div>
 
-            {/* Description */}
-            <section className="detail-section">
-              <h2 className="detail-section__title">الوصف والتفاصيل</h2>
-              <p className="detail-description">
-                {description ?? 'لا يوجد وصف متاح لهذا العقار.'}
-              </p>
-            </section>
+            {/* ── Main Content ── */}
+            <div className="detail-main">
 
-            {/* Location Info */}
-            <section className="detail-section">
-              <h2 className="detail-section__title">الموقع</h2>
-              <div className="location-info">
-                <IconMapPin size={18} strokeWidth={1.75} className="location-info__icon" />
-                <div>
-                  <p className="location-info__city">{location}</p>
-                  <p className="location-info__note">
-                    للحصول على الموقع التفصيلي، تواصل معنا عبر واتساب.
-                  </p>
-                </div>
+              {/* ── Specs Grid ── */}
+              <div className="specs-grid">
+
+                {/* Numeric specs */}
+                {bedrooms != null && (
+                  <Spec icon={<IconBed size={22} strokeWidth={1.5} />} label="غرف النوم"
+                    value={`${Number(bedrooms).toLocaleString('en-US')}`} />
+                )}
+                {bathrooms != null && (
+                  <Spec icon={<IconBath size={22} strokeWidth={1.5} />} label="الحمامات"
+                    value={`${Number(bathrooms).toLocaleString('en-US')}`} />
+                )}
+                {area != null && (
+                  <Spec icon={<IconSquare size={22} strokeWidth={1.5} />} label="المساحة"
+                    value={`${Number(area).toLocaleString('en-US')} م²`} />
+                )}
+                {(floor != null || floors != null) && (
+                  <Spec icon={<IconFloor size={22} strokeWidth={1.5} />} label="الطابق"
+                    value={`${Number(floor ?? floors).toLocaleString('en-US')}`} />
+                )}
+                <Spec icon={<IconTag size={22} strokeWidth={1.5} />} label="النوع" value={category} />
+
+                {kitchen != null && (
+                  <Spec icon={<Kitchen />} label="مطبخ"
+                    value={Number(kitchen) > 1 ? `${Number(kitchen).toLocaleString('en-US')} مطابخ` : 'يوجد'} />
+                )}
+                {livingRoom != null && (
+                  <Spec icon={<LivingRoom />} label="صالة المعيشة"
+                    value={Number(livingRoom) > 1 ? `${Number(livingRoom).toLocaleString('en-US')} صالات` : 'يوجد'} />
+                )}
+
+                {/* Boolean specs */}
+                {elevator != null && (
+                  <Spec icon={<IconElevator size={22} strokeWidth={1.5} />} label="مصعد"
+                    isBoolean yes={!!elevator} />
+                )}
+                {parking != null && (
+                  <Spec icon={<Parking />} label="موقف سيارات"
+                    isBoolean yes={!!parking} />
+                )}
+                {pool != null && (
+                  <Spec icon={<Pool />} label="مسبح"
+                    isBoolean yes={!!pool} />
+                )}
+                {garden != null && (
+                  <Spec icon={<Garden />} label="حديقة"
+                    isBoolean yes={!!garden} />
+                )}
+                {balcony != null && (
+                  <Spec icon={<Balcony />} label="بلكون"
+                    isBoolean yes={Number(balcony) > 0} />
+                )}
+                {maidRoom != null && (
+                  <Spec icon={<MaidRoom />} label="غرفة خادمة"
+                    isBoolean yes={Number(maidRoom) > 0} />
+                )}
+                {storage != null && (
+                  <Spec icon={<Storage />} label="غرفة مخزن"
+                    isBoolean yes={Number(storage) > 0} />
+                )}
+                {furnished != null && (
+                  <Spec icon={<IconCheckBadge size={22} />} label="مفروشة"
+                    isBoolean yes={!!furnished} />
+                )}
+                {seaView != null && (
+                  <Spec icon={<SeaView />} label="إطلالة بحرية"
+                    isBoolean yes={!!seaView} />
+                )}
+                {ac != null && (
+                  <Spec icon={<AC />} label="تكييف"
+                    isBoolean yes={!!ac} />
+                )}
+                {heating && (
+                  <Spec icon={<Heating />} label="التدفئة" value={String(heating)} />
+                )}
               </div>
-            </section>
 
+              {/* Description */}
+              <section className="detail-section">
+                <h2 className="detail-section__title">الوصف والتفاصيل</h2>
+                <p className="detail-description">
+                  {description ?? 'لا يوجد وصف متاح لهذا العقار.'}
+                </p>
+              </section>
+
+              {/* Location Info */}
+              <section className="detail-section">
+                <h2 className="detail-section__title">الموقع</h2>
+                <div className="location-info">
+                  <IconMapPin size={18} strokeWidth={1.75} className="location-info__icon" />
+                  <div>
+                    <p className="location-info__city">{location}</p>
+                    <p className="location-info__note">
+                      للحصول على الموقع التفصيلي، تواصل معنا عبر واتساب.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+            </div>
           </div>
 
           {/* ── Sidebar ── */}
@@ -371,12 +366,24 @@ export default async function PropertyDetailPage({ params }: Props) {
 
             {/* Contact Card */}
             <div className="contact-card">
+              {/* ── Price Moved Here ── */}
+              <div className="contact-card__price">
+                <span className="contact-card__price-label">السعر المطلوب</span>
+                <div className="contact-card__price-value">
+                  <span className="contact-card__price-amount">{formatPrice(price)}</span>
+                  <span className="contact-card__price-currency">$</span>
+                  {isRent && <span className="contact-card__price-period">/شهر</span>}
+                </div>
+              </div>
+
+              <hr className="contact-card__divider" />
+
               <h3 className="contact-card__title">استفسر عن هذا العقار</h3>
               <p className="contact-card__desc">
                 فريقنا متاح للإجابة على استفساراتك وترتيب موعد المعاينة.
               </p>
 
-              <BookingButton propertyName={name} />
+              <BookingButton propertyName={name} propertyId={id} />
 
               <a
                 href={waLink}
@@ -394,11 +401,7 @@ export default async function PropertyDetailPage({ params }: Props) {
               </p>
 
               <div className="contact-card__actions">
-                <button className="btn btn-outline contact-action-btn" type="button">
-                  <IconBookmark size={16} strokeWidth={1.75} />
-                  حفظ
-                </button>
-                <button className="btn btn-outline contact-action-btn" type="button">
+                <button className="btn btn-outline contact-action-btn" type="button" style={{ gridColumn: '1 / -1' }}>
                   <IconShare size={16} strokeWidth={1.75} />
                   مشاركة
                 </button>
