@@ -80,7 +80,7 @@ export default function Dashboard() {
   const [selectedSpecs, setSelectedSpecs] = useState<Record<string, number>>({});
   const [areaValue, setAreaValue] = useState('');
   const [areaUnit, setAreaUnit] = useState<'م²' | 'قدم²'>('م²');
-  const [images, setImages] = useState<File[]>([]);
+  const [_images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [propertyType, setPropertyType] = useState('سكني');
   const [propertyStatus, setPropertyStatus] = useState('available');
@@ -144,7 +144,7 @@ export default function Dashboard() {
     setLoading(true);
     
     // 1. Fetch Listings
-    const { data: listingsData } = await supabase!.from('listings').select('*').order('created_at', { ascending: false });
+    const { data: listingsData } = await supabase.from('listings').select('*').order('created_at', { ascending: false });
     if (listingsData) {
       setListings(listingsData);
     }
@@ -156,10 +156,10 @@ export default function Dashboard() {
     const isoStart = startOfMonth.toISOString();
 
     const [res1, res2, res3, res4] = await Promise.all([
-      supabase!.from('listings').select('id').gte('created_at', isoStart),
-      supabase!.from('listings').select('id').eq('status', 'available'),
-      supabase!.from('appointments').select('id').eq('status', 'pending'),
-      supabase!.from('users').select('id')
+      supabase.from('listings').select('id').gte('created_at', isoStart),
+      supabase.from('listings').select('id').eq('status', 'available'),
+      supabase.from('appointments').select('id').eq('status', 'pending'),
+      supabase.from('users').select('id')
     ]);
 
     setStats({
@@ -179,7 +179,7 @@ export default function Dashboard() {
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm('هل أنت متأكد من حذف هذا العقار؟')) {
-      const { error } = await supabase!.from('listings').delete().eq('id', id);
+      const { error } = await supabase.from('listings').delete().eq('id', id);
       if (error) {
         console.error('Error deleting listing:', error);
         alert('حدث خطأ أثناء החذف');
@@ -274,29 +274,9 @@ export default function Dashboard() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 animate-pulse">
-                <div className="h-48 bg-slate-200"></div>
-                <div className="p-5 flex flex-col gap-3">
-                  <div className="h-5 bg-slate-200 rounded w-3/4"></div>
-                  <div className="h-4 bg-slate-200 rounded w-1/2"></div>
-                  <div className="mt-4 pt-4 border-t border-slate-50 flex justify-between">
-                    <div className="h-6 bg-slate-200 rounded w-1/3"></div>
-                    <div className="h-6 bg-slate-200 rounded w-1/5"></div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <div className="text-center py-12 text-slate-500">جاري التحميل...</div>
         ) : filteredListings.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 flex flex-col items-center justify-center">
-            <div className="w-24 h-24 mb-4 bg-slate-50 rounded-full flex items-center justify-center">
-              <span className="material-symbols-outlined text-5xl text-slate-300">event_busy</span>
-            </div>
-            <h3 className="text-xl font-bold font-almarai text-primary mb-2">لا توجد سجلات مطابقة</h3>
-            <p className="text-slate-500 max-w-sm">لم يتم العثور على أي عقارات مسجلة. يمكنك البدء بإضافة عقار جديد عبر الضغط على الزر أدناه.</p>
-          </div>
+          <div className="text-center py-12 text-slate-500 bg-white rounded-xl border border-slate-100">لا توجد عقارات حالياً</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {filteredListings.map((listing) => (

@@ -23,7 +23,7 @@ export default function Bookings() {
   const fetchAppointments = async () => {
     setLoading(true);
     // Fetch all appointments, join users for name, listings for name and price
-    const { data, error } = await supabase!
+    const { data, error } = await supabase
       .from('appointments')
       .select(`
         *,
