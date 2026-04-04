@@ -29,7 +29,7 @@ proptech-ai/
 
 ## 🚀 تشغيل المشروع محلياً
 
-### 1. واجهة المستخدم (user-app)
+### 1. واجهة المستخدم (user-app) 
 
 ```bash
 cd frontend/user-app
