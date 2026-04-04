@@ -8,6 +8,9 @@ interface Listing {
   price: number;
   status: string;
   images: string[];
+  description?: string;
+  specs?: Record<string, any>;
+  category?: string;
 }
 
 function CustomSelect({ label, value, options, onChange }: { label: string, value: string, options: { value: string, label: string }[], onChange: (val: string) => void }) {
@@ -80,10 +83,21 @@ export default function Dashboard() {
   const [selectedSpecs, setSelectedSpecs] = useState<Record<string, number>>({});
   const [areaValue, setAreaValue] = useState('');
   const [areaUnit, setAreaUnit] = useState<'م²' | 'قدم²'>('م²');
-  const [_images, setImages] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  
+  // Unified image array to track both new uploads (with File) and existing remote images
+  const [uiImages, setUiImages] = useState<{url: string, file?: File}[]>([]);
+  
   const [propertyType, setPropertyType] = useState('سكني');
   const [propertyStatus, setPropertyStatus] = useState('available');
+
+  // Form Fields State
+  const [editModeId, setEditModeId] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
+  const [price, setPrice] = useState('');
+  const [rentPeriod, setRentPeriod] = useState<'شهري' | 'سنوي'>('شهري');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const toggleSpec = (key: string) => {
     setSelectedSpecs(prev => {
@@ -102,36 +116,175 @@ export default function Dashboard() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      setImages(prev => [...prev, ...newFiles]);
-      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-      setImagePreviews(prev => [...prev, ...newPreviews]);
+      const newFiles = Array.from(e.target.files).map(file => ({
+        url: URL.createObjectURL(file),
+        file
+      }));
+      setUiImages(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const handleDragDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    if (e.dataTransfer.files) {
+      const newFiles = Array.from(e.dataTransfer.files).map(file => ({
+        url: URL.createObjectURL(file),
+        file
+      }));
+      setUiImages(prev => [...prev, ...newFiles]);
     }
   };
 
   const removeImage = (index: number) => {
-    URL.revokeObjectURL(imagePreviews[index]);
-    setImages(prev => prev.filter((_, i) => i !== index));
-    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    const target = uiImages[index];
+    if (target.file) URL.revokeObjectURL(target.url);
+    setUiImages(prev => prev.filter((_, i) => i !== index));
   };
 
   const resetModal = () => {
+    setEditModeId(null);
     setSelectedSpecs({});
     setAreaValue('');
     setAreaUnit('م²');
-    imagePreviews.forEach(URL.revokeObjectURL);
-    setImages([]);
-    setImagePreviews([]);
+    
+    uiImages.forEach(img => {
+      if (img.file) URL.revokeObjectURL(img.url);
+    });
+    setUiImages([]);
+    
     setPropertyType('سكني');
     setPropertyStatus('available');
+    setTitle('');
+    setDescription('');
+    setLocation('');
+    setPrice('');
+    setRentPeriod('شهري');
     setShowAddModal(false);
+  };
+
+  const handleEditClick = (listing: Listing, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditModeId(listing.id);
+    setTitle(listing.name || '');
+    setDescription(listing.description || '');
+    setLocation(listing.location || '');
+    setPrice(listing.price ? String(listing.price) : '');
+    setPropertyStatus(listing.status || 'available');
+    setPropertyType(listing.category || 'سكني');
+    
+    // Mapping existing specs
+    if (listing.specs) {
+      setSelectedSpecs(listing.specs);
+      if (listing.specs.rentPeriod) {
+        setRentPeriod(listing.specs.rentPeriod);
+      } else {
+        setRentPeriod('شهري');
+      }
+    } else {
+      setSelectedSpecs({});
+      setRentPeriod('شهري');
+    }
+
+    // Mapping existing image URLs into uiImages
+    if (listing.images && listing.images.length > 0) {
+      const existing = listing.images.map(url => ({ url }));
+      setUiImages(existing);
+    } else {
+      setUiImages([]);
+    }
+
+    setShowAddModal(true);
+  };
+
+  const handleAddListing = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title || !location || !price) {
+      alert('يرجى ملء كافة الحقول الأساسية.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    const finalUrls: string[] = [];
+
+    // Upload new files to Supabase Storage
+    for (const img of uiImages) {
+      if (img.file) {
+        const fileExt = img.file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const { data, error: uploadError } = await supabase.storage
+          .from('property-images')
+          .upload(fileName, img.file);
+          
+        if (data) {
+          const { data: publicUrlData } = supabase.storage
+            .from('property-images')
+            .getPublicUrl(data.path);
+          finalUrls.push(publicUrlData.publicUrl);
+        } else if (uploadError) {
+          console.error('Image upload failed:', uploadError);
+        }
+      } else {
+        // Keep existing remote URLs
+        finalUrls.push(img.url);
+      }
+    }
+
+    // Fallback image if nothing was uploaded or kept
+    const urlsToSave = finalUrls.length > 0 
+      ? finalUrls 
+      : ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'];
+
+    let finalSpecs: Record<string, any> = { ...selectedSpecs };
+    if (propertyType.includes('إيجار')) {
+      finalSpecs.rentPeriod = rentPeriod;
+    } else {
+      delete finalSpecs.rentPeriod;
+    }
+
+    const propertyPayload = {
+      name: title,
+      location: location,
+      price: Number(price),
+      status: propertyStatus,
+      category: propertyType,
+      images: urlsToSave,
+      description: description,
+      specs: finalSpecs
+    };
+
+    let apiError;
+
+    if (editModeId) {
+      // Update existing
+      const { error } = await supabase
+        .from('listings')
+        .update(propertyPayload)
+        .eq('id', editModeId);
+      apiError = error;
+    } else {
+      // Insert new
+      const { error } = await supabase
+        .from('listings')
+        .insert([propertyPayload]);
+      apiError = error;
+    }
+    
+    setIsSubmitting(false);
+
+    if (apiError) {
+      console.error('Error saving property:', apiError);
+      alert('حدث خطأ أثناء حفظ العقار.');
+    } else {
+      resetModal();
+      fetchData(); // Refresh list
+    }
   };
   
   const [stats, setStats] = useState({
     totalThisMonth: 0,
     available: 0,
     pendingAppointments: 0,
-    totalUsers: 0
+    soldLastMonth: 0
   });
 
   const currentDate = new Intl.DateTimeFormat('ar-EG', { 
@@ -148,8 +301,6 @@ export default function Dashboard() {
     if (listingsData) {
       setListings(listingsData);
     }
-
-    // 2. Fetch Analytics
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0,0,0,0);
@@ -159,14 +310,14 @@ export default function Dashboard() {
       supabase.from('listings').select('id').gte('created_at', isoStart),
       supabase.from('listings').select('id').eq('status', 'available'),
       supabase.from('appointments').select('id').eq('status', 'pending'),
-      supabase.from('users').select('id')
+      supabase.from('listings').select('id').eq('status', 'sold')
     ]);
 
     setStats({
       totalThisMonth: res1.data?.length || 0,
       available: res2.data?.length || 0,
       pendingAppointments: res3.data?.length || 0,
-      totalUsers: res4.data?.length || 0
+      soldLastMonth: res4.data?.length || 0
     });
 
     setLoading(false);
@@ -250,16 +401,16 @@ export default function Dashboard() {
           <div className="text-3xl font-extrabold text-on-background">{stats.pendingAppointments}</div>
           <div className="mt-2 text-[10px] text-on-surface-variant">طلبات قيد الانتظار</div>
         </div>
-        {/* Card 4 - Total Customers */}
-        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#C9A84C] transition-transform hover:-translate-y-1">
+        {/* Card 4 - Sold Last Month */}
+        <div className="bg-surface-container-lowest p-6 rounded-xl editorial-shadow border-r-4 border-[#3a5a40] transition-transform hover:-translate-y-1">
           <div className="flex justify-between items-start mb-4">
-            <div className="p-2 bg-[#C9A84C]/10 text-[#C9A84C] rounded-lg">
-              <span className="material-symbols-outlined" data-icon="group">group</span>
+            <div className="p-2 bg-[#3a5a40]/10 text-[#3a5a40] rounded-lg">
+              <span className="material-symbols-outlined" data-icon="real_estate_agent">real_estate_agent</span>
             </div>
-            <span className="text-xs text-on-surface-variant font-bold">إجمالي العملاء</span>
+            <span className="text-xs text-on-surface-variant font-bold">المُباعة</span>
           </div>
-          <div className="text-3xl font-extrabold text-[#C9A84C]">{stats.totalUsers}</div>
-          <div className="mt-2 text-[10px] text-slate-500 font-bold">المهتمين والمسجلين بالمنصة</div>
+          <div className="text-3xl font-extrabold text-[#3a5a40]">{stats.soldLastMonth}</div>
+          <div className="mt-2 text-[10px] text-slate-500 font-bold">إجمالي العقارات المباعة</div>
         </div>
       </div>
 
@@ -306,7 +457,7 @@ export default function Dashboard() {
                   <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
                     <span className="font-extrabold text-secondary text-lg">{listing.price?.toLocaleString('ar-SY')} <span className="text-xs font-normal">ل.س</span></span>
                     <div className="flex gap-1">
-                      <button className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-primary hover:text-white transition-colors">
+                      <button onClick={(e) => handleEditClick(listing, e)} className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-primary hover:text-white transition-colors">
                         <span className="material-symbols-outlined text-[16px]">edit</span>
                       </button>
                       <button onClick={(e) => handleDelete(listing.id, e)} className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-error hover:text-white transition-colors">
@@ -337,7 +488,9 @@ export default function Dashboard() {
 
             {/* Modal Header */}
             <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h2 className="text-xl font-bold font-almarai text-primary">إضافة عقار جديد</h2>
+              <h2 className="text-xl font-bold font-almarai text-primary">
+                {editModeId ? 'تعديل العقار' : 'إضافة عقار جديد'}
+              </h2>
               <button onClick={resetModal} className="text-slate-400 hover:text-error transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-error/10">
                 <span className="material-symbols-outlined text-xl">close</span>
               </button>
@@ -345,22 +498,63 @@ export default function Dashboard() {
 
             {/* Modal Body */}
             <div className="p-6 max-h-[80vh] overflow-y-auto">
-              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); resetModal(); }}>
+              <form className="space-y-6" onSubmit={handleAddListing}>
 
                 {/* ── Basic Info ── */}
                 <div className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-on-surface-variant mb-1.5">عنوان العقار</label>
-                    <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="مثال: فيلا الياسمين بالقرب من المركز" type="text" />
+                    <input 
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" 
+                      placeholder="مثال: فيلا الياسمين بالقرب من المركز" 
+                      type="text" 
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-on-surface-variant mb-1.5">وصف العقار</label>
+                    <textarea 
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm resize-none h-24" 
+                      placeholder="اكتب وصفاً مفصلاً للعقار..."
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-on-surface-variant mb-1.5">الموقع/المدينة</label>
-                      <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" placeholder="دمشق، المزة" type="text" />
+                      <input 
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm" 
+                        placeholder="دمشق، المزة" 
+                        type="text" 
+                        required
+                      />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-on-surface-variant mb-1.5">السعر (ل.س)</label>
-                      <input className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm text-left no-spinner" dir="ltr" placeholder="0" type="number" />
+                      {propertyType.includes('إيجار') ? (
+                        <div className="flex justify-between items-center mb-1.5">
+                           <label className="block text-xs font-bold text-on-surface-variant">الإيجار (ل.س)</label>
+                           <div className="flex bg-slate-200/60 rounded-md p-0.5">
+                             <button type="button" onClick={() => setRentPeriod('شهري')} className={`text-[10px] px-2 py-0.5 rounded-sm font-bold transition-all ${rentPeriod === 'شهري' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}>شهري</button>
+                             <button type="button" onClick={() => setRentPeriod('سنوي')} className={`text-[10px] px-2 py-0.5 rounded-sm font-bold transition-all ${rentPeriod === 'سنوي' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}>سنوي</button>
+                           </div>
+                        </div>
+                      ) : (
+                        <label className="block text-xs font-bold text-on-surface-variant mb-1.5">السعر (ل.س)</label>
+                      )}
+                      <input 
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all py-2.5 px-3 text-sm text-left no-spinner" 
+                        dir="ltr" 
+                        placeholder="0" 
+                        type="number" 
+                        required
+                      />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -370,7 +564,9 @@ export default function Dashboard() {
                       onChange={setPropertyType}
                       options={[
                         { value: 'سكني', label: 'سكني' },
+                        { value: 'سكني للإيجار', label: 'سكني للإيجار' },
                         { value: 'تجاري', label: 'تجاري' },
+                        { value: 'تجاري للإيجار', label: 'تجاري للإيجار' },
                         { value: 'أرض', label: 'أرض' }
                       ]}
                     />
@@ -464,11 +660,15 @@ export default function Dashboard() {
 
                 {/* ── Images ── */}
                 <div>
-                  <label className="block text-xs font-bold text-on-surface-variant mb-2">صور العقار</label>
+                  <label className="block text-xs font-bold text-on-surface-variant mb-1">صور العقار</label>
+                  <p className="text-[10px] text-slate-500 mb-3 ml-2 font-bold bg-slate-50 border border-slate-200 py-1.5 px-3 rounded-lg inline-block text-secondary">
+                    <span className="font-extrabold material-symbols-outlined text-[12px] align-middle ml-1">star</span>
+                    أول صورة تضيفها ستكون هي الصورة الرئيسية الظاهرة للعقار.
+                  </p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                    {imagePreviews.map((preview, i) => (
+                    {uiImages.map((imgObj, i) => (
                       <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-slate-200 group">
-                        <img src={preview} alt="preview" className="w-full h-full object-cover" />
+                        <img src={imgObj.url} alt="preview" className="w-full h-full object-cover" />
                         <button
                           type="button"
                           onClick={() => removeImage(i)}
@@ -476,20 +676,15 @@ export default function Dashboard() {
                         >
                           <span className="material-symbols-outlined text-sm">close</span>
                         </button>
+                        {i === 0 && (
+                           <div className="absolute bottom-0 left-0 right-0 bg-secondary/90 text-[10px] font-bold text-white text-center py-1">الرئيسية</div>
+                        )}
                       </div>
                     ))}
                     <label 
                       className="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 hover:border-secondary hover:text-secondary hover:bg-secondary/5 transition-all cursor-pointer bg-slate-50 p-2"
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        e.preventDefault();
-                        if (e.dataTransfer.files) {
-                          const newFiles = Array.from(e.dataTransfer.files);
-                          setImages(prev => [...prev, ...newFiles]);
-                          const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-                          setImagePreviews(prev => [...prev, ...newPreviews]);
-                        }
-                      }}
+                      onDrop={handleDragDrop}
                     >
                       <span className="material-symbols-outlined text-2xl mb-1">add_photo_alternate</span>
                       <span className="text-[10px] font-bold text-center">أضف صور</span>
@@ -506,10 +701,18 @@ export default function Dashboard() {
 
                 {/* ── Submit ── */}
                 <button
-                  className="w-full bg-primary text-white py-3.5 rounded-xl font-bold font-almarai text-sm hover:bg-[#003666] transition-colors shadow-lg shadow-primary/20"
+                  className="w-full bg-primary text-white py-3.5 rounded-xl font-bold font-almarai text-sm hover:bg-[#003666] transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
                   type="submit"
+                  disabled={isSubmitting}
                 >
-                  حفظ مسودة العقار
+                  {isSubmitting ? (
+                    <>
+                      <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                      جاري الحفظ...
+                    </>
+                  ) : (
+                    editModeId ? 'حفظ التعديلات' : 'إضافة العقار للجدول'
+                  )}
                 </button>
               </form>
             </div>
