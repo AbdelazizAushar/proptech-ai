@@ -16,8 +16,8 @@ const FUSE_OPTIONS: IFuseOptions<Listing> = {
   includeScore: true,
 };
 
-const CATEGORIES = ['الكل', 'شقة', 'فيلا', 'أرض', 'شقة للإيجار'];
-const CITIES     = ['الكل', 'دمشق', 'حلب', 'اللاذقية', 'حمص', 'طرطوس'];
+const CATEGORIES = ['الكل', 'سكني', 'سكني للإيجار', 'تجاري', 'تجاري للإيجار', 'أرض'];
+const CITIES     = ['الكل', 'دمشق', 'حلب', 'اللاذقية', 'حمص', 'طرطوس', 'حماة'];
 const ROOMS      = [
   { label: 'الكل', value: 0 },
   { label: '1+',   value: 1 },
@@ -73,11 +73,13 @@ const PropertiesClient: React.FC<Props> = ({ initialListings, initialFilter }) =
       }
     }
     
-    // Rooms
+    // Rooms — support both Arabic and English spec keys
     if (filters.rooms) {
       list = list.filter((l) => {
         const specs = l.specs ?? {};
-        const roomsCount = Number(specs['غرف_النوم'] ?? specs['bedroom'] ?? 0);
+        const roomsCount = Number(
+          specs['bedroom'] ?? specs['غرف_النوم'] ?? 0
+        );
         return roomsCount >= filters.rooms!;
       });
     }

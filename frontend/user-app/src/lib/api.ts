@@ -106,9 +106,11 @@ export async function fetchListings(filters?: ListingFilter): Promise<Listing[]>
   if (!isSupabaseConfigured()) {
     let results = [...MOCK_LISTINGS];
     if (filters?.location) results = results.filter((l) => l.location.toLowerCase().includes(filters.location!.toLowerCase()));
-    if (filters?.category) results = results.filter((l) => l.category === filters.category);
-    if (filters?.status && filters.status !== 'all') results = results.filter((l) => l.status === filters.status);
-    if (filters?.rooms)    results = results.filter((l) => ((l.specs.غرف_النوم ?? l.specs.bedroom ?? 0) as number) >= filters.rooms!);
+    if (filters?.category) results = results.filter((l) => l.category?.includes(filters.category!));
+    // 'sale' / 'rent' are UI-only — filter by category inclusion of 'إيجار'
+    if (filters?.status && filters.status === 'rent') results = results.filter((l) => l.category?.includes('إيجار'));
+    if (filters?.status && filters.status === 'sale') results = results.filter((l) => !l.category?.includes('إيجار'));
+    if (filters?.rooms)    results = results.filter((l) => ((l.specs as any)['bedroom'] ?? (l.specs as any)['غرف_النوم'] ?? 0) >= filters.rooms!);
     if (filters?.minPrice) results = results.filter((l) => l.price >= filters.minPrice!);
     if (filters?.maxPrice) results = results.filter((l) => l.price <= filters.maxPrice!);
     return results;
@@ -120,8 +122,10 @@ export async function fetchListings(filters?: ListingFilter): Promise<Listing[]>
     .order('created_at', { ascending: false });
 
   if (filters?.location) query = query.ilike('location', `%${filters.location}%`);
-  if (filters?.category) query = query.eq('category', filters.category);
-  if (filters?.status && filters.status !== 'all') query = query.eq('status', filters.status);
+  // category filter: use 'ilike' for partial match (e.g. 'سكني' matches 'سكني للإيجار' too)
+  if (filters?.category) query = query.ilike('category', `%${filters.category}%`);
+  // Note: sale/rent are UI-only filters (based on category), not DB status values.
+  // They are handled client-side in PropertiesClient.tsx.
 
   const { data, error } = await query;
   if (error) {

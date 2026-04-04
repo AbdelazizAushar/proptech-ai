@@ -15,6 +15,7 @@ export interface Listing {
 }
 
 export interface ListingSpecs {
+  // Arabic keys (legacy / mock data)
   غرف_النوم?: number;
   الحمامات?: number;
   المساحة_م2?: number;
@@ -29,6 +30,19 @@ export interface ListingSpecs {
   إطلالة_بحر?: boolean;
   الطوابق?: number;
   النوع?: string;
+  // English keys (saved by admin form)
+  bedroom?: number;
+  bathroom?: number;
+  kitchen?: number;
+  living_room?: number;
+  balcony?: number;
+  garden?: number;
+  pool?: number;
+  parking?: number;
+  maid_room?: number;
+  storage?: number;
+  rentPeriod?: string;
+  area?: string;
   [key: string]: unknown;
 }
 

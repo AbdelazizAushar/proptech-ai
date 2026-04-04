@@ -12,6 +12,7 @@ interface BookingButtonProps {
 export default function BookingButton({ propertyName, propertyId }: BookingButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,17 +23,15 @@ export default function BookingButton({ propertyName, propertyId }: BookingButto
     setLoading(true);
 
     try {
-      // In the absence of a logged-in user, we'll try to save it like this.
-      // Saving name in notes so admin knows who it is.
-      const appointmentDateStr = `${date}T${time}:00`;
-      
       const { error } = await supabase
         .from('appointments')
         .insert({
           listing_id: propertyId,
-          appointment_date: appointmentDateStr,
+          'Full name': name,
+          'Phone number': phone,
+          appointment_date: date,
+          appointment_time: time,
           status: 'pending',
-          notes: `اسم العميل: ${name}`,
         });
 
       if (error) throw error;
@@ -42,6 +41,7 @@ export default function BookingButton({ propertyName, propertyId }: BookingButto
         setIsOpen(false);
         setSuccess(false);
         setName('');
+        setPhone('');
         setDate('');
         setTime('');
       }, 3000);
@@ -141,6 +141,21 @@ export default function BookingButton({ propertyName, propertyId }: BookingButto
                       border: '1px solid var(--border)', fontFamily: 'inherit'
                     }}
                     placeholder="أدخل اسمك الكريم"
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '0.3rem', color: 'var(--text-body)' }}>رقم الهاتف</label>
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    style={{
+                      width: '100%', padding: '0.75rem', borderRadius: '8px',
+                      border: '1px solid var(--border)', fontFamily: 'inherit',
+                      direction: 'ltr', textAlign: 'left'
+                    }}
+                    placeholder="+963 9XX XXX XXXX"
                   />
                 </div>
                 <div>
