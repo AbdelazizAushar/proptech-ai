@@ -156,7 +156,7 @@ export default async function PropertyDetailPage({ params }: Props) {
   const related = await fetchFeaturedListings();
   const relatedListings = related.filter((l) => l.id !== listing.id).slice(0, 3);
 
-  const { name, location, price, images, specs, description, status, category } = listing;
+  const { name, location, price, images, specs, description, status, category, area: listingArea, area_unit: listingAreaUnit } = listing;
 
   const allImages = Array.isArray(images) && images.length > 0 ? images : [];
   const mainImg  = allImages[0] ?? 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200';
@@ -174,7 +174,9 @@ export default async function PropertyDetailPage({ params }: Props) {
   // Arabic keys (from seed data)
   const bedrooms    = s['غرف_النوم']   ?? s['bedroom']    ?? null;
   const bathrooms   = s['الحمامات']    ?? s['bathroom']   ?? null;
-  const area        = s['المساحة_م2']  ?? null;
+  // Area: top-level column takes priority over Arabic specs key
+  const area        = listingArea ?? s['المساحة_م2'] ?? null;
+  const areaUnit    = listingAreaUnit ?? 'م²';
   const floor       = s['الطابق']      ?? null;
   const elevator    = s['مصعد']        ?? null;
   const parking     = s['موقف_سيارة'] ?? s['موقف_سيارات'] ?? s['parking'] ?? null;
@@ -273,7 +275,7 @@ export default async function PropertyDetailPage({ params }: Props) {
                 )}
                 {area != null && (
                   <Spec icon={<IconSquare size={22} strokeWidth={1.5} />} label="المساحة"
-                    value={`${Number(area).toLocaleString('en-US')} م²`} />
+                    value={`${Number(area).toLocaleString('en-US')} ${areaUnit}`} />
                 )}
                 {(floor != null || floors != null) && (
                   <Spec icon={<IconFloor size={22} strokeWidth={1.5} />} label="الطابق"

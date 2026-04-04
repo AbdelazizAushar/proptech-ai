@@ -10,6 +10,8 @@ export interface Listing {
   specs: ListingSpecs;
   images: string[];
   status: 'available' | 'sold' | 'rented';
+  area?: number | null;
+  area_unit?: string | null;
   created_at: string;
   updated_at: string;
 }

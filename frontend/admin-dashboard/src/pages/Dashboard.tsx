@@ -11,6 +11,8 @@ interface Listing {
   description?: string;
   specs?: Record<string, any>;
   category?: string;
+  area?: number;
+  area_unit?: string;
 }
 
 function CustomSelect({ label, value, options, onChange }: { label: string, value: string, options: { value: string, label: string }[], onChange: (val: string) => void }) {
@@ -171,6 +173,8 @@ export default function Dashboard() {
     setPrice(listing.price ? String(listing.price) : '');
     setPropertyStatus(listing.status || 'available');
     setPropertyType(listing.category || 'سكني');
+    setAreaValue(listing.area ? String(listing.area) : '');
+    setAreaUnit((listing.area_unit as 'م²' | 'قدم²') || 'م²');
     
     // Mapping existing specs
     if (listing.specs) {
@@ -249,7 +253,9 @@ export default function Dashboard() {
       category: propertyType,
       images: urlsToSave,
       description: description,
-      specs: finalSpecs
+      specs: finalSpecs,
+      area: areaValue ? Number(areaValue) : null,
+      area_unit: areaValue ? areaUnit : null
     };
 
     let apiError;

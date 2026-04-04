@@ -64,10 +64,11 @@ const PropertyCard: React.FC<Props> = ({ listing }) => {
               {Number(specs.الحمامات ?? specs.bathroom)} حمام
             </span>
           )}
-          {specs.المساحة_م2 !== undefined && (
+          {/* Area: top-level column takes priority over Arabic spec key */}
+          {(listing.area != null || specs.المساحة_م2 !== undefined) && (
             <span className="pcard__spec">
               <IconSquare size={14} strokeWidth={1.75} />
-              {specs.المساحة_م2} م²
+              {Number(listing.area ?? specs.المساحة_م2).toLocaleString('en-US')} {listing.area != null ? (listing.area_unit ?? 'م²') : 'م²'}
             </span>
           )}
         </div>
