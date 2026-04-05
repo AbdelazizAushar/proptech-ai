@@ -23,6 +23,7 @@ export default function BookingButton({ propertyName, propertyId }: BookingButto
     setLoading(true);
 
     try {
+      if (!supabase) throw new Error('Supabase not configured');
       const { error } = await supabase
         .from('appointments')
         .insert({
