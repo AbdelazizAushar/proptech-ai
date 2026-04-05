@@ -1,4 +1,5 @@
-﻿'use client';
+'use client';
+// Build trigger: 2026-04-05 - PropTech AI Netlify deployment check
 
 import { usePathname } from 'next/navigation';
 import AdminLayout from './layouts/AdminLayout';
