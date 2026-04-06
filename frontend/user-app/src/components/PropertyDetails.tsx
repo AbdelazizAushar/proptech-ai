@@ -120,12 +120,12 @@ const PropertyDetails = () => {
               <h3 className="contact-title">تواصل معنا</h3>
               <p className="contact-desc">فريقنا جاهز للإجابة على جميع استفساراتك بشكل فوري.</p>
               
-              <button className="btn whatsapp-btn w-100">
+              <a href={`https://api.whatsapp.com/send?phone=963994822045&text=${encodeURIComponent('مرحباً، أريد الاستفسار عن العقار: ' + mockProperty.name + ' (id:' + mockProperty.id + ')')}`} target="_blank" rel="noopener noreferrer" className="btn whatsapp-btn w-100" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span className="btn-icon">💬</span>
                 تواصل عبر واتساب
-              </button>
+              </a>
               
-              <div className="property-ref">رقم العقار: AQ-1042</div>
+              <div className="property-ref">id: {mockProperty.id}</div>
               
               <div className="action-buttons">
                 <button className="btn btn-outline flex-1">

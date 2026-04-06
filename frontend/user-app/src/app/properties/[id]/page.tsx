@@ -162,9 +162,9 @@ export default async function PropertyDetailPage({ params }: Props) {
   const mainImg  = allImages[0] ?? 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200';
   const sideImgs = allImages.slice(1, 5);
   const isRent   = category?.includes('إيجار');
-  const refCode  = id.slice(-6).toUpperCase();
-  const waText   = `مرحباً، أريد الاستفسار عن العقار: ${name} (رقم مرجع: ${refCode})`;
-  const waLink   = `https://wa.me/963994822045?text=${encodeURIComponent(waText)}`;
+  const refCode  = id;
+  const waText   = `مرحباً، أريد الاستفسار عن العقار: ${name} (id:${refCode})`;
+  const waLink   = `https://api.whatsapp.com/send?phone=963994822045&text=${encodeURIComponent(waText)}`;
 
   const statusInfo = STATUS_MAP[status] ?? STATUS_MAP.available;
 
@@ -399,7 +399,7 @@ export default async function PropertyDetailPage({ params }: Props) {
               </a>
 
               <p className="contact-card__ref">
-                رقم مرجعي: <strong>{refCode}</strong>
+                id: <strong>{refCode}</strong>
               </p>
 
               <div className="contact-card__actions">
