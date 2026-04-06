@@ -123,8 +123,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        592,
-        400
+        352,
+        256
       ],
       "id": "af9e5877-7fed-4918-adaa-ac86f17daf62",
       "name": "Delete a row",
@@ -200,12 +200,12 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const newData = $items(\"Webhook\")[0].json.body.record; // البيانات الجديدة من الويب هوك\nconst oldRow = $input.item.json; // البيانات القديمة من السوبابيز\n\nconst oldVision = oldRow.metadata.vision_description || \"وصف سابق غير متاح\";\n\nconst images = newData.images || [];\nconst firstImageUrl = images.length > 0 ? images[0] : null;\n\nreturn {\n  json: {\n    listing_id: newData.id,\n    content: `الاسم: ${newData.name}\\nالموقع: ${newData.location}\\nالسعر: ${newData.price}\\nالوصف: ${newData.description}\\n🌟 وصف المظهر: ${oldVision}`,\n    metadata: {\n      listing_id: newData.id,\n      price: newData.price,\n      location: newData.location,\n      vision_description: oldVision,\n      image_url: firstImageUrl,\n      status : newData.status\n    }\n  }\n};"
+        "jsCode": "const newData = $items(\"Webhook\")[0].json.body.record; // البيانات الجديدة من الويب هوك\nconst oldRow = $items(\"Get a row\")[0].json; // البيانات القديمة من السوبابيز\n\nconst oldVision = oldRow.metadata.vision_description || \"وصف سابق غير متاح\";\n\nconst images = newData.images || [];\nconst firstImageUrl = images.length > 0 ? images[0] : null;\n\nreturn {\n  json: {\n    listing_id: newData.id,\n    content: `الاسم: ${newData.name}\\nالموقع: ${newData.location}\\nالسعر: ${newData.price}\\nالوصف: ${newData.description}\\n🌟 وصف المظهر: ${oldVision}`,\n    metadata: {\n      listing_id: newData.id,\n      price: newData.price,\n      location: newData.location,\n      vision_description: oldVision,\n      image_url: firstImageUrl,\n      status : newData.status\n    }\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        368,
+        512,
         256
       ],
       "id": "4ea42618-cca1-4d2a-a38d-b5daf038adda",
@@ -261,6 +261,8 @@
       ],
       "id": "5e011c06-e011-435f-b870-0df98b678bcb",
       "name": "Analyze an image",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000,
       "credentials": {
         "googlePalmApi": {
           "id": "0xha9bodFAzqgHSB",
@@ -306,7 +308,13 @@
     },
     "Delete a row": {
       "main": [
-        []
+        [
+          {
+            "node": "Code Fast Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "If update or insert": {
@@ -331,7 +339,7 @@
       "main": [
         [
           {
-            "node": "Code Fast Merge",
+            "node": "Delete a row",
             "type": "main",
             "index": 0
           }
@@ -364,11 +372,6 @@
       "main": [
         [
           {
-            "node": "Delete a row",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "Supabase Vector Store",
             "type": "main",
             "index": 0
@@ -388,12 +391,12 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "31cd1153-4ad3-498c-91f2-ec8697db2613",
+  "versionId": "b807b2a5-7fb5-4dbe-bc11-6a4917b17735",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "5a9250c7991133c26d3a1c77ce48321af1549b41b5d05960ab243b92f787790b"
