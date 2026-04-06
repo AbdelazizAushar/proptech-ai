@@ -1,0 +1,406 @@
+{
+  "name": "My workflow-admin",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "database",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        128
+      ],
+      "id": "d4f3b879-aa58-4071-9ccd-297a8f707860",
+      "name": "Webhook",
+      "webhookId": "f910ab2d-f1ac-4973-87bc-08b521c85565"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "knowledge_base",
+          "mode": "list",
+          "cachedResultName": "knowledge_base"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        864,
+        144
+      ],
+      "id": "82fc5a28-b28d-4880-9d88-80961c2b9d2a",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "kwLRaTxrxnfaYnwW",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.content }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "listing_id",
+                "value": "={{ $json.listing_id }}"
+              },
+              {
+                "name": "price",
+                "value": "={{ $json.metadata.price }}"
+              },
+              {
+                "name": "location",
+                "value": "={{ $json.metadata.location }}"
+              },
+              {
+                "name": "status",
+                "value": "={{ $json.metadata.status }}"
+              },
+              {
+                "name": "vision_description",
+                "value": "={{ $json.metadata.vision_description }}"
+              },
+              {
+                "name": "image_url",
+                "value": "={{ $json.metadata.image_url }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        944,
+        320
+      ],
+      "id": "04b971a7-80df-4e24-86e3-5881b18a3a7e",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        752,
+        288
+      ],
+      "id": "2510a970-a9e6-4b1b-9c0f-ac2af0b54a4e",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "X1hApC6UyFnaIE0O",
+          "name": "CohereApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "knowledge_base",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "listing_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.listing_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        352,
+        256
+      ],
+      "id": "af9e5877-7fed-4918-adaa-ac86f17daf62",
+      "name": "Delete a row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "kwLRaTxrxnfaYnwW",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bdf8bc8a-96ca-4ceb-9231-f4486d90297b",
+              "leftValue": "={{ $json.body.type }}",
+              "rightValue": "INSERT",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        16,
+        128
+      ],
+      "id": "73f4bcd7-74de-499b-822d-912a9b77b895",
+      "name": "If update or insert"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "knowledge_base",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "listing_id",
+              "keyValue": "={{ $('Webhook').item.json.body.record.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        192,
+        256
+      ],
+      "id": "a398a2f5-3fb3-408a-bb5e-57704435e017",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "kwLRaTxrxnfaYnwW",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const newData = $items(\"Webhook\")[0].json.body.record; // البيانات الجديدة من الويب هوك\nconst oldRow = $items(\"Get a row\")[0].json; // البيانات القديمة من السوبابيز\n\nconst oldVision = oldRow.metadata.vision_description || \"وصف سابق غير متاح\";\n\nconst images = newData.images || [];\nconst firstImageUrl = images.length > 0 ? images[0] : null;\n\nreturn {\n  json: {\n    listing_id: newData.id,\n    content: `الاسم: ${newData.name}\\nالموقع: ${newData.location}\\nالسعر: ${newData.price}\\nالوصف: ${newData.description}\\n🌟 وصف المظهر: ${oldVision}`,\n    metadata: {\n      listing_id: newData.id,\n      price: newData.price,\n      location: newData.location,\n      vision_description: oldVision,\n      image_url: firstImageUrl,\n      status : newData.status\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        256
+      ],
+      "id": "4ea42618-cca1-4d2a-a38d-b5daf038adda",
+      "name": "Code Fast Merge"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// جلب البيانات الأصلية من عقدة الكود الأولى (تأكد أن اسم العقدة مطابق لاسمها عندك)\nconst original_data = $items(\"Code Prepare Data\")[0].json; \n\n// 🌟 جلب الوصف البصري من عقدة Gemini (التغيير هنا في مسار قراءة النص)\nconst vision_description = $input.item.json.content?.parts?.[0]?.text || \"لا يوجد وصف بصري متاح.\";\n\n// دمج النصين معاً\nconst final_content = `${original_data.base_content}\\n🌟 الوصف المعماري والبصري: ${vision_description}`;\n\nreturn {\n  json: {\n    listing_id: original_data.listing_id,\n    content: final_content, \n    metadata: { // تجهيز الـ Metadata لعقدة الحفظ\n        listing_id: original_data.listing_id,\n        price: original_data.price,\n        location: original_data.location,\n        vision_description: vision_description,\n        image_url: original_data.image_url,\n        status : original_data.status\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        0
+      ],
+      "id": "707f9d71-5e9e-4eba-b8c8-208ed3f764c8",
+      "name": "Code Final Fusion"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// 1. استلام البيانات من الجذر\nconst payload = $input.item.json;\n\n// 2. الوصول إلى بيانات العقار الموجودة داخل مسار (body -> record)\nconst record = payload.body.record;\n\n// 3. استخراج الحقول الأساسية\nconst id = record.id || \"بدون_معرف\"; \nconst name = record.name || \"غير محدد\";\nconst description = record.description || \"لا يوجد وصف\";\nconst price = record.price || \"غير محدد\";\nconst location = record.location || \"غير محدد\";\nconst category = record.category || \"غير محدد\";\n\n// استخراج حالة العقار من قاعدة البيانات وترجمتها للعربية\nconst rawStatus = record.status || \"available\"; \nlet statusText = \"متاح\";\n\nif (rawStatus === \"sold\") {\n    statusText = \"مباع\";\n} else if (rawStatus === \"booked\" || rawStatus === \"reserved\") {\n    statusText = \"محجوز\";\n} else if (rawStatus === \"pending\") {\n    statusText = \"قيد المعاينة\";\n}\n\n// 4. استخراج المواصفات (specs)\nconst specs = record.specs || {};\nlet specsText = \"\";\n\nif (Object.keys(specs).length > 0) {\n  specsText = Object.entries(specs)\n    .map(([key, value]) => `${key}: ${value}`)\n    .join('، ');\n} else {\n  specsText = \"لا يوجد تفاصيل إضافية\";\n}\n\n// 🌟 5. (الجديد) استخراج رابط الصورة الأولى للذكاء الاصطناعي\nconst images = record.images || [];\nconst firstImageUrl = images.length > 0 ? images[0] : null;\n\n// 6. صياغة النص الذكي (Semantic Chunk) ديناميكياً\nconst ai_content = `حالة العقار الحالي: ${statusText}\n- الاسم: ${name}\n- التصنيف: ${category}\n- الوصف: ${description}\n- الموقع: ${location}\n- السعر: ${price}\n- المواصفات الإضافية: ${specsText}`;\n\n// 7. إرجاع النتيجة\nreturn {\n  json: {\n    listing_id: id,\n    base_content: ai_content, // غيّرنا الاسم لنضيف عليه لاحقاً\n    image_url: firstImageUrl, // 🌟 الرابط الذي ستقرأه عقدة Analyze image\n    status: rawStatus, \n    price: Number(price), \n    location: location \n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "0426a787-1c42-4d3e-8a73-190c33a92545",
+      "name": "Code Prepare Data"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "أنت خبير هندسة معمارية ووسيط عقاري محترف. مهمتك هي تحليل صورة العقار المرفقة بدقة شديدة وتوليد وصف نصي غني بالكلمات المفتاحية ليتم استخدامه في محرك بحث عقاري ذكي.\n\nصف المظهر الخارجي أو الداخلي للعقار في سطرين إلى ثلاثة أسطر كحد أقصى باللغة العربية، مع التركيز حصراً على العناصر التالية:\n\nالنمط المعماري: (مثال: بناء حديث، تصميم كلاسيكي، طراز ريفي، فيلا مودرن).\n\nنوع الواجهة والمواد: (مثال: واجهة حجرية، إكساء زجاجي بالكامل، تطعيم بالخشب، رخام).\n\nالألوان الطاغية: (مثال: ألوان ترابية دافئة، أبيض ناصع، رمادي مع أسود).\n\nالميزات المعمارية البارزة: (مثال: نوافذ بانورامية واسعة، شرفة ممتدة، سقف قرميد، تصميم هندسي غير تقليدي).\n\nتعليمات صارمة: أعطني الوصف مباشرة بدون أي مقدمات مثل \"تُظهر الصورة..\" أو ختامات. اكتب النص كفقرة واحدة متصلة وجاهزة للبحث.",
+        "imageUrls": "={{ $json.image_url }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "5e011c06-e011-435f-b870-0df98b678bcb",
+      "name": "Analyze an image",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "0xha9bodFAzqgHSB",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If update or insert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a row": {
+      "main": [
+        [
+          {
+            "node": "Code Fast Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If update or insert": {
+      "main": [
+        [
+          {
+            "node": "Code Prepare Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "Delete a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Prepare Data": {
+      "main": [
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Final Fusion": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Fast Merge": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Code Final Fusion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b807b2a5-7fb5-4dbe-bc11-6a4917b17735",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5a9250c7991133c26d3a1c77ce48321af1549b41b5d05960ab243b92f787790b"
+  },
+  "id": "0mAhVZerfm2d83Rn",
+  "tags": []
+}
